@@ -10,8 +10,11 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:fontFamily="@font/primary_regular"
+        android:text="Hello World! let's start Srini"
+        android:textSize="32sp"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="@font/primary_bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
