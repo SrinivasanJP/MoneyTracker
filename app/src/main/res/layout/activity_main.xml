@@ -1,23 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/component_rounded_gradient_square">
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World! let's start Srini"
-        android:textSize="32sp"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary"
-        android:fontFamily="@font/primary_bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:paddingHorizontal="30sp"
+        android:layout_marginVertical="30sp"
+        android:id="@+id/headerLayout"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30 September 2025"
+            android:textSize="15sp"
+            android:id="@+id/date"
+            android:fontFamily="@font/primary_regular"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/colorOnPrimary"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile"
+            android:src="@drawable/profile_placeholder"
+            android:layout_alignParentEnd="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="30sp"
+        android:layout_below="@+id/headerLayout"
+        android:id="@+id/balanceSheetLayout">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:id="@+id/balanceLayout"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs."
+                    android:fontFamily="@font/primary_bold"
+                    android:textColor="@color/colorOnPrimary"
+                    android:textSize="32sp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="100000"
+                    android:fontFamily="@font/primary_bold"
+                    android:textColor="@color/colorOnPrimary"
+                    android:textSize="32sp"
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                    android:id="@+id/balanceAmountWhole"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=".99"
+                    android:fontFamily="@font/primary_bold"
+                    android:id="@+id/balanceAmountFraction"
+                    android:textColor="@color/colorOnPrimary"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/leftBalance"
+                android:fontFamily="@font/primary_medium"
+                android:textColor="@color/colorOnPrimary"
+                android:text="Left balance"/>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_below="@+id/balanceLayout"
+            android:layout_marginVertical="30sp"
+            android:clipToOutline="true"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/component_diagonal_gray_strips">
+
+            <RelativeLayout
+                android:layout_width="102dp"
+                android:layout_height="32dp"
+                android:background="@drawable/component_rounded_black_rectangle" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>
+
+</RelativeLayout>
