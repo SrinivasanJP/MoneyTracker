@@ -102,7 +102,23 @@
         </RelativeLayout>
 
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/balanceSheetLayout"
+        android:layout_marginHorizontal="30dp"
+        android:background="@drawable/component_rounded_black_rectangle"
+        android:id="@+id/dailyInputButton">
+        <TextView
+            android:layout_centerInParent="true"
+            android:layout_margin="20dp"
+            android:layout_width="wrap_content"
+            android:fontFamily="@font/primary_bold"
+            android:textSize="18sp"
+            android:layout_height="wrap_content"
+            android:text="ADD Today Amount"/>
 
+    </RelativeLayout>
 </RelativeLayout>
 
 </RelativeLayout>
