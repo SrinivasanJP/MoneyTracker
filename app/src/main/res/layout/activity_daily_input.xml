@@ -7,10 +7,76 @@
     android:layout_height="match_parent"
     tools:context=".page.DailyInput_Activity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Daily Input Activity"
-        android:layout_centerInParent="true" />
+        android:paddingHorizontal="30sp"
+        android:layout_marginVertical="30sp"
+        android:id="@+id/headerLayout"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30 September 2025"
+            android:textSize="23sp"
+            android:id="@+id/date"
+            android:fontFamily="@font/primary_bold"
+            android:layout_alignParentStart="true"
+            android:textColor="@color/colorPrimary"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/date"
+            android:fontFamily="@font/primary_medium"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorPrimaryVariant"
+            android:text="Enter the amont spent today"
+            android:textSize="18sp"
 
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_below="@+id/headerLayout"
+        android:layout_height="wrap_content"
+        android:id="@+id/spentInputLayout"
+        android:paddingHorizontal="20dp"
+        >
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginEnd="10sp"
+        android:hint="Soft Money"
+        android:layout_height="wrap_content">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/softMoneyInput"
+            android:layout_width="match_parent"
+            android:fontFamily="@font/primary_bold"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="number"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:hint="Hard Money"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/hardMoneyInput"
+                android:fontFamily="@font/primary_bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:ems="10"
+                android:inputType="number"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+<RelativeLayout
+    android:layout_width=""
+    android:layout_height=""
 </RelativeLayout>
