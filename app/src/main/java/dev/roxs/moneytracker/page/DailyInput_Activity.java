@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import dev.roxs.moneytracker.R;
 import dev.roxs.moneytracker.helper.DateTimeHelper;
@@ -32,7 +33,7 @@ import dev.roxs.moneytracker.helper.SQl_Helper;
 public class DailyInput_Activity extends AppCompatActivity {
 
     private TextView date, buttonText, vYesterdayHoldings;
-    private TextInputEditText softMoney, hardMoney;
+    private TextInputEditText softMoney, hardMoney, vInvestments, vCredits, vloan, vReview;
     private RelativeLayout saveButton;
     private double soft,hard, spent,yesterdaysHoldings, holdings, loan,investments, credits;
     private SQl_Helper sql;
@@ -65,6 +66,10 @@ public class DailyInput_Activity extends AppCompatActivity {
         buttonText = saveButton.findViewById(R.id.label);
         softMoney = findViewById(R.id.softMoneyInput);
         hardMoney = findViewById(R.id.hardMoneyInput);
+        vInvestments = findViewById(R.id.investmentsInput);
+        vCredits = findViewById(R.id.creditsInput);
+        vloan = findViewById(R.id.loanInput);
+        vReview = findViewById(R.id.remarks);
 
         //date setting
         date.setText(DateTimeHelper.getCurrentDate());
@@ -77,17 +82,14 @@ public class DailyInput_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    double soft = Double.parseDouble(softMoney.getText().toString());
-                    double hard = Double.parseDouble(hardMoney.getText().toString());
-//                    double investments = Double.parseDouble(investmentInput.getText().toString());
-//                    double credits = Double.parseDouble(creditInput.getText().toString());
-//                    double loan = Double.parseDouble(loanInput.getText().toString());
-//                    String remarks = remarksInput.getText().toString();
+                    double soft = Double.parseDouble(Objects.requireNonNull(softMoney.getText()).toString());
+                    double hard = Double.parseDouble(Objects.requireNonNull(hardMoney.getText()).toString());
+                    double investments = Double.parseDouble(Objects.requireNonNull(vInvestments.getText()).toString());
+                    double credits = Double.parseDouble(Objects.requireNonNull(vCredits.getText()).toString());
+                    double loan = Double.parseDouble(Objects.requireNonNull(vloan.getText()).toString());
+                    String remarks = Objects.requireNonNull(vReview.getText()).toString();
 
-                    investments = 0;
-                    credits = 0;
-                    loan = 0;
-                    remarks ="No Remarks";
+
                     holdings = soft + hard + loan;
                     spent = yesterdaysHoldings - (holdings - investments - credits);
 

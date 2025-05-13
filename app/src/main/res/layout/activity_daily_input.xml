@@ -84,6 +84,7 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="10dp"
         android:paddingHorizontal="20sp"
+        android:id="@+id/tagLayouts"
         android:paddingVertical="5sp"
         android:background="@drawable/component_rounded_primary_rectangle"
         android:layout_below="@+id/spentInputLayout">
@@ -103,6 +104,95 @@
             android:text="0"
             />
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Additional details"
+        android:layout_below="@id/tagLayouts"
+        android:layout_marginTop="35dp"
+        android:layout_marginHorizontal="20dp"
+        android:id="@+id/additionalText"
+        android:textSize="35sp"
+        android:fontFamily="@font/primary_bold"
+        android:textColor="@color/colorPrimary"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="20dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/additionalText"
+        android:layout_marginTop="10dp">
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_marginBottom="10dp"
+            android:hint="Investments"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/investmentsInput"
+                android:fontFamily="@font/primary_bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:ems="10"
+                android:inputType="numberDecimal"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:hint="Credits"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/creditsInput"
+                android:fontFamily="@font/primary_bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:ems="10"
+                android:inputType="numberSigned"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:hint="Friendly Loan"
+            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/loanInput"
+                android:fontFamily="@font/primary_bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:ems="10"
+                android:inputType="numberDecimal"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:hint="Remarks"
+            app:hintAnimationEnabled="true"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/remarks"
+                android:fontFamily="@font/primary_bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimary"
+                android:ems="10"
+                android:lines="4"
+
+                android:inputType="textMultiLine"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+
     <include
         layout="@layout/components_button_black_xxl"
         android:layout_width="match_parent"
