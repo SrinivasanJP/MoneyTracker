@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorPrimary"
             android:ems="10"
-            android:inputType="number"/>
+            android:inputType="numberDecimal"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
