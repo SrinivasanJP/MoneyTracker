@@ -17,12 +17,14 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import dev.roxs.moneytracker.helper.DateTimeHelper;
+import dev.roxs.moneytracker.helper.SQl_Helper;
 import dev.roxs.moneytracker.page.DailyInput_Activity;
 
 public class MainActivity extends AppCompatActivity {
 
     private RelativeLayout dailyInputButton;
     private TextView date, balanceAmountWhole, balanceAmountFraction;
+    private SQl_Helper sql;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
         }
 
+        sql = new SQl_Helper(getApplicationContext());
+
 
         //referencing
         date = findViewById(R.id.date);
@@ -51,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
         //Date setting
         date.setText(DateTimeHelper.getCurrentDate());
         //TODO: Left amount display
+        String[] balance = String.valueOf(sql.getBalanceLeft()).split("\\.");
+        balanceAmountWhole.setText(balance[0]);
+        balanceAmountFraction.setText("."+balance[1]);
 
         //Button actions
         dailyInputButton.setOnClickListener(new View.OnClickListener() {
