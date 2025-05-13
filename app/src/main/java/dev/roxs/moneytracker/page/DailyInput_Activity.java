@@ -31,7 +31,7 @@ import dev.roxs.moneytracker.helper.SQl_Helper;
 
 public class DailyInput_Activity extends AppCompatActivity {
 
-    private TextView date, buttonText;
+    private TextView date, buttonText, vYesterdayHoldings;
     private TextInputEditText softMoney, hardMoney;
     private RelativeLayout saveButton;
     private double soft,hard, spent,yesterdaysHoldings, holdings, loan,investments, credits;
@@ -55,11 +55,12 @@ public class DailyInput_Activity extends AppCompatActivity {
         if(yesterdaysHoldings==-1){
             showYesterdaysSpentDialog(sql);
         }
-//        sql.clearDatabase();
+//        sql.clearDatabase();  TODO: delete this once the testing is done
 
 
         //Referencing
         date = findViewById(R.id.date);
+        vYesterdayHoldings = findViewById(R.id.yesterdaysHoldings);
         saveButton = findViewById(R.id.dailyInputButton);
         buttonText = saveButton.findViewById(R.id.label);
         softMoney = findViewById(R.id.softMoneyInput);
@@ -68,6 +69,8 @@ public class DailyInput_Activity extends AppCompatActivity {
         //date setting
         date.setText(DateTimeHelper.getCurrentDate());
         buttonText.setText("Save Amount");
+        vYesterdayHoldings.setText(String.valueOf(yesterdaysHoldings));
+
 
 
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -153,6 +156,7 @@ public class DailyInput_Activity extends AppCompatActivity {
                 db.insertWithOnConflict(SQl_Helper.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_REPLACE);
                 db.close();
 
+                vYesterdayHoldings.setText(String.valueOf(yesterdaysHoldings));
                 Toast.makeText(this, "Yesterday's entry added", Toast.LENGTH_SHORT).show();
             }
         });
