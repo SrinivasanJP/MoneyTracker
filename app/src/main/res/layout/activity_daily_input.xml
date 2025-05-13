@@ -31,7 +31,7 @@
             android:layout_marginTop="10dp"
             android:textColor="@color/colorPrimaryVariant"
             android:text="Enter the amont spent today"
-            android:textSize="18sp"
+            android:textSize="18sp"/>
 
     </RelativeLayout>
     <LinearLayout
@@ -54,6 +54,7 @@
             android:layout_width="match_parent"
             android:fontFamily="@font/primary_bold"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
             android:ems="10"
             android:inputType="number"/>
 
@@ -69,14 +70,19 @@
                 android:fontFamily="@font/primary_bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:textColor="@color/colorPrimary"
                 android:ems="10"
-                android:inputType="number"/>
+                android:inputType="numberDecimal"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
-<RelativeLayout
-    android:layout_width=""
-    android:layout_height=""
+    <include
+        layout="@layout/components_button_black_xxl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:id="@+id/dailyInputButton"
+        android:layout_below="@+id/spentInputLayout"
+        android:layout_marginHorizontal="30dp" />
 </RelativeLayout>

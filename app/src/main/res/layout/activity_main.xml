@@ -6,119 +6,135 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/component_rounded_gradient_square">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="30sp"
-        android:layout_marginVertical="30sp"
-        android:id="@+id/headerLayout"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="30 September 2025"
-            android:textSize="15sp"
-            android:id="@+id/date"
-            android:fontFamily="@font/primary_regular"
-            android:layout_alignParentStart="true"
-            android:textColor="@color/colorOnPrimary"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/profile"
-            android:src="@drawable/profile_placeholder"
-            android:layout_alignParentEnd="true"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="30sp"
-        android:layout_below="@+id/headerLayout"
-        android:id="@+id/balanceSheetLayout">
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:id="@+id/balanceLayout"
-            android:layout_height="wrap_content">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rs."
-                    android:fontFamily="@font/primary_bold"
-                    android:textColor="@color/colorOnPrimary"
-                    android:textSize="32sp"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="100000"
-                    android:fontFamily="@font/primary_bold"
-                    android:textColor="@color/colorOnPrimary"
-                    android:textSize="32sp"
 
-                    android:id="@+id/balanceAmountWhole"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=".99"
-                    android:fontFamily="@font/primary_bold"
-                    android:id="@+id/balanceAmountFraction"
-                    android:textColor="@color/colorOnPrimary"/>
-            </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/component_rounded_gradient_square">
+
+        <RelativeLayout
+            android:id="@+id/headerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="30sp"
+            android:paddingHorizontal="30sp">
 
             <TextView
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:textSize="18sp"
+                android:id="@+id/date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/leftBalance"
-                android:fontFamily="@font/primary_medium"
+                android:layout_alignParentStart="true"
+                android:fontFamily="@font/primary_regular"
+                android:text="30 September 2025"
                 android:textColor="@color/colorOnPrimary"
-                android:text="Left balance"/>
+                android:textSize="15sp" />
 
+            <ImageView
+                android:id="@+id/profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/profile_placeholder" />
         </RelativeLayout>
+
         <RelativeLayout
+            android:id="@+id/balanceSheetLayout"
             android:layout_width="match_parent"
-            android:layout_height="32dp"
-            android:layout_below="@+id/balanceLayout"
-            android:layout_marginVertical="30sp"
-            android:clipToOutline="true"
-            android:layout_marginTop="6dp"
-            android:background="@drawable/component_diagonal_gray_strips">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/headerLayout"
+            android:paddingHorizontal="30sp">
 
             <RelativeLayout
-                android:layout_width="102dp"
+                android:id="@+id/balanceLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_bold"
+                        android:text="Rs."
+                        android:textColor="@color/colorOnPrimary"
+                        android:textSize="32sp" />
+
+                    <TextView
+                        android:id="@+id/balanceAmountWhole"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_bold"
+                        android:text="100000"
+                        android:textColor="@color/colorOnPrimary"
+
+                        android:textSize="32sp" />
+
+                    <TextView
+                        android:id="@+id/balanceAmountFraction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/primary_bold"
+                        android:text=".99"
+                        android:textColor="@color/colorOnPrimary" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/leftBalance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/primary_medium"
+                    android:text="Left balance"
+                    android:textColor="@color/colorOnPrimary"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="32dp"
-                android:background="@drawable/component_rounded_black_rectangle" />
+                android:layout_below="@+id/balanceLayout"
+                android:layout_marginVertical="30sp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/component_diagonal_gray_strips"
+                android:clipToOutline="true">
+
+                <RelativeLayout
+                    android:layout_width="102dp"
+                    android:layout_height="32dp"
+                    android:background="@drawable/component_rounded_black_rectangle" />
+
+            </RelativeLayout>
 
         </RelativeLayout>
+        <!--    <RelativeLayout-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:layout_below="@+id/balanceSheetLayout"-->
+        <!--        android:layout_marginHorizontal="30dp"-->
+        <!--        android:background="@drawable/component_rounded_black_rectangle"-->
+        <!--        android:id="@+id/dailyInputButton">-->
+        <!--        <TextView-->
+        <!--            android:layout_centerInParent="true"-->
+        <!--            android:layout_margin="20dp"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:fontFamily="@font/primary_bold"-->
+        <!--            android:textSize="18sp"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:text="ADD Today Amount"/>-->
 
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/balanceSheetLayout"
-        android:layout_marginHorizontal="30dp"
-        android:background="@drawable/component_rounded_black_rectangle"
-        android:id="@+id/dailyInputButton">
-        <TextView
-            android:layout_centerInParent="true"
-            android:layout_margin="20dp"
-            android:layout_width="wrap_content"
-            android:fontFamily="@font/primary_bold"
-            android:textSize="18sp"
+        <!--    </RelativeLayout>-->
+        <include
+            layout="@layout/components_button_black_xxl"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ADD Today Amount"/>
-
+            android:id="@+id/dailyInputButton"
+            android:layout_below="@+id/balanceSheetLayout"
+            android:layout_marginHorizontal="30dp" />
     </RelativeLayout>
-</RelativeLayout>
 
 </RelativeLayout>
