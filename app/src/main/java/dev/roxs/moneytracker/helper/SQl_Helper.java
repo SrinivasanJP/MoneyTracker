@@ -13,7 +13,7 @@ import java.util.Locale;
 public class SQl_Helper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "money_tracker.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String TABLE_NAME = "money_tracking";
     public static final String COL_ID = "id";
@@ -36,7 +36,7 @@ public class SQl_Helper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL_DATE + " TEXT, " +
+                COL_DATE + " TEXT UNIQUE, " +  // <-- Make date UNIQUE
                 COL_DAY + " TEXT, " +
                 COL_SPENT + " REAL, " +
                 COL_SOFTCASH + " REAL, " +
@@ -49,6 +49,7 @@ public class SQl_Helper extends SQLiteOpenHelper {
                 ")";
         db.execSQL(CREATE_TABLE);
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
