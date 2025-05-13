@@ -1,6 +1,7 @@
 package dev.roxs.moneytracker.page;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.InputType;
@@ -26,6 +27,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
+import dev.roxs.moneytracker.MainActivity;
 import dev.roxs.moneytracker.R;
 import dev.roxs.moneytracker.helper.DateTimeHelper;
 import dev.roxs.moneytracker.helper.SQl_Helper;
@@ -56,7 +58,7 @@ public class DailyInput_Activity extends AppCompatActivity {
         if(yesterdaysHoldings==-1){
             showYesterdaysSpentDialog(sql);
         }
-//        sql.clearDatabase();  TODO: delete this once the testing is done
+//        sql.clearDatabase(); // TODO: delete this once the testing is done
 
 
         //Referencing
@@ -100,6 +102,8 @@ public class DailyInput_Activity extends AppCompatActivity {
                     sql.insertOrUpdateEntry(date, day, soft, hard, investments, credits, loan, remarks);
 
                     Toast.makeText(getApplicationContext(), "Entry saved successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intent);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Please fill all fields correctly", Toast.LENGTH_SHORT).show();
