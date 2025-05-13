@@ -136,6 +136,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
                 android:ems="10"
+                android:text="0"
                 android:inputType="numberDecimal"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -149,6 +150,7 @@
                 android:id="@+id/creditsInput"
                 android:fontFamily="@font/primary_bold"
                 android:layout_width="match_parent"
+                android:text="0"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
                 android:ems="10"
@@ -166,6 +168,8 @@
                 android:fontFamily="@font/primary_bold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="0"
+
                 android:textColor="@color/colorPrimary"
                 android:ems="10"
                 android:inputType="numberDecimal"/>
@@ -183,6 +187,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorPrimary"
+                android:text="No Remarks"
                 android:ems="10"
                 android:lines="4"
 
