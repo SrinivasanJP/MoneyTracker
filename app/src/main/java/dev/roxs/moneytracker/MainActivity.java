@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,11 +16,13 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import dev.roxs.moneytracker.helper.DateTimeHelper;
 import dev.roxs.moneytracker.page.DailyInput_Activity;
 
 public class MainActivity extends AppCompatActivity {
 
     private RelativeLayout dailyInputButton;
+    private TextView date, balanceAmountWhole, balanceAmountFraction;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +40,19 @@ public class MainActivity extends AppCompatActivity {
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
         }
 
+
+        //referencing
+        date = findViewById(R.id.date);
+        balanceAmountWhole = findViewById(R.id.balanceAmountWhole);
+        balanceAmountFraction = findViewById(R.id.balanceAmountFraction);
         dailyInputButton = findViewById(R.id.dailyInputButton);
+
+
+        //Date setting
+        date.setText(DateTimeHelper.getCurrentDate());
+        //TODO: Left amount display
+
+        //Button actions
         dailyInputButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
