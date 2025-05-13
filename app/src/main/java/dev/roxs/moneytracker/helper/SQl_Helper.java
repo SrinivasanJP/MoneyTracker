@@ -119,7 +119,7 @@ public class SQl_Helper extends SQLiteOpenHelper {
 
     public double getBalanceLeft() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + COL_SOFTCASH + " + " + COL_HARDCASH + " FROM " + TABLE_NAME + " ORDER BY date DESC LIMIT 1", null);
+        Cursor cursor = db.rawQuery("SELECT " + COL_HOLDINGS + " FROM " + TABLE_NAME + " ORDER BY date DESC LIMIT 1", null);
 
         double balance = 0;
         if (cursor.moveToFirst()) {
