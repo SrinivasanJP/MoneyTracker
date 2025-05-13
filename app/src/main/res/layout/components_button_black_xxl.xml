@@ -12,6 +12,7 @@
             android:fontFamily="@font/primary_bold"
             android:textColor="@color/colorOnPrimary"
             android:textSize="18sp"
+            android:id="@+id/label"
             android:layout_height="wrap_content"
             android:text="ADD Today Amount"/>
 
