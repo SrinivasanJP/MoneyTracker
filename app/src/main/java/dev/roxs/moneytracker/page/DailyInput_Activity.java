@@ -55,7 +55,7 @@ public class DailyInput_Activity extends AppCompatActivity {
         if(yesterdaysHoldings==-1){
             showYesterdaysSpentDialog(sql);
         }
-
+//        sql.clearDatabase();
 
 
         //Referencing

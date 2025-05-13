@@ -55,6 +55,12 @@ public class SQl_Helper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }
+    public void clearDatabase() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_NAME, null, null); // Deletes all rows
+        db.close();
+    }
+
 
     public double getYesterdaysHoldings() {
         // Get yesterday's date in the same format as stored in the DB (assumed "dd-MMM-yyyy")
