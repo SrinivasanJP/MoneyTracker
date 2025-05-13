@@ -10,6 +10,9 @@ public class DateTimeHelper {
     public static String getCurrentDate() {
         return formatDate(new Date());
     }
+    public static String getCurrentDayName() {
+        return new SimpleDateFormat("EEEE", Locale.ENGLISH).format(new Date());
+    }
 
     // Get current time like "10:42 AM"
     public static String getCurrentTime() {
