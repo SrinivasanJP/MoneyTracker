@@ -77,12 +77,38 @@
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="10dp"
+        android:paddingHorizontal="20sp"
+        android:paddingVertical="5sp"
+        android:background="@drawable/component_rounded_primary_rectangle"
+        android:layout_below="@+id/spentInputLayout">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorOnPrimary"
+            android:fontFamily="@font/primary_medium"
+            android:text="Yesterday's Holdings: "
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorOnPrimary"
+            android:id="@+id/yesterdaysHoldings"
+            android:fontFamily="@font/primary_medium"
+            android:text="0"
+            />
+    </LinearLayout>
     <include
         layout="@layout/components_button_black_xxl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:id="@+id/dailyInputButton"
-        android:layout_below="@+id/spentInputLayout"
+        android:layout_alignParentBottom="true"
+        android:layout_marginVertical="20dp"
         android:layout_marginHorizontal="30dp" />
 </RelativeLayout>
