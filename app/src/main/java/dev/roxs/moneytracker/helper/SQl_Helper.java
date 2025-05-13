@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class SQl_Helper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "money_tracker.db";
@@ -52,6 +56,25 @@ public class SQl_Helper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public double getYesterdaysHoldings() {
+        // Get yesterday's date in the same format as stored in the DB (assumed "dd-MMM-yyyy")
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        String yesterday = sdf.format(calendar.getTime());
+
+        // Query the database for yesterday's holdings
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COL_HOLDINGS + " FROM " + TABLE_NAME + " WHERE " + COL_DATE + " = ?", new String[]{yesterday});
+
+        double holdings = -1;
+        if (cursor.moveToFirst()) {
+            holdings = cursor.getDouble(0);
+        }
+
+        cursor.close();
+        return holdings;
+    }
     public void insertOrUpdateEntry(String date, String day, double softcash, double hardcash, double investments, double credit, double loan, String remarks) {
         SQLiteDatabase db = this.getWritableDatabase();
 
