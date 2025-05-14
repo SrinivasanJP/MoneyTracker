@@ -103,21 +103,32 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         ArrayList<String> daysInMonthArray = new ArrayList<>();
         YearMonth yearMonth = YearMonth.from(date);
         int daysInMonth = yearMonth.lengthOfMonth();
-        LocalDate firstOfMonth = selectedDate.withDayOfMonth(1);
-        int dayOfWeek = firstOfMonth.getDayOfWeek().getValue();
-        for(int i=1;i<=42;i++){
-            if(i<=dayOfWeek || i> daysInMonth+dayOfWeek){
-                daysInMonthArray.add("");
-            }else{
-                daysInMonthArray.add(String.valueOf(i+dayOfWeek));
-            }
+
+        LocalDate firstOfMonth = date.withDayOfMonth(1);
+        int dayOfWeek = firstOfMonth.getDayOfWeek().getValue(); // 1=Monday ... 7=Sunday
+
+        int firstDayIndex = dayOfWeek % 7; // Convert to 0-based index (0=Sunday, 6=Saturday)
+
+        for (int i = 0; i < firstDayIndex; i++) {
+            daysInMonthArray.add("");
         }
-        return  daysInMonthArray;
+
+        for (int day = 1; day <= daysInMonth; day++) {
+            daysInMonthArray.add(String.valueOf(day));
+        }
+
+        // Pad the end of the list to make a complete 6-week grid (42 cells)
+        while (daysInMonthArray.size() < 42) {
+            daysInMonthArray.add("");
+        }
+
+        return daysInMonthArray;
     }
+
 
     @Override
     public void onItemClick(int position, String dayText) {
-        if(dayText.equals("")){
+        if(!dayText.equals("")){
             String message = "Selected date "+ dayText+" "+DateTimeHelper.getCurrentMonth();
             Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         }
