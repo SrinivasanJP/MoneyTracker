@@ -3,6 +3,7 @@ package dev.roxs.moneytracker;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -27,6 +28,7 @@ import dev.roxs.moneytracker.Adapter.CalendarAdapter;
 import dev.roxs.moneytracker.helper.DateTimeHelper;
 import dev.roxs.moneytracker.helper.SQl_Helper;
 import dev.roxs.moneytracker.page.DailyInput_Activity;
+import dev.roxs.moneytracker.page.DayDataShow_Activity;
 
 public class MainActivity extends AppCompatActivity implements CalendarAdapter.OnItemListener {
 
@@ -58,7 +60,10 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
 
         sql = new SQl_Helper(getApplicationContext());
 
+        ArrayList<String> datesWithData = sql.getAllRecordedDates(DateTimeHelper.getCurrentMonthLocalDate(),DateTimeHelper.getCurrentYearLocalDate());
 
+
+        Log.d("UT", "onCreate: dateswithdata: "+datesWithData.get(0));
         //referencing
         date = findViewById(R.id.date);
         balanceAmountWhole = findViewById(R.id.balanceAmountWhole);
@@ -71,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
 
         vMonthText.setText(DateTimeHelper.getCurrentMonth());
         ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
-        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this,datesWithData);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),7);
         calendarRecyclerView.setLayoutManager(layoutManager);
         calendarRecyclerView.setAdapter(calendarAdapter);
@@ -128,9 +133,17 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
 
     @Override
     public void onItemClick(int position, String dayText) {
-        if(!dayText.equals("")){
-            String message = "Selected date "+ dayText+" "+DateTimeHelper.getCurrentMonth();
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        if (!dayText.equals("")) {
+            int day = Integer.parseInt(dayText);
+            LocalDate clickedDate = selectedDate.withDayOfMonth(day);
+
+            // Format to "dd-MMM-yyyy"
+            String formattedDate = DateTimeHelper.formatToDisplayDate(clickedDate);  // Helper method you can add
+
+            Intent intent = new Intent(getApplicationContext(), DayDataShow_Activity.class);
+            intent.putExtra("date",formattedDate);
+            startActivity(intent);
+
         }
     }
 }
