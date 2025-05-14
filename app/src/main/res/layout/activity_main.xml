@@ -10,6 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/topPanel"
         android:background="@drawable/component_rounded_gradient_square">
 
         <RelativeLayout
@@ -98,43 +99,118 @@
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_below="@+id/balanceLayout"
-                android:layout_marginVertical="30sp"
-                android:layout_marginTop="6dp"
-                android:background="@drawable/component_diagonal_gray_strips"
+                android:padding="5sp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/component_rounded_gray_rectangle"
                 android:clipToOutline="true">
 
                 <RelativeLayout
                     android:layout_width="102dp"
                     android:layout_height="32dp"
-                    android:background="@drawable/component_rounded_black_rectangle" />
+                    android:background="@drawable/component_rounded_blue_rectangle" />
 
             </RelativeLayout>
 
         </RelativeLayout>
-        <!--    <RelativeLayout-->
-        <!--        android:layout_width="match_parent"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:layout_below="@+id/balanceSheetLayout"-->
-        <!--        android:layout_marginHorizontal="30dp"-->
-        <!--        android:background="@drawable/component_rounded_black_rectangle"-->
-        <!--        android:id="@+id/dailyInputButton">-->
-        <!--        <TextView-->
-        <!--            android:layout_centerInParent="true"-->
-        <!--            android:layout_margin="20dp"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:fontFamily="@font/primary_bold"-->
-        <!--            android:textSize="18sp"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:text="ADD Today Amount"/>-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/monthSpentLayout"
+            android:layout_below="@+id/balanceSheetLayout"
+            android:layout_marginVertical="20dp"
+            android:layout_marginHorizontal="30dp">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/primary_bold"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp"
+                    android:text="Rs.12345 "
+                    android:id="@+id/totalSpent"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/primary_medium"
+                    android:textColor="@color/colorSecondary"
+                    android:text="Of "/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/primary_medium"
+                    android:id="@+id/monthStartHoldings"
+                    android:textColor="@color/colorPrimaryVariant"
+                    android:text="Rs.1232 "/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:textColor="@color/colorPrimaryVariant"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/primary_medium"
+                    android:text="spent"/>
 
-        <!--    </RelativeLayout>-->
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:paddingHorizontal="10sp"
+                android:paddingVertical="2sp"
+                android:background="@drawable/component_tags_secondary"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+15%"
+                    android:textColor="@color/colorOnPrimary"
+                    android:fontFamily="@font/primary_bold"
+
+                    android:id="@+id/percentageOfLastMonth"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" last month"
+                    android:textColor="@color/colorOnPrimary"
+                    android:fontFamily="@font/primary_regular"
+                    />
+
+            </LinearLayout>
+        </RelativeLayout>
+
         <include
             layout="@layout/components_button_black_xxl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/dailyInputButton"
-            android:layout_below="@+id/balanceSheetLayout"
+            android:layout_below="@+id/monthSpentLayout"
             android:layout_marginHorizontal="30dp" />
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/topPanel"
+        android:layout_marginVertical="20dp"
+        android:layout_marginHorizontal="30dp"
+        android:id="@+id/todaySpentLayout">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Today's Spent Details"
+            android:fontFamily="@font/primary_bold"
+            android:textSize="24sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rs. 250"
+            android:layout_alignParentEnd="true"
+            android:fontFamily="@font/primary_bold"
+            android:textColor="@color/colorPrimary"
+            android:textSize="25sp"/>
+
+    </RelativeLayout>
+
 
 </RelativeLayout>
