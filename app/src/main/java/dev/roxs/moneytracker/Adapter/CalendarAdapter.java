@@ -7,9 +7,13 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import dev.roxs.moneytracker.R;
 
@@ -17,10 +21,12 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
     private final ArrayList<String> daysOfMonth;
     private final OnItemListener onItemListener;
+    private final Set<String> recordedDates;
 
-    public CalendarAdapter(ArrayList<String> daysOfMonth, OnItemListener onItemListener) {
+    public CalendarAdapter(ArrayList<String> daysOfMonth, OnItemListener onItemListener, List<String> recordedDates) {
         this.daysOfMonth = daysOfMonth;
         this.onItemListener = onItemListener;
+        this.recordedDates = new HashSet<>(recordedDates);
     }
 
     @NonNull
@@ -35,14 +41,28 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
-        holder.dayOfMonth.setText(daysOfMonth.get(position));
-        if(!daysOfMonth.get(position).isEmpty()){
-            holder.dayOfMonth.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(),R.drawable.component_rounded_border));
-//            holder.dayOfMonth.setWidth(400);
-//            holder.dayOfMonth.setPadding(40,20,40,20);
-        }
+        String dayText = daysOfMonth.get(position);
+        holder.dayOfMonth.setText(dayText);
 
+
+        Context context = holder.itemView.getContext();
+
+        if (!dayText.isEmpty()) {
+            holder.dayOfMonth.setBackground(ContextCompat.getDrawable(context, R.drawable.component_rounded_border));
+
+            // Highlight recorded date
+            if (recordedDates.contains(dayText)) {
+                // You can change background or text color
+                holder.dayOfMonth.setBackground(ContextCompat.getDrawable(context, R.drawable.component_tags_secondary)); // use a different drawable for highlighted
+                holder.dayOfMonth.setTextColor(ContextCompat.getColor(context, R.color.colorOnPrimary));
+                holder.dayOfMonth.setTypeface(ResourcesCompat.getFont(context, R.font.primary_bold));
+
+            }
+        } else {
+            holder.dayOfMonth.setText(""); // in case of empty cell
+        }
     }
+
 
     @Override
     public int getItemCount() {
