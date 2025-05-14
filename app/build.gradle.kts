@@ -33,6 +33,9 @@ android {
 
 dependencies {
 
+    implementation(libs.prolificinteractive.material.calendarview)
+
+
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
