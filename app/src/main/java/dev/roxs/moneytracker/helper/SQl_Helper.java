@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class SQl_Helper extends SQLiteOpenHelper {
@@ -32,6 +34,27 @@ public class SQl_Helper extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    public static class DB_STRUCT{
+        public Double spent;
+        public Double softCash;
+        public Double hardCash;
+        public Double investments;
+        public Double holdings;
+        public Double credits;
+        public Double loan;
+        public String remarks;
+
+        public DB_STRUCT(Double spent, Double softCash, Double hardCash, Double investments, Double holdings, Double credits, Double loan, String remarks) {
+            this.spent = spent;
+            this.softCash = softCash;
+            this.hardCash = hardCash;
+            this.investments = investments;
+            this.holdings = holdings;
+            this.credits = credits;
+            this.loan = loan;
+            this.remarks = remarks;
+        }
+    }
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
@@ -152,4 +175,50 @@ public class SQl_Helper extends SQLiteOpenHelper {
         cursor.close();
         return totalSpent;
     }
+    public DB_STRUCT getEntryByDate(String date) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COL_DATE + " = ?", new String[]{date});
+
+        DB_STRUCT SQlHelper_Struct = null;
+        if (cursor.moveToFirst()) {
+            double spent = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_SPENT));
+            double softcash = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_SOFTCASH));
+            double hardcash = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_HARDCASH));
+            double investments = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_INVESTMENTS));
+            double holdings = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_HOLDINGS));
+            double credit = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_CREDIT));
+            double loan = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_LOAN));
+            String remarks = cursor.getString(cursor.getColumnIndexOrThrow(COL_REMARKS));
+
+            SQlHelper_Struct = new DB_STRUCT(spent,softcash,hardcash,investments,holdings,credit,loan,remarks);
+
+        }
+
+        cursor.close();
+        return SQlHelper_Struct;
+    }
+    public ArrayList<String> getAllRecordedDates(int month, int year) {
+        ArrayList<String> dates = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Format the month to 2-digits (e.g., 05)
+        String monthName = new java.text.DateFormatSymbols().getShortMonths()[month - 1];
+        String formattedLike = "%-" + monthName + "-" + year;
+
+        Cursor cursor = db.rawQuery(
+                "SELECT " + COL_DATE + " FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?",
+                new String[]{formattedLike}
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                dates.add(cursor.getString(0).split("-")[0]);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return dates;
+    }
+
+
 }
