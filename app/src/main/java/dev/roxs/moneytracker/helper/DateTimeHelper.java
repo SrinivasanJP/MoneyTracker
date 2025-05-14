@@ -38,6 +38,11 @@ public class DateTimeHelper {
     public static String formatDateTime(Date date) {
         return new SimpleDateFormat("dd-MMM-yyyy hh:mm a", Locale.ENGLISH).format(date);
     }
+    // Get current month like "May"
+    public static String getCurrentMonth() {
+        return new SimpleDateFormat("MMMM", Locale.ENGLISH).format(new Date());
+    }
+
 
     // Format from millis
     public static String formatDate(long millis) {
