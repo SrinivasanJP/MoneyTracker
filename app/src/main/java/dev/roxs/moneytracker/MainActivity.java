@@ -8,6 +8,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,16 +16,29 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.ArrayList;
+
+import dev.roxs.moneytracker.Adapter.CalendarAdapter;
 import dev.roxs.moneytracker.helper.DateTimeHelper;
 import dev.roxs.moneytracker.helper.SQl_Helper;
 import dev.roxs.moneytracker.page.DailyInput_Activity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CalendarAdapter.OnItemListener {
 
     private RelativeLayout dailyInputButton;
     private TextView date, balanceAmountWhole, balanceAmountFraction;
     private SQl_Helper sql;
+
+    private TextView vMonthText;
+    private RecyclerView calendarRecyclerView;
+    private LocalDate selectedDate;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +65,18 @@ public class MainActivity extends AppCompatActivity {
         balanceAmountFraction = findViewById(R.id.balanceAmountFraction);
         dailyInputButton = findViewById(R.id.dailyInputButton);
 
+        calendarRecyclerView = findViewById(R.id.calendarRecycyleView);
+        vMonthText = findViewById(R.id.month);
+        selectedDate = LocalDate.now();
+
+        vMonthText.setText(DateTimeHelper.getCurrentMonth());
+        ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),7);
+        calendarRecyclerView.setLayoutManager(layoutManager);
+        calendarRecyclerView.setAdapter(calendarAdapter);
+
+
 
         //Date setting
         date.setText(DateTimeHelper.getCurrentDate());
@@ -71,5 +97,29 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private ArrayList<String> daysInMonthArray(LocalDate date){
+        ArrayList<String> daysInMonthArray = new ArrayList<>();
+        YearMonth yearMonth = YearMonth.from(date);
+        int daysInMonth = yearMonth.lengthOfMonth();
+        LocalDate firstOfMonth = selectedDate.withDayOfMonth(1);
+        int dayOfWeek = firstOfMonth.getDayOfWeek().getValue();
+        for(int i=1;i<=42;i++){
+            if(i<=dayOfWeek || i> daysInMonth+dayOfWeek){
+                daysInMonthArray.add("");
+            }else{
+                daysInMonthArray.add(String.valueOf(i+dayOfWeek));
+            }
+        }
+        return  daysInMonthArray;
+    }
+
+    @Override
+    public void onItemClick(int position, String dayText) {
+        if(dayText.equals("")){
+            String message = "Selected date "+ dayText+" "+DateTimeHelper.getCurrentMonth();
+            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        }
     }
 }
