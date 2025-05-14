@@ -1,6 +1,7 @@
 package dev.roxs.moneytracker.helper;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Locale;
 
@@ -44,6 +45,13 @@ public class DateTimeHelper {
     }
 
 
+    public static int getCurrentMonthLocalDate() {
+        return LocalDate.now().getMonthValue();
+    }
+    public static int getCurrentYearLocalDate() {
+        return LocalDate.now().getYear();
+    }
+
     // Format from millis
     public static String formatDate(long millis) {
         return formatDate(new Date(millis));
@@ -55,5 +63,9 @@ public class DateTimeHelper {
 
     public static String formatDateTime(long millis) {
         return formatDateTime(new Date(millis));
+    }
+
+    public static String formatToDisplayDate(LocalDate date) {
+        return date.format(java.time.format.DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH));
     }
 }
