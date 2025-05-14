@@ -1,10 +1,12 @@
 package dev.roxs.moneytracker.Adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -27,13 +29,19 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.calendar_cell, parent, false);
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-        layoutParams.height = (int)(parent.getHeight()*0.16666666);
+        layoutParams.height = (int)(parent.getHeight()*0.12);
         return new CalendarViewHolder(view,onItemListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
         holder.dayOfMonth.setText(daysOfMonth.get(position));
+        if(!daysOfMonth.get(position).isEmpty()){
+            holder.dayOfMonth.setBackground(ContextCompat.getDrawable(holder.itemView.getContext(),R.drawable.component_rounded_border));
+//            holder.dayOfMonth.setWidth(400);
+//            holder.dayOfMonth.setPadding(40,20,40,20);
+        }
+
     }
 
     @Override
