@@ -2,6 +2,9 @@ package dev.roxs.moneytracker.helper;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -45,11 +48,11 @@ public class DateTimeHelper {
     }
 
 
-    public static int getCurrentMonthLocalDate() {
-        return LocalDate.now().getMonthValue();
+    public static int getCurrentMonthLocalDate(LocalDate date) {
+        return date.getMonthValue();
     }
-    public static int getCurrentYearLocalDate() {
-        return LocalDate.now().getYear();
+    public static int getCurrentYearLocalDate(LocalDate date) {
+        return date.getYear();
     }
 
     // Format from millis
@@ -68,4 +71,34 @@ public class DateTimeHelper {
     public static String formatToDisplayDate(LocalDate date) {
         return date.format(java.time.format.DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH));
     }
+    public static String monthYearFromDate(LocalDate date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+        return  date.format(formatter);
+    }
+    public static ArrayList<String> daysInMonthArray(LocalDate date){
+        ArrayList<String> daysInMonthArray = new ArrayList<>();
+        YearMonth yearMonth = YearMonth.from(date);
+        int daysInMonth = yearMonth.lengthOfMonth();
+
+        LocalDate firstOfMonth = date.withDayOfMonth(1);
+        int dayOfWeek = firstOfMonth.getDayOfWeek().getValue(); // 1=Monday ... 7=Sunday
+
+        int firstDayIndex = dayOfWeek % 7; // Convert to 0-based index (0=Sunday, 6=Saturday)
+
+        for (int i = 0; i < firstDayIndex; i++) {
+            daysInMonthArray.add("");
+        }
+
+        for (int day = 1; day <= daysInMonth; day++) {
+            daysInMonthArray.add(String.valueOf(day));
+        }
+
+        // Pad the end of the list to make a complete 6-week grid (42 cells)
+        while (daysInMonthArray.size() < 42) {
+            daysInMonthArray.add("");
+        }
+
+        return daysInMonthArray;
+    }
+
 }
