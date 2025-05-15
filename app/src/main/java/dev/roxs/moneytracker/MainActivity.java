@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
             todaySpentLayout.setVisibility(View.INVISIBLE);
         }
         vTotalSpent.setText(""+sumOfSpent);
-        vMonthStartHoldings.setText(""+earliestDayHolding);
+        vMonthStartHoldings.setText(""+earliestDayHolding+" ");
         vTodaySpent.setText(""+todaySpent);
 
         if(percentageOfChange>=0){

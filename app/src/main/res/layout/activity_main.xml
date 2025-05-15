@@ -68,7 +68,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/primary_bold"
-                        android:text="100000"
+                        android:text=""
                         android:textColor="@color/colorOnPrimary"
 
                         android:textSize="32sp" />
@@ -78,7 +78,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/primary_bold"
-                        android:text=".99"
+                        android:text=""
                         android:textColor="@color/colorOnPrimary" />
                 </LinearLayout>
 
@@ -135,7 +135,7 @@
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp"
                     android:layout_marginRight="5dp"
-                    android:text="Rs.12345 "
+                    android:text=""
                     android:id="@+id/totalSpent"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -149,7 +149,7 @@
                     android:fontFamily="@font/primary_medium"
                     android:id="@+id/monthStartHoldings"
                     android:textColor="@color/colorPrimaryVariant"
-                    android:text="Rs.1232 "/>
+                    android:text=""/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:textColor="@color/colorPrimaryVariant"
@@ -169,7 +169,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="+15%"
+                    android:text=""
                     android:textColor="@color/colorOnPrimary"
                     android:fontFamily="@font/primary_bold"
 
@@ -209,7 +209,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Rs. 250"
+            android:text=""
             android:id="@+id/todaySpent"
             android:layout_alignParentEnd="true"
             android:fontFamily="@font/primary_bold"
