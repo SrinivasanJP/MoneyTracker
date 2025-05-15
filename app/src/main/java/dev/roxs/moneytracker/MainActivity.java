@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
     private RecyclerView calendarRecyclerView;
     private LocalDate selectedDate;
 
+    private ImageView leftArrow,rightArrow;
+    ArrayList<String> datesWithData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,27 +64,24 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
 
         sql = new SQl_Helper(getApplicationContext());
 
-        ArrayList<String> datesWithData = sql.getAllRecordedDates(DateTimeHelper.getCurrentMonthLocalDate(),DateTimeHelper.getCurrentYearLocalDate());
 
 
-        Log.d("UT", "onCreate: dateswithdata: "+datesWithData.get(0));
+
         //referencing
         date = findViewById(R.id.date);
         balanceAmountWhole = findViewById(R.id.balanceAmountWhole);
         balanceAmountFraction = findViewById(R.id.balanceAmountFraction);
         dailyInputButton = findViewById(R.id.dailyInputButton);
+        leftArrow =findViewById(R.id.leftArrow);
+        rightArrow = findViewById(R.id.rightArrow);
 
         calendarRecyclerView = findViewById(R.id.calendarRecycyleView);
         vMonthText = findViewById(R.id.month);
         selectedDate = LocalDate.now();
 
-        vMonthText.setText(DateTimeHelper.getCurrentMonth());
-        ArrayList<String> daysInMonth = daysInMonthArray(selectedDate);
-        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this,datesWithData);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),7);
-        calendarRecyclerView.setLayoutManager(layoutManager);
-        calendarRecyclerView.setAdapter(calendarAdapter);
 
+
+        setMonthView();
 
 
         //Date setting
@@ -99,36 +100,27 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
             }
         });
 
+        leftArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedDate = selectedDate.minusMonths(1);
+                setMonthView();
+            }
+        });
+
+        rightArrow.setOnClickListener((new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedDate = selectedDate.plusMonths(1);
+                setMonthView();
+            }
+        }));
+
 
 
 
     }
 
-    private ArrayList<String> daysInMonthArray(LocalDate date){
-        ArrayList<String> daysInMonthArray = new ArrayList<>();
-        YearMonth yearMonth = YearMonth.from(date);
-        int daysInMonth = yearMonth.lengthOfMonth();
-
-        LocalDate firstOfMonth = date.withDayOfMonth(1);
-        int dayOfWeek = firstOfMonth.getDayOfWeek().getValue(); // 1=Monday ... 7=Sunday
-
-        int firstDayIndex = dayOfWeek % 7; // Convert to 0-based index (0=Sunday, 6=Saturday)
-
-        for (int i = 0; i < firstDayIndex; i++) {
-            daysInMonthArray.add("");
-        }
-
-        for (int day = 1; day <= daysInMonth; day++) {
-            daysInMonthArray.add(String.valueOf(day));
-        }
-
-        // Pad the end of the list to make a complete 6-week grid (42 cells)
-        while (daysInMonthArray.size() < 42) {
-            daysInMonthArray.add("");
-        }
-
-        return daysInMonthArray;
-    }
 
 
     @Override
@@ -145,5 +137,14 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
             startActivity(intent);
 
         }
+    }
+    private void setMonthView(){
+        datesWithData = sql.getAllRecordedDates(DateTimeHelper.getCurrentMonthLocalDate(selectedDate),DateTimeHelper.getCurrentYearLocalDate(selectedDate));
+        vMonthText.setText(DateTimeHelper.monthYearFromDate(selectedDate));
+        ArrayList<String> daysInMonth = DateTimeHelper.daysInMonthArray(selectedDate);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this,datesWithData);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),7);
+        calendarRecyclerView.setLayoutManager(layoutManager);
+        calendarRecyclerView.setAdapter(calendarAdapter);
     }
 }
