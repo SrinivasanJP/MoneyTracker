@@ -63,6 +63,7 @@ public class DayDataShow_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), DailyInput_Activity.class);
+                intent.putExtra("date", formattedDate);
                 startActivity(intent);
             }
         });
