@@ -14,6 +14,9 @@ public class DateTimeHelper {
     public static String getCurrentDate() {
         return formatDate(new Date());
     }
+    public static LocalDate getCurrentDateLocaldate() {
+        return LocalDate.now();
+    }
     public static String getCurrentDayName() {
         return new SimpleDateFormat("EEEE", Locale.ENGLISH).format(new Date());
     }
