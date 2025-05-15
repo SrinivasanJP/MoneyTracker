@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
             @Override
             public void onClick(View v) {
                 Intent dailyPage = new Intent(MainActivity.this, DailyInput_Activity.class);
+                dailyPage.putExtra("date",DateTimeHelper.getCurrentDate());
                 startActivity(dailyPage);
             }
         });
