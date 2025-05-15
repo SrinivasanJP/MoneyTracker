@@ -21,7 +21,7 @@ public class DayDataShow_Activity extends AppCompatActivity {
     private SQl_Helper sql;
     private String formattedDate;
     private TextView tvDate, tvSpent, tvSoftCash, tvHardCash, tvInvestments, tvHoldings, tvCredit, tvLoan, tvRemarks,vBtnLable;
-    private RelativeLayout vModifyOrAddBtn;
+    private RelativeLayout vModifyOrAddBtn, vDataShowLayout;
 
 
     @Override
@@ -55,6 +55,7 @@ public class DayDataShow_Activity extends AppCompatActivity {
             tvRemarks.setText("Remarks: " + data.remarks);
 
         } else {
+            vDataShowLayout.setVisibility(View.INVISIBLE);
             vBtnLable.setText("Add Spent Data");
             tvDate.setText("No data found for: " + formattedDate);
         }
@@ -81,5 +82,6 @@ public class DayDataShow_Activity extends AppCompatActivity {
         tvRemarks = findViewById(R.id.tv_remarks);
         vModifyOrAddBtn = findViewById(R.id.modifyOrAddBtn);
         vBtnLable = vModifyOrAddBtn.findViewById(R.id.label);
+        vDataShowLayout = findViewById(R.id.dataShowLayout);
     }
 }
