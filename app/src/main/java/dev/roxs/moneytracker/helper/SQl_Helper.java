@@ -223,4 +223,92 @@ public class SQl_Helper extends SQLiteOpenHelper {
     }
 
 
+    public double getSumSpentCurrentMonth() {
+        String currentMonth = new SimpleDateFormat("MMM-yyyy", Locale.ENGLISH).format(Calendar.getInstance().getTime());
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT SUM(" + COL_SPENT + ") FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?",
+                new String[]{"%-" + currentMonth}
+        );
+
+        double totalSpent = 0;
+        if (cursor.moveToFirst()) {
+            totalSpent = cursor.getDouble(0);
+        }
+
+        cursor.close();
+        return totalSpent;
+    }
+
+    public double getHoldingsFromEarliestDateThisMonth() {
+        String currentMonth = new SimpleDateFormat("MMM-yyyy", Locale.ENGLISH).format(Calendar.getInstance().getTime());
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT " + COL_HOLDINGS + " FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ? ORDER BY " + COL_DATE + " ASC LIMIT 1",
+                new String[]{"%-" + currentMonth}
+        );
+
+        double holdings = 0;
+        if (cursor.moveToFirst()) {
+            holdings = cursor.getDouble(0);
+        }
+
+        cursor.close();
+        return holdings;
+    }
+
+    public double getTodaysSpent() {
+        String today = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH).format(Calendar.getInstance().getTime());
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT " + COL_SPENT + " FROM " + TABLE_NAME + " WHERE " + COL_DATE + " = ?",
+                new String[]{today}
+        );
+
+        double spent = -1;
+        if (cursor.moveToFirst()) {
+            spent = cursor.getDouble(0);
+        }
+
+        cursor.close();
+        return spent;
+    }
+
+
+    public double getMonthlySpentPercentageChange() {
+        Calendar calendar = Calendar.getInstance();
+        String currentMonth = new SimpleDateFormat("MMM-yyyy", Locale.ENGLISH).format(calendar.getTime());
+
+        calendar.add(Calendar.MONTH, -1);
+        String lastMonth = new SimpleDateFormat("MMM-yyyy", Locale.ENGLISH).format(calendar.getTime());
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Get current month spent
+        Cursor cursor1 = db.rawQuery("SELECT SUM(" + COL_SPENT + ") FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?", new String[]{"%-" + currentMonth});
+        double currentSpent = 0;
+        if (cursor1.moveToFirst()) {
+            currentSpent = cursor1.getDouble(0);
+        }
+        cursor1.close();
+
+        // Get last month spent
+        Cursor cursor2 = db.rawQuery("SELECT SUM(" + COL_SPENT + ") FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?", new String[]{"%-" + lastMonth});
+        double lastSpent = 0;
+        if (cursor2.moveToFirst()) {
+            lastSpent = cursor2.getDouble(0);
+        }
+        cursor2.close();
+
+        if (lastSpent == 0) {
+            return currentSpent == 0 ? 0 : 100; // Avoid divide-by-zero
+        }
+
+        return ((currentSpent - lastSpent) / lastSpent) * 100;
+    }
+
+
+
+
+
 }

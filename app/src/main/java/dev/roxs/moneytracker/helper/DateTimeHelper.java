@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -17,6 +18,11 @@ public class DateTimeHelper {
     public static LocalDate getCurrentDateLocaldate() {
         return LocalDate.now();
     }
+    public static String getDayName(LocalDate date) {
+        return date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+    }
+
+
     public static String getCurrentDayName() {
         return new SimpleDateFormat("EEEE", Locale.ENGLISH).format(new Date());
     }
