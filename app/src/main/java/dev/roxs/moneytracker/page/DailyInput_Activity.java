@@ -21,9 +21,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -52,9 +54,18 @@ public class DailyInput_Activity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        String formatted = getIntent().getStringExtra("date");
+//        LocalDate dateLocalDate= LocalDate.parse();
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH);
+//        LocalDate dateLocalDate = LocalDate.parse(clickedDate, formatter);
+//        dateLocalDate = dateLocalDate.minusDays(1); // Fix here
+//        String formatted = DateTimeHelper.formatToDisplayDate(dateLocalDate);
+        Log.d("UT", "onCreate: " + formatted);
+
         //Database Init
         sql = new SQl_Helper(getApplicationContext());
-        yesterdaysHoldings = sql.getYesterdaysHoldings();
+        yesterdaysHoldings = sql.getYesterdaysHoldings(formatted);
+        Log.d("UT", "onCreate: "+formatted);
         if(yesterdaysHoldings==-1){
             showYesterdaysSpentDialog(sql);
         }
@@ -74,7 +85,7 @@ public class DailyInput_Activity extends AppCompatActivity {
         vReview = findViewById(R.id.remarks);
 
         //date setting
-        date.setText(DateTimeHelper.getCurrentDate());
+        date.setText(formatted);
         buttonText.setText("Save Amount");
         vYesterdayHoldings.setText(String.valueOf(yesterdaysHoldings));
 
@@ -96,7 +107,7 @@ public class DailyInput_Activity extends AppCompatActivity {
                     spent = yesterdaysHoldings - (holdings - investments - credits);
 
                     // Use DateTimeHelper
-                    String date = DateTimeHelper.getCurrentDate();
+                    String date = formatted;
                     String day = DateTimeHelper.getCurrentDayName();
 
                     sql.insertOrUpdateEntry(date, day, soft, hard, investments, credits, loan, remarks);
