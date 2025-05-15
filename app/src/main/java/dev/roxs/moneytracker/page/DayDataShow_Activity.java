@@ -3,6 +3,7 @@ package dev.roxs.moneytracker.page;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ public class DayDataShow_Activity extends AppCompatActivity {
     private String formattedDate;
     private TextView tvDate, tvSpent, tvSoftCash, tvHardCash, tvInvestments, tvHoldings, tvCredit, tvLoan, tvRemarks,vBtnLable;
     private RelativeLayout vModifyOrAddBtn, vDataShowLayout;
+    private ImageView noData;
 
 
     @Override
@@ -55,6 +57,7 @@ public class DayDataShow_Activity extends AppCompatActivity {
             tvRemarks.setText("Remarks: " + data.remarks);
 
         } else {
+            noData.setVisibility(View.VISIBLE);
             vDataShowLayout.setVisibility(View.INVISIBLE);
             vBtnLable.setText("Add Spent Data");
             tvDate.setText("No data found for: " + formattedDate);
@@ -83,5 +86,6 @@ public class DayDataShow_Activity extends AppCompatActivity {
         vModifyOrAddBtn = findViewById(R.id.modifyOrAddBtn);
         vBtnLable = vModifyOrAddBtn.findViewById(R.id.label);
         vDataShowLayout = findViewById(R.id.dataShowLayout);
+        noData = findViewById(R.id.noData);
     }
 }

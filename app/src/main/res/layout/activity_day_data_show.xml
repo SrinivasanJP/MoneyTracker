@@ -23,6 +23,13 @@
 
 
     </RelativeLayout>
+ <ImageView
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+  android:layout_centerInParent="true"
+     android:id="@+id/noData"
+  android:src="@drawable/no_data"
+  android:visibility="invisible"/>
 
  <RelativeLayout
      android:layout_width="match_parent"
