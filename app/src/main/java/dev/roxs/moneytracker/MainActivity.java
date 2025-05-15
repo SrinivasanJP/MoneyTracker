@@ -33,8 +33,8 @@ import dev.roxs.moneytracker.page.DayDataShow_Activity;
 
 public class MainActivity extends AppCompatActivity implements CalendarAdapter.OnItemListener {
 
-    private RelativeLayout dailyInputButton;
-    private TextView date, balanceAmountWhole, balanceAmountFraction;
+    private RelativeLayout dailyInputButton, todaySpentLayout;
+    private TextView date, balanceAmountWhole, balanceAmountFraction, vTotalSpent, vMonthStartHoldings,vPercentageOfLastMonth,vTodaySpent;
     private SQl_Helper sql;
 
     private TextView vMonthText;
@@ -74,6 +74,12 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         dailyInputButton = findViewById(R.id.dailyInputButton);
         leftArrow =findViewById(R.id.leftArrow);
         rightArrow = findViewById(R.id.rightArrow);
+        vTodaySpent = findViewById(R.id.todaySpent);
+        vMonthStartHoldings = findViewById(R.id.monthStartHoldings);
+        vTotalSpent = findViewById(R.id.totalSpent);
+        vPercentageOfLastMonth = findViewById(R.id.percentageOfLastMonth);
+        todaySpentLayout = findViewById(R.id.todaySpentLayout);
+
 
         calendarRecyclerView = findViewById(R.id.calendarRecycyleView);
         vMonthText = findViewById(R.id.month);
@@ -90,6 +96,21 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         String[] balance = String.valueOf(sql.getBalanceLeft()).split("\\.");
         balanceAmountWhole.setText(balance[0]);
         balanceAmountFraction.setText("."+balance[1]);
+
+
+
+
+        String sumOfSpent = String.valueOf(sql.getSumSpentCurrentMonth());
+        String earliestDayHolding = String.valueOf(sql.getHoldingsFromEarliestDateThisMonth());
+        String todaySpent = String.valueOf(sql.getTodaysSpent());
+        String percentageOfChange = String.valueOf(sql.getMonthlySpentPercentageChange());
+
+
+        vTotalSpent.setText(sumOfSpent);
+        vMonthStartHoldings.setText(earliestDayHolding);
+        vTodaySpent.setText(todaySpent);
+        vPercentageOfLastMonth.setText(percentageOfChange+" %");
+
 
         //Button actions
         dailyInputButton.setOnClickListener(new View.OnClickListener() {
