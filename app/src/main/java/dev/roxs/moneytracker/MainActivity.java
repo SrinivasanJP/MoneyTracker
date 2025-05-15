@@ -33,7 +33,7 @@ import dev.roxs.moneytracker.page.DayDataShow_Activity;
 
 public class MainActivity extends AppCompatActivity implements CalendarAdapter.OnItemListener {
 
-    private RelativeLayout dailyInputButton, todaySpentLayout;
+    private RelativeLayout dailyInputButton, todaySpentLayout,progressFill,progressContainer;
     private TextView date, balanceAmountWhole, balanceAmountFraction, vTotalSpent, vMonthStartHoldings,vPercentageOfLastMonth,vTodaySpent;
     private SQl_Helper sql;
 
@@ -79,7 +79,14 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         vTotalSpent = findViewById(R.id.totalSpent);
         vPercentageOfLastMonth = findViewById(R.id.percentageOfLastMonth);
         todaySpentLayout = findViewById(R.id.todaySpentLayout);
+        progressFill = findViewById(R.id.progressBarFill);
+        progressContainer = findViewById(R.id.progressContainer);
 
+        int percentage = 65;
+
+
+
+        spentProgress(percentage);
 
         calendarRecyclerView = findViewById(R.id.calendarRecycyleView);
         vMonthText = findViewById(R.id.month);
@@ -101,17 +108,19 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
 
 
         double sumOfSpent = sql.getSumSpentCurrentMonth();
-        String earliestDayHolding = String.valueOf(sql.getHoldingsFromEarliestDateThisMonth());
+        double earliestDayHolding = sql.getHoldingsFromEarliestDateThisMonth();
         double todaySpent = (sql.getTodaysSpent());
         double percentageOfChange = sql.getMonthlySpentPercentageChange();
 
+        if (earliestDayHolding > 0) {
+            spentProgress((sumOfSpent / earliestDayHolding) * 100.0);
+        }
 
-        Log.d("UT", "onCreate: sum of spent "+todaySpent);
         if(todaySpent<0){
             todaySpentLayout.setVisibility(View.INVISIBLE);
         }
         vTotalSpent.setText(""+sumOfSpent);
-        vMonthStartHoldings.setText(earliestDayHolding);
+        vMonthStartHoldings.setText(""+earliestDayHolding);
         vTodaySpent.setText(""+todaySpent);
 
         if(percentageOfChange>=0){
@@ -178,5 +187,18 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),7);
         calendarRecyclerView.setLayoutManager(layoutManager);
         calendarRecyclerView.setAdapter(calendarAdapter);
+    }
+
+    private void spentProgress(double percentage){
+        // Get the full width after layout pass
+        progressContainer.post(() -> {
+            int fullWidth = progressContainer.getWidth();
+            int progressWidth = (int) (fullWidth * (percentage / 100.0));
+
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) progressFill.getLayoutParams();
+            params.width = progressWidth;
+            progressFill.setLayoutParams(params);
+        });
+
     }
 }

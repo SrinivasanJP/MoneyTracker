@@ -25,10 +25,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:fontFamily="@font/primary_regular"
+                android:fontFamily="@font/primary_medium"
                 android:text="30 September 2025"
                 android:textColor="@color/colorOnPrimary"
-                android:textSize="15sp" />
+                android:textSize="18sp" />
 
             <ImageView
                 android:id="@+id/profile"
@@ -96,20 +96,24 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/progressContainer"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_below="@+id/balanceLayout"
-                android:padding="5sp"
                 android:layout_marginTop="20dp"
+                android:padding="5dp"
                 android:background="@drawable/component_rounded_gray_rectangle"
                 android:clipToOutline="true">
 
                 <RelativeLayout
-                    android:layout_width="102dp"
-                    android:layout_height="32dp"
-                    android:background="@drawable/component_rounded_blue_rectangle" />
+                    android:id="@+id/progressBarFill"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/component_rounded_blue_rectangle"
+                    android:layout_alignParentStart="true" />
 
             </RelativeLayout>
+
 
         </RelativeLayout>
         <RelativeLayout
