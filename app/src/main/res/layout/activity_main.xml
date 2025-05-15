@@ -130,6 +130,7 @@
                     android:fontFamily="@font/primary_bold"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp"
+
                     android:text="Rs.12345 "
                     android:id="@+id/totalSpent"/>
                 <TextView
@@ -205,6 +206,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Rs. 250"
+            android:id="@+id/todaySpent"
             android:layout_alignParentEnd="true"
             android:fontFamily="@font/primary_bold"
             android:textColor="@color/colorPrimary"

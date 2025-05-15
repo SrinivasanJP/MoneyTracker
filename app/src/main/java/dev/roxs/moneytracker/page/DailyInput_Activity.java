@@ -67,7 +67,7 @@ public class DailyInput_Activity extends AppCompatActivity {
         yesterdaysHoldings = sql.getYesterdaysHoldings(formatted);
         Log.d("UT", "onCreate: "+formatted);
         if(yesterdaysHoldings==-1){
-            showYesterdaysSpentDialog(sql);
+            showYesterdaysSpentDialog(sql,formatted);
         }
 //        sql.clearDatabase(); // TODO: delete this once the testing is done
 
@@ -108,7 +108,10 @@ public class DailyInput_Activity extends AppCompatActivity {
 
 
                     holdings = soft + hard + loan;
+
                     spent = yesterdaysHoldings - (holdings - investments - credits);
+
+                    Log.d("UT", "onClick: y:"+yesterdaysHoldings+"h:"+holdings+"s:"+spent);
 
                     // Use DateTimeHelper
                     String date = formatted;
@@ -141,9 +144,9 @@ public class DailyInput_Activity extends AppCompatActivity {
         vloan.setText("" + data.loan);
         vReview.setText("" + data.remarks);
     }
-    private void showYesterdaysSpentDialog(SQl_Helper sqlHelper) {
+    private void showYesterdaysSpentDialog(SQl_Helper sqlHelper, String formatted) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Oops! It seems I have no Data give ablest Yesterday's Holdings");
+        builder.setTitle("Oops! It seems I have no Data. Please provide Yesterday's Holdings");
 
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
@@ -154,17 +157,16 @@ public class DailyInput_Activity extends AppCompatActivity {
             if (!spentStr.isEmpty()) {
                 yesterdaysHoldings = Double.parseDouble(spentStr);
 
-                // Get yesterday's date
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-                Calendar calendar = Calendar.getInstance();
-                calendar.add(Calendar.DAY_OF_YEAR, -1);
-                String date = sdf.format(calendar.getTime());
+                // Use the formatted string from the activity (the selected date)
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH);
+                LocalDate selectedDate = LocalDate.parse(formatted, formatter);
+                LocalDate yesterday = selectedDate.minusDays(1);
+                String yesterdayDateStr = yesterday.format(formatter);
 
                 // Day of the week
-                SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.ENGLISH);
-                String day = dayFormat.format(calendar.getTime());
+                String day = DateTimeHelper.getDayName(yesterday); // Use your helper if it supports LocalDate
 
-                // Ask user only for spent, then you estimate softcash, hardcash, investments, credit, loan as 0
+                // Default placeholder values
                 double softcash = 0;
                 double hardcash = 0;
                 double investments = 0;
@@ -172,14 +174,17 @@ public class DailyInput_Activity extends AppCompatActivity {
                 double loan = 0;
                 String remarks = "Auto entry (only spent provided)";
 
+                // Calculate holdings from spent if you need, or use it directly
+                double holdings = yesterdaysHoldings;
+
                 // Insert into table
                 ContentValues values = new ContentValues();
-                values.put(SQl_Helper.COL_DATE, date);
+                values.put(SQl_Helper.COL_DATE, yesterdayDateStr);
                 values.put(SQl_Helper.COL_DAY, day);
                 values.put(SQl_Helper.COL_SOFTCASH, softcash);
                 values.put(SQl_Helper.COL_HARDCASH, hardcash);
                 values.put(SQl_Helper.COL_INVESTMENTS, investments);
-                values.put(SQl_Helper.COL_HOLDINGS, yesterdaysHoldings);
+                values.put(SQl_Helper.COL_HOLDINGS, holdings);
                 values.put(SQl_Helper.COL_CREDIT, credit);
                 values.put(SQl_Helper.COL_LOAN, loan);
                 values.put(SQl_Helper.COL_SPENT, spent);
@@ -197,5 +202,6 @@ public class DailyInput_Activity extends AppCompatActivity {
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         builder.show();
     }
+
 
 }
