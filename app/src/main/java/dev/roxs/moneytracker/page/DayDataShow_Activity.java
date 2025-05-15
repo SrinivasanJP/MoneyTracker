@@ -1,6 +1,9 @@
 package dev.roxs.moneytracker.page;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,7 +20,8 @@ public class DayDataShow_Activity extends AppCompatActivity {
 
     private SQl_Helper sql;
     private String formattedDate;
-    private TextView tvDate, tvSpent, tvSoftCash, tvHardCash, tvInvestments, tvHoldings, tvCredit, tvLoan, tvRemarks;
+    private TextView tvDate, tvSpent, tvSoftCash, tvHardCash, tvInvestments, tvHoldings, tvCredit, tvLoan, tvRemarks,vBtnLable;
+    private RelativeLayout vModifyOrAddBtn;
 
 
     @Override
@@ -37,7 +41,9 @@ public class DayDataShow_Activity extends AppCompatActivity {
 
         initViewsById();
 
+
         if (data != null) {
+            vBtnLable.setText("Modify Spent Data");
             tvDate.setText("Date: " + formattedDate);
             tvSpent.setText("Spent: ₹" + data.spent);
             tvSoftCash.setText("Soft Cash: ₹" + data.softCash);
@@ -47,9 +53,19 @@ public class DayDataShow_Activity extends AppCompatActivity {
             tvCredit.setText("Credit: ₹" + data.credits);
             tvLoan.setText("Loan: ₹" + data.loan);
             tvRemarks.setText("Remarks: " + data.remarks);
+
         } else {
+            vBtnLable.setText("Add Spent Data");
             tvDate.setText("No data found for: " + formattedDate);
         }
+
+        vModifyOrAddBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), DailyInput_Activity.class);
+                startActivity(intent);
+            }
+        });
     }
     private void initViewsById(){
         // Link Views
@@ -62,5 +78,7 @@ public class DayDataShow_Activity extends AppCompatActivity {
         tvCredit = findViewById(R.id.tv_credit);
         tvLoan = findViewById(R.id.tv_loan);
         tvRemarks = findViewById(R.id.tv_remarks);
+        vModifyOrAddBtn = findViewById(R.id.modifyOrAddBtn);
+        vBtnLable = vModifyOrAddBtn.findViewById(R.id.label);
     }
 }
