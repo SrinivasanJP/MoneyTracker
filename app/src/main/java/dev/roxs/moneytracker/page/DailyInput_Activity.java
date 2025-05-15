@@ -91,7 +91,7 @@ public class DailyInput_Activity extends AppCompatActivity {
 
         SQl_Helper.DB_STRUCT data = sql.getEntryByDate(formatted);
 
-        if (date != null){
+        if (data != null){
             setDataInViews(data, formatted);
         }
 
