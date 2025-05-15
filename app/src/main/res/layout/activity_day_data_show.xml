@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginVertical="30sp"
+        android:layout_marginHorizontal="30sp"
         android:id="@+id/headerLayout"
         >
         <TextView
@@ -24,33 +25,215 @@
     </RelativeLayout>
 
 
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_marginLeft="30sp"
+       android:layout_marginBottom="30sp"
+       android:text="Spent: Rs. "
+       android:layout_below="@id/headerLayout"
+       android:id="@+id/spentLable"
+       android:fontFamily="@font/primary_medium"
+       android:textSize="35sp"
+       />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/spentLable"
+        android:layout_below="@+id/headerLayout"
+        android:fontFamily="@font/primary_bold"
+        android:id="@+id/tv_spent"
+        android:textColor="@color/colorPrimary"
+        android:textSize="35sp"
+        android:text="123443432"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:id="@+id/divider"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/component_tag_box"
+        android:layout_below="@+id/spentLable"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30sp"
+        android:text="Total Holdings "
+        android:layout_below="@+id/divider"
+        android:layout_marginTop="20sp"
+        android:id="@+id/holdingsLabel"
+        android:textSize="25sp"
+        android:fontFamily="@font/primary_medium"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/holdingsLabel"
+        android:text="Rs. 1232342"
+        android:textSize="35sp"
+        android:layout_marginVertical="30dp"
+        android:id="@+id/tv_holdings"
+        android:fontFamily="@font/primary_bold"
+        android:textColor="@color/colorPrimary"
+        android:layout_centerHorizontal="true"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Soft Cash:"
+        android:id="@+id/softCashLable"
+        android:layout_below="@+id/tv_holdings"
+        android:fontFamily="@font/primary_medium"
+        android:layout_marginLeft="30sp"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rs. 12341231231"
+        android:id="@+id/tv_softcash"
+        android:layout_below="@+id/tv_holdings"
+        android:layout_alignParentEnd="true"
+        android:paddingRight="30sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="5dp"
+        android:textSize="20sp"
+        android:fontFamily="@font/primary_bold"
+        android:textColor="@color/colorPrimaryVariant"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hard Cash:"
+        android:id="@+id/hardCashLable"
+        android:layout_below="@+id/softCashLable"
+        android:fontFamily="@font/primary_medium"
+        android:layout_marginLeft="30sp"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rs. 12341231231"
+        android:layout_below="@+id/tv_softcash"
+        android:id="@+id/tv_hardcash"
+        android:layout_alignParentEnd="true"
+        android:paddingRight="30sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="5dp"
+        android:textSize="20sp"
+        android:fontFamily="@font/primary_bold"
+        android:textColor="@color/colorPrimaryVariant"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Investments:"
+        android:id="@+id/investmentsLable"
+        android:layout_below="@+id/hardCashLable"
+        android:fontFamily="@font/primary_medium"
+        android:layout_marginLeft="30sp"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rs. 12341231231"
+        android:layout_below="@+id/tv_hardcash"
+        android:layout_alignParentEnd="true"
+        android:paddingRight="30sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="5dp"
+        android:id="@+id/tv_investments"
+        android:textSize="20sp"
+        android:fontFamily="@font/primary_bold"
+        android:textColor="@color/colorPrimaryVariant"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Credits:"
+        android:id="@+id/creditsLable"
+        android:layout_below="@+id/investmentsLable"
+        android:fontFamily="@font/primary_medium"
+        android:layout_marginLeft="30sp"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rs. 12341231231"
+        android:layout_below="@+id/tv_investments"
+        android:layout_alignParentRight="true"
+        android:paddingRight="30sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="5dp"
+        android:id="@+id/tv_credits"
+        android:textSize="20sp"
+        android:fontFamily="@font/primary_bold"
+        android:textColor="@color/colorPrimaryVariant"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Friendly Loan:"
+        android:id="@+id/loanLable"
+        android:layout_below="@+id/creditsLable"
+        android:fontFamily="@font/primary_medium"
+        android:layout_marginLeft="30sp"
+        android:textSize="20sp"
+        android:layout_marginTop="10dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rs. 12341231231"
+        android:paddingRight="30sp"
+        android:id="@+id/tv_loan"
+        android:layout_below="@+id/tv_credits"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="5dp"
+        android:textSize="20sp"
+        android:fontFamily="@font/primary_bold"
+        android:textColor="@color/colorPrimaryVariant"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/loanLable"
+        android:id="@+id/remarksLabel"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="30sp"
+        android:text="Remarks:"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="remarks"
+        android:layout_toRightOf="@+id/remarksLabel"
+        android:layout_marginHorizontal="20dp"
+        android:layout_below="@id/tv_loan"
+        android:id="@+id/tv_remarks"
+        android:layout_marginTop="20dp"/>
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-            android:layout_below="@+id/headerLayout"
-            android:background="@color/colorSecondaryVariant"
-                android:padding="16dp">
+<!--        <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--            android:layout_below="@+id/headerLayout"-->
+<!--            android:background="@color/colorSecondaryVariant"-->
+<!--                android:padding="16dp">-->
 
-                <!-- Each field styled consistently -->
-            <TextView android:id="@+id/tv_spent" style="@style/DataTextStyle"/>
-                <TextView android:id="@+id/tv_softcash" style="@style/DataTextStyle"/>
-                <TextView android:id="@+id/tv_hardcash" style="@style/DataTextStyle"/>
-                <TextView android:id="@+id/tv_investments" style="@style/DataTextStyle"/>
-                <TextView android:id="@+id/tv_holdings" style="@style/DataTextStyle"/>
-                <TextView android:id="@+id/tv_credit" style="@style/DataTextStyle"/>
-                <TextView android:id="@+id/tv_loan" style="@style/DataTextStyle"/>
+<!--                &lt;!&ndash; Each field styled consistently &ndash;&gt;-->
+<!--            <TextView android:id="@+id/tv_spent" style="@style/DataTextStyle"/>-->
+<!--                <TextView android:id="@+id/tv_softcash" style="@style/DataTextStyle"/>-->
+<!--                <TextView android:id="@+id/tv_hardcash" style="@style/DataTextStyle"/>-->
+<!--                <TextView android:id="@+id/tv_investments" style="@style/DataTextStyle"/>-->
+<!--                <TextView android:id="@+id/tv_holdings" style="@style/DataTextStyle"/>-->
+<!--                <TextView android:id="@+id/tv_credit" style="@style/DataTextStyle"/>-->
+<!--                <TextView android:id="@+id/tv_loan" style="@style/DataTextStyle"/>-->
 
-                <TextView
-                    android:id="@+id/tv_remarks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Remarks: --"
-                    android:textColor="#666"
-                    android:paddingTop="12dp"
-                    android:textStyle="italic"/>
-            </LinearLayout>
+<!--                <TextView-->
+<!--                    android:id="@+id/tv_remarks"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="Remarks: &#45;&#45;"-->
+<!--                    android:textColor="#666"-->
+<!--                    android:paddingTop="12dp"-->
+<!--                    android:textStyle="italic"/>-->
+<!--            </LinearLayout>-->
 
     <include
         layout="@layout/components_button_black_xxl"

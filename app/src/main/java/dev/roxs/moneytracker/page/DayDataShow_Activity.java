@@ -44,14 +44,14 @@ public class DayDataShow_Activity extends AppCompatActivity {
 
         if (data != null) {
             vBtnLable.setText("Modify Spent Data");
-            tvDate.setText("Date: " + formattedDate);
-            tvSpent.setText("Spent: ₹" + data.spent);
-            tvSoftCash.setText("Soft Cash: ₹" + data.softCash);
-            tvHardCash.setText("Hard Cash: ₹" + data.hardCash);
-            tvInvestments.setText("Investments: ₹" + data.investments);
-            tvHoldings.setText("Holdings: ₹" + data.holdings);
-            tvCredit.setText("Credit: ₹" + data.credits);
-            tvLoan.setText("Loan: ₹" + data.loan);
+            tvDate.setText(""+ formattedDate);
+            tvSpent.setText("₹ " + data.spent);
+            tvSoftCash.setText("₹ " + data.softCash);
+            tvHardCash.setText("₹ " + data.hardCash);
+            tvInvestments.setText("₹ " + data.investments);
+            tvHoldings.setText("₹ " + data.holdings);
+            tvCredit.setText("₹ " + data.credits);
+            tvLoan.setText("₹ " + data.loan);
             tvRemarks.setText("Remarks: " + data.remarks);
 
         } else {
@@ -76,7 +76,7 @@ public class DayDataShow_Activity extends AppCompatActivity {
         tvHardCash = findViewById(R.id.tv_hardcash);
         tvInvestments = findViewById(R.id.tv_investments);
         tvHoldings = findViewById(R.id.tv_holdings);
-        tvCredit = findViewById(R.id.tv_credit);
+        tvCredit = findViewById(R.id.tv_credits);
         tvLoan = findViewById(R.id.tv_loan);
         tvRemarks = findViewById(R.id.tv_remarks);
         vModifyOrAddBtn = findViewById(R.id.modifyOrAddBtn);
