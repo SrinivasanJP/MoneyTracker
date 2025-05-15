@@ -5,8 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -86,25 +89,24 @@ public class SQl_Helper extends SQLiteOpenHelper {
     }
 
 
-    public double getYesterdaysHoldings() {
-        // Get yesterday's date in the same format as stored in the DB (assumed "dd-MMM-yyyy")
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DAY_OF_YEAR, -1);
-        String yesterday = sdf.format(calendar.getTime());
-
-        // Query the database for yesterday's holdings
+    public double getYesterdaysHoldings(String formattedDate) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH);
+        LocalDate dateLocalDate = LocalDate.parse(formattedDate, formatter);
+        dateLocalDate = dateLocalDate.minusDays(1); // Fix here
+        formattedDate = DateTimeHelper.formatToDisplayDate(dateLocalDate);
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + COL_HOLDINGS + " FROM " + TABLE_NAME + " WHERE " + COL_DATE + " = ?", new String[]{yesterday});
+        Cursor cursor = db.rawQuery("SELECT " + COL_HOLDINGS + " FROM " + TABLE_NAME + " WHERE " + COL_DATE + " = ?", new String[]{formattedDate});
 
         double holdings = -1;
         if (cursor.moveToFirst()) {
             holdings = cursor.getDouble(0);
         }
 
+        Log.d("UT", "getYesterdaysHoldings: "+holdings);
         cursor.close();
         return holdings;
     }
+
     public void insertOrUpdateEntry(String date, String day, double softcash, double hardcash, double investments, double credit, double loan, String remarks) {
         SQLiteDatabase db = this.getWritableDatabase();
 
