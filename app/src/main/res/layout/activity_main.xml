@@ -130,7 +130,7 @@
                     android:fontFamily="@font/primary_bold"
                     android:textColor="@color/colorPrimary"
                     android:textSize="20sp"
-
+                    android:layout_marginRight="5dp"
                     android:text="Rs.12345 "
                     android:id="@+id/totalSpent"/>
                 <TextView

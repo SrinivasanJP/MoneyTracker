@@ -100,16 +100,26 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
 
 
 
-        String sumOfSpent = String.valueOf(sql.getSumSpentCurrentMonth());
+        double sumOfSpent = sql.getSumSpentCurrentMonth();
         String earliestDayHolding = String.valueOf(sql.getHoldingsFromEarliestDateThisMonth());
-        String todaySpent = String.valueOf(sql.getTodaysSpent());
-        String percentageOfChange = String.valueOf(sql.getMonthlySpentPercentageChange());
+        double todaySpent = (sql.getTodaysSpent());
+        double percentageOfChange = sql.getMonthlySpentPercentageChange();
 
 
-        vTotalSpent.setText(sumOfSpent);
+        Log.d("UT", "onCreate: sum of spent "+todaySpent);
+        if(todaySpent<0){
+            todaySpentLayout.setVisibility(View.INVISIBLE);
+        }
+        vTotalSpent.setText(""+sumOfSpent);
         vMonthStartHoldings.setText(earliestDayHolding);
-        vTodaySpent.setText(todaySpent);
-        vPercentageOfLastMonth.setText(percentageOfChange+" %");
+        vTodaySpent.setText(""+todaySpent);
+
+        if(percentageOfChange>=0){
+            vPercentageOfLastMonth.setText("+"+percentageOfChange+"%");
+        }else{
+            vPercentageOfLastMonth.setText("-"+percentageOfChange+"%");
+        }
+
 
 
         //Button actions
