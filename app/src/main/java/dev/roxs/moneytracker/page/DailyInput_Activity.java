@@ -71,7 +71,6 @@ public class DailyInput_Activity extends AppCompatActivity {
         }
 //        sql.clearDatabase(); // TODO: delete this once the testing is done
 
-
         //Referencing
         date = findViewById(R.id.date);
         vYesterdayHoldings = findViewById(R.id.yesterdaysHoldings);
@@ -90,6 +89,11 @@ public class DailyInput_Activity extends AppCompatActivity {
         vYesterdayHoldings.setText(String.valueOf(yesterdaysHoldings));
 
 
+        SQl_Helper.DB_STRUCT data = sql.getEntryByDate(formatted);
+
+        if (date != null){
+            setDataInViews(data, formatted);
+        }
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,6 +128,18 @@ public class DailyInput_Activity extends AppCompatActivity {
 
 
 
+    }
+    private void setDataInViews(SQl_Helper.DB_STRUCT data, String formatted){
+
+        date.setText(formatted);
+//        spent.setText("Spent: ₹" + data.spent);
+        softMoney.setText(String.valueOf(data.softCash));
+        hardMoney.setText(String.valueOf(data.hardCash));
+        vInvestments.setText("" + data.investments);
+//        vHolding.setText("Holdings: ₹" + data.holdings);
+        vCredits.setText("" + data.credits);
+        vloan.setText("" + data.loan);
+        vReview.setText("" + data.remarks);
     }
     private void showYesterdaysSpentDialog(SQl_Helper sqlHelper) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
