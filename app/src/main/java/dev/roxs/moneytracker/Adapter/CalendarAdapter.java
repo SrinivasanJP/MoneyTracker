@@ -53,7 +53,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
             // Highlight recorded date
             if (recordedDates.contains(dayText)) {
                 // You can change background or text color
-                holder.dayOfMonth.setBackground(ContextCompat.getDrawable(context, R.drawable.component_tags_secondary)); // use a different drawable for highlighted
+                holder.dayOfMonth.setBackground(ContextCompat.getDrawable(context, R.drawable.component_tag_box)); // use a different drawable for highlighted
                 holder.dayOfMonth.setTextColor(ContextCompat.getColor(context, R.color.colorOnPrimary));
                 holder.dayOfMonth.setTypeface(ResourcesCompat.getFont(context, R.font.primary_bold));
 
