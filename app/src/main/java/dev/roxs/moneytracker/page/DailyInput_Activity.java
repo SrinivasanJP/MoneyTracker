@@ -60,7 +60,7 @@ public class DailyInput_Activity extends AppCompatActivity {
 //        LocalDate dateLocalDate = LocalDate.parse(clickedDate, formatter);
 //        dateLocalDate = dateLocalDate.minusDays(1); // Fix here
 //        String formatted = DateTimeHelper.formatToDisplayDate(dateLocalDate);
-        Log.d("UT", "onCreate: " + formatted);
+
 
         //Database Init
         sql = new SQl_Helper(getApplicationContext());
@@ -117,7 +117,7 @@ public class DailyInput_Activity extends AppCompatActivity {
                     String date = formatted;
                     String day = DateTimeHelper.getCurrentDayName();
 
-                    sql.insertOrUpdateEntry(date, day, soft, hard, investments, credits, loan, remarks);
+                    sql.insertOrUpdateEntry(date, day, soft, hard, investments, credits, loan, remarks, holdings, spent);
 
                     Toast.makeText(getApplicationContext(), "Entry saved successfully", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);

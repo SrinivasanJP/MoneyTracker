@@ -107,12 +107,10 @@ public class SQl_Helper extends SQLiteOpenHelper {
         return holdings;
     }
 
-    public void insertOrUpdateEntry(String date, String day, double softcash, double hardcash, double investments, double credit, double loan, String remarks) {
+    public void insertOrUpdateEntry(String date, String day, double softcash, double hardcash, double investments, double credit, double loan, String remarks, double holdings, double spent) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        double holdings = softcash + hardcash;
-        double prevHoldings = getPreviousHoldings(date);
-        double spent = prevHoldings - (holdings - investments - credit);
+
 
         ContentValues values = new ContentValues();
         values.put(COL_DATE, date);
