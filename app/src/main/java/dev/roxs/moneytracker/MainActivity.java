@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
     private TextView date, balanceAmountWhole, balanceAmountFraction, vTotalSpent, vMonthStartHoldings,vPercentageOfLastMonth,vTodaySpent;
     private SQl_Helper sql;
 
+    private TextView vAvgSpent, vInvestments, vLoanBalance;
+    private RelativeLayout vAvgSpentLayout, vInvestmentsLayout, vLoanBalanceLayout;
+
     private TextView vMonthText;
     private RecyclerView calendarRecyclerView;
     private LocalDate selectedDate;
@@ -81,6 +84,12 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         todaySpentLayout = findViewById(R.id.todaySpentLayout);
         progressFill = findViewById(R.id.progressBarFill);
         progressContainer = findViewById(R.id.progressContainer);
+        vAvgSpentLayout = findViewById(R.id.avgSpent);
+        vLoanBalanceLayout = findViewById(R.id.loanBalance);
+        vInvestmentsLayout = findViewById(R.id.investments);
+
+
+
 
         int percentage = 65;
 
@@ -187,6 +196,22 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),7);
         calendarRecyclerView.setLayoutManager(layoutManager);
         calendarRecyclerView.setAdapter(calendarAdapter);
+
+        TextView temp = vAvgSpentLayout.findViewById(R.id.label);
+        temp.setText("Average spent on "+ DateTimeHelper.monthYearFromDate(selectedDate));
+        temp = vAvgSpentLayout.findViewById(R.id.amount);
+        temp.setText("Rs. "+sql.getAverageSpentForMonth(selectedDate));
+        temp = vInvestmentsLayout.findViewById(R.id.label);
+        temp.setText("Total Investments on "+DateTimeHelper.monthYearFromDate(selectedDate));
+        temp = vInvestmentsLayout.findViewById(R.id.amount);
+        temp.setText("Rs. "+sql.getTotalInvestmentsForMonth(selectedDate));
+        temp = vLoanBalanceLayout.findViewById(R.id.label);
+        temp.setText("Total Balance Loan");
+        temp = vLoanBalanceLayout.findViewById(R.id.amount);
+        temp.setText("Rs. "+sql.getLastLoanForMonth(selectedDate));
+
+
+
     }
 
     private void spentProgress(double percentage){
