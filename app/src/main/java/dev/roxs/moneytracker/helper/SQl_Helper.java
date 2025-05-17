@@ -307,6 +307,60 @@ public class SQl_Helper extends SQLiteOpenHelper {
 
 
 
+    public double getAverageSpentForMonth(LocalDate date) {
+        String monthName = date.getMonth().name().substring(0, 1) + date.getMonth().name().substring(1, 3).toLowerCase(); // "Jan", "Feb", ...
+        String pattern = "%-" + monthName + "-" + date.getYear();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT AVG(" + COL_SPENT + ") FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?", new String[]{pattern});
+
+        double avgSpent = 0;
+        if (cursor.moveToFirst()) {
+            avgSpent = cursor.getDouble(0);
+        }
+        cursor.close();
+        return avgSpent;
+    }
+
+
+    public double getTotalInvestmentsForMonth(LocalDate date) {
+        String monthName = date.getMonth().name().substring(0, 1) + date.getMonth().name().substring(1, 3).toLowerCase();
+        String pattern = "%-" + monthName + "-" + date.getYear();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT SUM(" + COL_INVESTMENTS + ") FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?", new String[]{pattern});
+
+        double totalInvestments = 0;
+        if (cursor.moveToFirst()) {
+            totalInvestments = cursor.getDouble(0);
+        }
+        cursor.close();
+        return totalInvestments;
+    }
+
+    public double getLastLoanForMonth(LocalDate date) {
+        String monthName = date.getMonth().name().substring(0, 1) + date.getMonth().name().substring(1, 3).toLowerCase();
+        String pattern = "%-" + monthName + "-" + date.getYear();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT " + COL_LOAN + " FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ? ORDER BY " + COL_DATE + " DESC LIMIT 1",
+                new String[]{pattern}
+        );
+
+        double loan = -1;
+        if (cursor.moveToFirst()) {
+            loan = cursor.getDouble(0);
+        }
+        cursor.close();
+        return loan;
+    }
+
+
+
+
+
+
 
 
 }
