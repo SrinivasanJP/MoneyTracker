@@ -224,6 +224,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="20dp"
             android:layout_marginHorizontal="20dp"
            >
             <RelativeLayout
@@ -338,7 +339,7 @@
                 android:layout_width="match_parent"
                 android:layout_below="@+id/days"
                 android:layout_marginTop="10dp"
-                android:layout_height="match_parent"/>
+                android:layout_height="370dp"/>
 
 <!--            <RelativeLayout-->
 <!--                android:layout_width="match_parent"-->
@@ -376,13 +377,23 @@
 <!--                    android:fontFamily="@font/primary_bold"-->
 <!--                    android:textColor="@color/colorPrimary"/>-->
 <!--            </RelativeLayout>-->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/calendarRecycyleView"
+                android:text="Monthly Summery"
+                android:textSize="28sp"
+                android:layout_marginHorizontal="10dp"
+                android:fontFamily="@font/primary_bold"
+                android:id="@+id/monthSummery"
+                android:textColor="@color/colorPrimary"/>
             <include layout="@layout/row_template_month_summary"
                 android:id="@+id/avgSpent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="20dp"
-                android:layout_below="@+id/calendarRecycyleView"
+                android:layout_below="@+id/monthSummery"
                 />
             <include layout="@layout/row_template_month_summary"
                 android:id="@+id/investments"
