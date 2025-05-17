@@ -9,25 +9,16 @@
             android:layout_height="wrap_content"
             android:text="Average spent on"
             android:layout_alignParentBottom="true"
-            android:id="@+id/avgLabel"
+            android:id="@+id/label"
             android:textSize="18sp"
             android:fontFamily="@font/primary_medium"
 
             />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/avgMonth"
-            android:layout_marginLeft="10dp"
-            android:text="September"
-            android:textColor="@color/colorPrimaryVariant"
-            android:textSize="18sp"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/avgLabel"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/avgMonth"
+            android:layout_toRightOf="@+id/label"
             android:text="Rs. 1234"
             android:layout_marginLeft="10dp"
             android:id="@+id/amount"
