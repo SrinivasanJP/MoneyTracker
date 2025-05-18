@@ -39,7 +39,7 @@ public class DailyInput_Activity extends AppCompatActivity {
     private TextView date, buttonText, vYesterdayHoldings;
     private TextInputEditText softMoney, hardMoney, vInvestments, vCredits, vloan, vReview;
     private RelativeLayout saveButton;
-    private double soft,hard, spent, holdings,yesterdaysHoldings, loan,investments, credits;
+    private double soft,hard, spent, holdings, loan,investments, credits;
     private SQl_Helper sql;
     private String remarks;
     private SQl_Helper.DB_STRUCT yesterdaysData;
@@ -112,9 +112,9 @@ public class DailyInput_Activity extends AppCompatActivity {
 
                     holdings = soft + hard + loan;
 
-                    spent = yesterdaysHoldings - (holdings - investments - credits);
+                    spent = yesterdaysData.holdings - (holdings - investments - credits);
 
-                    Log.d("UT", "onClick: y:"+yesterdaysHoldings+"h:"+holdings+"s:"+spent);
+                    Log.d("UT", "onClick: y:"+yesterdaysData.holdings+"h:"+holdings+"s:"+spent);
 
                     // Use DateTimeHelper
                     String date = formatted;
@@ -125,6 +125,7 @@ public class DailyInput_Activity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Entry saved successfully", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
+                    finish();
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(), "Please fill all fields correctly", Toast.LENGTH_SHORT).show();
@@ -158,7 +159,7 @@ public class DailyInput_Activity extends AppCompatActivity {
         builder.setPositiveButton("Save", (dialog, which) -> {
             String spentStr = input.getText().toString().trim();
             if (!spentStr.isEmpty()) {
-                yesterdaysHoldings = Double.parseDouble(spentStr);
+                Double yesterdaysHoldings = Double.parseDouble(spentStr);
 
                 // Use the formatted string from the activity (the selected date)
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH);

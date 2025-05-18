@@ -1,6 +1,10 @@
 package dev.roxs.moneytracker;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +18,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -24,20 +29,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import dev.roxs.moneytracker.Adapter.CalendarAdapter;
 import dev.roxs.moneytracker.helper.DateTimeHelper;
+import dev.roxs.moneytracker.helper.Notification_Helper;
 import dev.roxs.moneytracker.helper.SQl_Helper;
 import dev.roxs.moneytracker.page.DailyInput_Activity;
 import dev.roxs.moneytracker.page.DayDataShow_Activity;
-
+import android.Manifest;
 public class MainActivity extends AppCompatActivity implements CalendarAdapter.OnItemListener {
 
     private RelativeLayout dailyInputButton, todaySpentLayout,progressFill,progressContainer;
     private TextView date, balanceAmountWhole, balanceAmountFraction, vTotalSpent, vMonthStartHoldings,vPercentageOfLastMonth,vTodaySpent;
     private SQl_Helper sql;
 
-    private TextView vAvgSpent, vInvestments, vLoanBalance;
     private RelativeLayout vAvgSpentLayout, vInvestmentsLayout, vLoanBalanceLayout;
 
     private TextView vMonthText;
@@ -53,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        Notification_Helper.scheduleDailyWork(this);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -64,6 +71,14 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimary));
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 101);
+            }
+        }
+
 
         sql = new SQl_Helper(getApplicationContext());
 
@@ -125,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
             spentProgress((sumOfSpent / earliestDayHolding) * 100.0);
         }
 
-        if(todaySpent<0){
+        if(!sql.isTodaysRecordAvailable()){
             todaySpentLayout.setVisibility(View.INVISIBLE);
         }
         vTotalSpent.setText(""+sumOfSpent);
@@ -226,4 +241,5 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         });
 
     }
+
 }

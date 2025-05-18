@@ -291,6 +291,19 @@ public class SQl_Helper extends SQLiteOpenHelper {
         cursor.close();
         return spent;
     }
+    public boolean isTodaysRecordAvailable() {
+        String today = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH).format(Calendar.getInstance().getTime());
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT 1 FROM " + TABLE_NAME + " WHERE " + COL_DATE + " = ? LIMIT 1",
+                new String[]{today}
+        );
+
+        boolean exists = cursor.moveToFirst(); // true if a row exists
+        cursor.close();
+        return exists;
+    }
+
 
 
     public double getMonthlySpentPercentageChange() {
