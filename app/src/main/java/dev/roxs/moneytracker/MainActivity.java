@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-        scheduleDailySpentReminder();
+        Notification_Helper.scheduleDailyWork(this);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -241,34 +241,5 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         });
 
     }
-
-    private void scheduleDailySpentReminder() {
-        Intent intent = new Intent(this, Notification_Helper.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 20); // 3 PM
-        calendar.set(Calendar.MINUTE, 0);       // 08 minutes
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-
-        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
-        }
-
-        alarmManager.setInexactRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calendar.getTimeInMillis(),
-                AlarmManager.INTERVAL_DAY,
-                pendingIntent
-        );
-
-        Log.d("UT", "Alarm scheduled for: " + calendar.getTime().toString());
-        Toast.makeText(this, "Notification Set for 3:08 PM", Toast.LENGTH_SHORT).show();
-    }
-
 
 }
