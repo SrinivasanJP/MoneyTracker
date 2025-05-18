@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
     private TextView date, balanceAmountWhole, balanceAmountFraction, vTotalSpent, vMonthStartHoldings,vPercentageOfLastMonth,vTodaySpent;
     private SQl_Helper sql;
 
-    private TextView vAvgSpent, vInvestments, vLoanBalance;
     private RelativeLayout vAvgSpentLayout, vInvestmentsLayout, vLoanBalanceLayout;
 
     private TextView vMonthText;
@@ -125,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
             spentProgress((sumOfSpent / earliestDayHolding) * 100.0);
         }
 
-        if(todaySpent<0){
+        if(!sql.isTodaysRecordAvailable()){
             todaySpentLayout.setVisibility(View.INVISIBLE);
         }
         vTotalSpent.setText(""+sumOfSpent);
