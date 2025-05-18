@@ -89,23 +89,43 @@ public class SQl_Helper extends SQLiteOpenHelper {
     }
 
 
-    public double getYesterdaysHoldings(String formattedDate) {
+    public DB_STRUCT getYesterdaysHoldings(String formattedDate) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH);
         LocalDate dateLocalDate = LocalDate.parse(formattedDate, formatter);
-        dateLocalDate = dateLocalDate.minusDays(1); // Fix here
-        formattedDate = DateTimeHelper.formatToDisplayDate(dateLocalDate);
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + COL_HOLDINGS + " FROM " + TABLE_NAME + " WHERE " + COL_DATE + " = ?", new String[]{formattedDate});
+        dateLocalDate = dateLocalDate.minusDays(1); // Move to yesterday
+        formattedDate = DateTimeHelper.formatToDisplayDate(dateLocalDate); // Adjust date to string format
 
-        double holdings = -1;
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT " + COL_SOFTCASH + ", " + COL_HARDCASH + ", " + COL_HOLDINGS +
+                        " FROM " + TABLE_NAME +
+                        " WHERE " + COL_DATE + " = ?",
+                new String[]{formattedDate}
+        );
+
+        DB_STRUCT result = null;
         if (cursor.moveToFirst()) {
-            holdings = cursor.getDouble(0);
+            double softCash = cursor.getDouble(0);
+            double hardCash = cursor.getDouble(1);
+            double holdings = cursor.getDouble(2);
+
+            result = new DB_STRUCT(
+                    0.0,       // spent
+                    softCash,
+                    hardCash,
+                    0.0,       // investments
+                    holdings,
+                    0.0,       // credits
+                    0.0,       // loan
+                    ""        // remarks
+            );
         }
 
-        Log.d("UT", "getYesterdaysHoldings: "+holdings);
         cursor.close();
-        return holdings;
+        return result;
     }
+
 
     public void insertOrUpdateEntry(String date, String day, double softcash, double hardcash, double investments, double credit, double loan, String remarks, double holdings, double spent) {
         SQLiteDatabase db = this.getWritableDatabase();

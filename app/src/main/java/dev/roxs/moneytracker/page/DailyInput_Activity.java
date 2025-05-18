@@ -39,9 +39,10 @@ public class DailyInput_Activity extends AppCompatActivity {
     private TextView date, buttonText, vYesterdayHoldings;
     private TextInputEditText softMoney, hardMoney, vInvestments, vCredits, vloan, vReview;
     private RelativeLayout saveButton;
-    private double soft,hard, spent,yesterdaysHoldings, holdings, loan,investments, credits;
+    private double soft,hard, spent, holdings,yesterdaysHoldings, loan,investments, credits;
     private SQl_Helper sql;
     private String remarks;
+    private SQl_Helper.DB_STRUCT yesterdaysData;
 
 
     @Override
@@ -64,9 +65,9 @@ public class DailyInput_Activity extends AppCompatActivity {
 
         //Database Init
         sql = new SQl_Helper(getApplicationContext());
-        yesterdaysHoldings = sql.getYesterdaysHoldings(formatted);
+        yesterdaysData = sql.getYesterdaysHoldings(formatted);
         Log.d("UT", "onCreate: "+formatted);
-        if(yesterdaysHoldings==-1){
+        if(yesterdaysData.holdings==-1){
             showYesterdaysSpentDialog(sql,formatted);
         }
 //        sql.clearDatabase(); // TODO: delete this once the testing is done
@@ -86,13 +87,15 @@ public class DailyInput_Activity extends AppCompatActivity {
         //date setting
         date.setText(formatted);
         buttonText.setText("Save Amount");
-        vYesterdayHoldings.setText(String.valueOf(yesterdaysHoldings));
+        vYesterdayHoldings.setText(String.valueOf(yesterdaysData.holdings));
 
 
         SQl_Helper.DB_STRUCT data = sql.getEntryByDate(formatted);
 
         if (data != null){
             setDataInViews(data, formatted);
+        }else{
+            setDataInViews(yesterdaysData, formatted);
         }
 
         saveButton.setOnClickListener(new View.OnClickListener() {
