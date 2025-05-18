@@ -21,6 +21,18 @@ public class DateTimeHelper {
     public static String getDayName(LocalDate date) {
         return date.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
     }
+    public static String getDayOfWeek(String formattedDate) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+            Date date = format.parse(formattedDate);
+
+            SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.ENGLISH);
+            return dayFormat.format(date);  // e.g., "Saturday"
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
     public static String getCurrentDayName() {

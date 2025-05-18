@@ -118,7 +118,7 @@ public class DailyInput_Activity extends AppCompatActivity {
 
                     // Use DateTimeHelper
                     String date = formatted;
-                    String day = DateTimeHelper.getCurrentDayName();
+                    String day = DateTimeHelper.getDayOfWeek(formatted);
 
                     sql.insertOrUpdateEntry(date, day, soft, hard, investments, credits, loan, remarks, holdings, spent);
 
