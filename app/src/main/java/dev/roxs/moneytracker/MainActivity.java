@@ -250,8 +250,8 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 15); // 3 PM
-        calendar.add(Calendar.MINUTE, 1);       // 08 minutes
+        calendar.set(Calendar.HOUR_OF_DAY, 20); // 3 PM
+        calendar.set(Calendar.MINUTE, 0);       // 08 minutes
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
