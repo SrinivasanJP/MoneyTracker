@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -15,12 +16,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MoneyTracker"
         tools:targetApi="31">
-        <receiver android:name=".helper.Notification_Helper"
+        <activity
+            android:name=".page.SplashScreen"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".helper.Notification_Helper"
             android:enabled="true"
-            android:exported="false"> <intent-filter>
-            <action android:name="android.intent.action.BOOT_COMPLETED" />
-            <action android:name="dev.roxs.moneytracker.DAILY_SPENT_REMINDER" />
-        </intent-filter>
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="dev.roxs.moneytracker.DAILY_SPENT_REMINDER" />
+            </intent-filter>
         </receiver>
 
         <activity
@@ -39,6 +52,5 @@
             </intent-filter>
         </activity>
     </application>
-
 
 </manifest>

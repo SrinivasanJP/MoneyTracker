@@ -5,6 +5,9 @@ plugins {
 android {
     namespace = "dev.roxs.moneytracker"
     compileSdk = 34
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "dev.roxs.moneytracker"
