@@ -1,6 +1,8 @@
 package dev.roxs.moneytracker.page;
 
 import android.os.Bundle;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,6 +14,9 @@ import dev.roxs.moneytracker.R;
 
 public class Settings extends AppCompatActivity {
 
+    RelativeLayout vExportButton;
+    TextView vExportLabel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,5 +27,12 @@ public class Settings extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        vExportLabel.setText("Export Spent Data");
+
+
+    }
+    private void InitViews(){
+        vExportButton = findViewById(R.id.exportData);
+        vExportLabel = vExportButton.findViewById(R.id.label);
     }
 }
