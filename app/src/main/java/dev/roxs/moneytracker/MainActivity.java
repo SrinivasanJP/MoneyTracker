@@ -1,20 +1,15 @@
 package dev.roxs.moneytracker;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,9 +22,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import dev.roxs.moneytracker.Adapter.CalendarAdapter;
 import dev.roxs.moneytracker.helper.DateTimeHelper;
@@ -37,6 +30,8 @@ import dev.roxs.moneytracker.helper.Notification_Helper;
 import dev.roxs.moneytracker.helper.SQl_Helper;
 import dev.roxs.moneytracker.page.DailyInput_Activity;
 import dev.roxs.moneytracker.page.DayDataShow_Activity;
+import dev.roxs.moneytracker.page.Settings_Activity;
+
 import android.Manifest;
 public class MainActivity extends AppCompatActivity implements CalendarAdapter.OnItemListener {
 
@@ -50,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
     private RecyclerView calendarRecyclerView;
     private LocalDate selectedDate;
 
-    private ImageView leftArrow,rightArrow;
+    private ImageView leftArrow,rightArrow, vSettings;
     ArrayList<String> datesWithData;
 
 
@@ -102,15 +97,15 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         vAvgSpentLayout = findViewById(R.id.avgSpent);
         vLoanBalanceLayout = findViewById(R.id.loanBalance);
         vInvestmentsLayout = findViewById(R.id.investments);
+        vSettings =findViewById(R.id.settings);
 
-
-
-
-        int percentage = 65;
-
-
-
-        spentProgress(percentage);
+        vSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent settings = new Intent(getApplicationContext(), Settings_Activity.class);
+                startActivity(settings);
+            }
+        });
 
         calendarRecyclerView = findViewById(R.id.calendarRecycyleView);
         vMonthText = findViewById(R.id.month);
