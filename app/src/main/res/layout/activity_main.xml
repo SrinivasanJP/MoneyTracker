@@ -31,11 +31,11 @@
                 android:textSize="18sp" />
 
             <ImageView
-                android:id="@+id/profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/settings"
+                android:layout_width="32sp"
+                android:layout_height="32sp"
                 android:layout_alignParentEnd="true"
-                android:src="@drawable/profile_placeholder" />
+                android:src="@drawable/round_settings_24" />
         </RelativeLayout>
 
         <RelativeLayout
