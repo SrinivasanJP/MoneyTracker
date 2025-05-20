@@ -67,7 +67,7 @@ public class Notification_Helper extends Worker {
     public static void scheduleDailyWork(Context context) {
         Calendar now = Calendar.getInstance();
         Calendar dueTime = Calendar.getInstance();
-        dueTime.set(Calendar.HOUR_OF_DAY, 20);
+        dueTime.set(Calendar.HOUR_OF_DAY, 18);
         dueTime.set(Calendar.MINUTE, 0);
         dueTime.set(Calendar.SECOND, 0);
 
