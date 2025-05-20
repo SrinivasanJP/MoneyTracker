@@ -210,15 +210,15 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         TextView temp = vAvgSpentLayout.findViewById(R.id.label);
         temp.setText("Average spent on "+ DateTimeHelper.monthYearFromDate(selectedDate));
         temp = vAvgSpentLayout.findViewById(R.id.amount);
-        temp.setText("Rs. "+sql.getAverageSpentForMonth(selectedDate));
+        temp.setText(String.format("Rs. %.2f",sql.getAverageSpentForMonth(selectedDate)));
         temp = vInvestmentsLayout.findViewById(R.id.label);
         temp.setText("Total Investments on "+DateTimeHelper.monthYearFromDate(selectedDate));
         temp = vInvestmentsLayout.findViewById(R.id.amount);
-        temp.setText("Rs. "+sql.getTotalInvestmentsForMonth(selectedDate));
+        temp.setText(String.format("Rs. %.2f",sql.getTotalInvestmentsForMonth(selectedDate)));
         temp = vLoanBalanceLayout.findViewById(R.id.label);
         temp.setText("Total Balance Loan");
         temp = vLoanBalanceLayout.findViewById(R.id.amount);
-        temp.setText("Rs. "+sql.getLastLoanForMonth(selectedDate));
+        temp.setText(String.format("Rs. %.2f",sql.getLastLoanForMonth(selectedDate)));
 
 
 
