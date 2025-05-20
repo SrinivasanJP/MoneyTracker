@@ -23,6 +23,7 @@ import dev.roxs.moneytracker.R;
 
 public class SplashScreen extends AppCompatActivity {
         private ImageView logoImage;
+        private String appLink, version;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -65,13 +66,17 @@ public class SplashScreen extends AppCompatActivity {
                 urlConnection.disconnect();
 
                 JSONObject jsonObject = new JSONObject(json.toString());
-                return jsonObject.getString("version");
+                version = jsonObject.getString("version");
+                appLink = jsonObject.getString("appLink");
+
+                return version;
 
             } catch (Exception e) {
                 e.printStackTrace();
-                return null;  // On failure, skip update check
+                return null;
             }
         }
+
 
         @Override
         protected void onPostExecute(String latestVersion) {
@@ -98,7 +103,7 @@ public class SplashScreen extends AppCompatActivity {
                     .setMessage("A new version of the app is available. Please update to continue.")
                     .setCancelable(false)
                     .setPositiveButton("Update", (dialog, which) -> {
-                        String updateUrl = "https://srinivasan-jp-portfolio.vercel.app/appVersionAPI.json";
+                        String updateUrl = appLink;
                         Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateUrl));
                         startActivity(intent);
                         finish(); // Close the splash screen
