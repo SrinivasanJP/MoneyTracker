@@ -30,15 +30,7 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name=".helper.Notification_Helper"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="dev.roxs.moneytracker.DAILY_SPENT_REMINDER" />
-            </intent-filter>
-        </receiver>
+
 
         <activity
             android:name=".page.DayDataShow_Activity"

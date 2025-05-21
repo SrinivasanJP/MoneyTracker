@@ -66,8 +66,8 @@ public class DailyInput_Activity extends AppCompatActivity {
         //Database Init
         sql = new SQl_Helper(getApplicationContext());
         yesterdaysData = sql.getYesterdaysHoldings(formatted);
-        Log.d("UT", "onCreate: "+formatted);
-        if(yesterdaysData.holdings==-1){
+        Log.d("UT", "onCreate: "+yesterdaysData);
+        if(yesterdaysData==null){
             showYesterdaysSpentDialog(sql,formatted);
         }
 //        sql.clearDatabase(); // TODO: delete this once the testing is done
@@ -87,14 +87,18 @@ public class DailyInput_Activity extends AppCompatActivity {
         //date setting
         date.setText(formatted);
         buttonText.setText("Save Amount");
-        vYesterdayHoldings.setText(String.valueOf(yesterdaysData.holdings));
+        if(yesterdaysData!=null && yesterdaysData.holdings==-1){
+            vYesterdayHoldings.setText(String.valueOf(yesterdaysData.holdings));
+        }
+
 
 
         SQl_Helper.DB_STRUCT data = sql.getEntryByDate(formatted);
 
         if (data != null){
             setDataInViews(data, formatted);
-        }else{
+        }else if(yesterdaysData !=null){
+
             setDataInViews(yesterdaysData, formatted);
         }
 
