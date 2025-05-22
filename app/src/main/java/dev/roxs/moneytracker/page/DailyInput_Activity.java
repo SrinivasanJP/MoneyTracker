@@ -87,7 +87,7 @@ public class DailyInput_Activity extends AppCompatActivity {
         //date setting
         date.setText(formatted);
         buttonText.setText("Save Amount");
-        if(yesterdaysData!=null && yesterdaysData.holdings==-1){
+        if(yesterdaysData!=null){
             vYesterdayHoldings.setText(String.valueOf(yesterdaysData.holdings));
         }
 
