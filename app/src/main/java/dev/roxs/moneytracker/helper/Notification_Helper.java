@@ -3,7 +3,9 @@ package dev.roxs.moneytracker.helper;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
@@ -20,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import dev.roxs.moneytracker.R;
 import dev.roxs.moneytracker.helper.SQl_Helper;
+import dev.roxs.moneytracker.page.DailyInput_Activity;
 
 public class Notification_Helper extends Worker {
 
@@ -32,20 +35,15 @@ public class Notification_Helper extends Worker {
     @Override
     public Result doWork() {
         SQl_Helper dbHelper = new SQl_Helper(getApplicationContext());
-
-//        if (!dbHelper.isTodaysRecordAvailable()) {
-//            sendReminderNotification();
-//        }
-            sendReminderNotification();
-
-
+        sendReminderNotification();
         return Result.success();
     }
 
     private void sendReminderNotification() {
         String channelId = "daily_spent_reminder";
+        Context context = getApplicationContext();
         NotificationManager notificationManager = (NotificationManager)
-                getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
@@ -54,12 +52,25 @@ public class Notification_Helper extends Worker {
             notificationManager.createNotificationChannel(channel);
         }
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), channelId)
+        // Intent to open MainActivity or any other activity
+        Intent intent = new Intent(context, DailyInput_Activity.class); // Change to your target activity
+        intent.putExtra("date",DateTimeHelper.getCurrentDate());
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                context,
+                0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE // Use FLAG_IMMUTABLE for API 31+
+        );
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.mipmap.mm_icon_round)
                 .setContentTitle("Money Tracker Reminder")
                 .setContentText("You haven’t added today’s spent yet!")
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true);
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent); // 👈 This adds the onClick action
 
         notificationManager.notify(1001, builder.build());
     }
