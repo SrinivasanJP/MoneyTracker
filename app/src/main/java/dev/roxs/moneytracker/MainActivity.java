@@ -143,9 +143,9 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         vTodaySpent.setText(""+todaySpent);
 
         if(percentageOfChange>=0){
-            vPercentageOfLastMonth.setText("+"+percentageOfChange+"%");
+            vPercentageOfLastMonth.setText(String.format("+%.2f %%",percentageOfChange));
         }else{
-            vPercentageOfLastMonth.setText("-"+percentageOfChange+"%");
+            vPercentageOfLastMonth.setText(String.format("%.2f %%",percentageOfChange));
         }
 
 
