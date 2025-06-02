@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
     private LocalDate selectedDate;
 
     private ImageView leftArrow,rightArrow, vSettings;
-    ArrayList<String> datesWithData;
+    ArrayList<Integer> datesWithData;
 
 
     @Override

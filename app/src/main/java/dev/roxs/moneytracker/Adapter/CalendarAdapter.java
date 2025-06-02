@@ -21,9 +21,9 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
     private final ArrayList<String> daysOfMonth;
     private final OnItemListener onItemListener;
-    private final Set<String> recordedDates;
+    private final Set<Integer> recordedDates;
 
-    public CalendarAdapter(ArrayList<String> daysOfMonth, OnItemListener onItemListener, List<String> recordedDates) {
+    public CalendarAdapter(ArrayList<String> daysOfMonth, OnItemListener onItemListener, List<Integer> recordedDates) {
         this.daysOfMonth = daysOfMonth;
         this.onItemListener = onItemListener;
         this.recordedDates = new HashSet<>(recordedDates);
@@ -43,15 +43,12 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
         String dayText = daysOfMonth.get(position);
         holder.dayOfMonth.setText(dayText);
-
-
         Context context = holder.itemView.getContext();
-
         if (!dayText.isEmpty()) {
             holder.dayOfMonth.setBackground(ContextCompat.getDrawable(context, R.drawable.component_rounded_border));
 
             // Highlight recorded date
-            if (recordedDates.contains(dayText)) {
+            if (recordedDates.contains(Integer.parseInt(dayText))) {
                 // You can change background or text color
                 holder.dayOfMonth.setBackground(ContextCompat.getDrawable(context, R.drawable.component_tag_box)); // use a different drawable for highlighted
                 holder.dayOfMonth.setTextColor(ContextCompat.getColor(context, R.color.colorOnPrimary));

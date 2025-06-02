@@ -217,14 +217,13 @@ public class SQl_Helper extends SQLiteOpenHelper {
         cursor.close();
         return SQlHelper_Struct;
     }
-    public ArrayList<String> getAllRecordedDates(int month, int year) {
-        ArrayList<String> dates = new ArrayList<>();
+    public ArrayList<Integer> getAllRecordedDates(int month, int year) {
+        ArrayList<Integer> dates = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
         // Format the month to 2-digits (e.g., 05)
         String monthName = new java.text.DateFormatSymbols().getShortMonths()[month - 1];
         String formattedLike = "%-" + monthName + "-" + year;
-
         Cursor cursor = db.rawQuery(
                 "SELECT " + COL_DATE + " FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?",
                 new String[]{formattedLike}
@@ -232,7 +231,7 @@ public class SQl_Helper extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                dates.add(cursor.getString(0).split("-")[0]);
+                dates.add(Integer.parseInt(cursor.getString(0).split("-")[0]));
             } while (cursor.moveToNext());
         }
 
