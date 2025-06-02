@@ -22,7 +22,9 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import dev.roxs.moneytracker.Adapter.CalendarAdapter;
 import dev.roxs.moneytracker.helper.DateTimeHelper;
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
     private TextView date, balanceAmountWhole, balanceAmountFraction, vTotalSpent, vMonthStartHoldings,vPercentageOfLastMonth,vTodaySpent;
     private SQl_Helper sql;
 
-    private RelativeLayout vAvgSpentLayout, vInvestmentsLayout, vLoanBalanceLayout;
+    private RelativeLayout vAvgSpentLayout, vInvestmentsLayout, vLoanBalanceLayout, vTotalSpentOfMonth;
 
     private TextView vMonthText;
     private RecyclerView calendarRecyclerView;
@@ -96,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         progressContainer = findViewById(R.id.progressContainer);
         vAvgSpentLayout = findViewById(R.id.avgSpent);
         vLoanBalanceLayout = findViewById(R.id.loanBalance);
+        vTotalSpentOfMonth = findViewById(R.id.totalSpentOfTheMonth);
         vInvestmentsLayout = findViewById(R.id.investments);
         vSettings =findViewById(R.id.settings);
 
@@ -215,8 +218,11 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         temp.setText("Total Balance Loan");
         temp = vLoanBalanceLayout.findViewById(R.id.amount);
         temp.setText(String.format("Rs. %.2f",sql.getLastLoanForMonth(selectedDate)));
-
-
+        temp = vTotalSpentOfMonth.findViewById(R.id.label);
+        temp.setText("Total Spent on "+ DateTimeHelper.monthYearFromDate(selectedDate));
+        temp = vTotalSpentOfMonth.findViewById((R.id.amount));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM-yyyy", Locale.ENGLISH);
+        temp.setText(String.format("Rs. %.2f",sql.getMonthlyTotalSpent(selectedDate.format(formatter))));
 
     }
 
