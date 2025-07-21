@@ -54,7 +54,7 @@ public class DayDataShow_Activity extends AppCompatActivity {
             tvHoldings.setText("₹ " + data.holdings);
             tvCredit.setText("₹ " + data.credits);
             tvLoan.setText("₹ " + data.loan);
-            tvRemarks.setText("Remarks: " + data.remarks);
+            tvRemarks.setText(data.remarks);
 
         } else {
             noData.setVisibility(View.VISIBLE);
