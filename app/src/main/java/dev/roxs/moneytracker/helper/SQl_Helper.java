@@ -221,23 +221,26 @@ public class SQl_Helper extends SQLiteOpenHelper {
         ArrayList<Integer> dates = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        // Format the month to 2-digits (e.g., 05)
-        String monthName = new java.text.DateFormatSymbols().getShortMonths()[month - 1];
-        String formattedLike = "%-" + monthName + "-" + year;
+        // Format as "yyyy-MM"
+        String formattedLike = String.format("%04d-%02d", year, month);  // e.g., "2025-07"
+
         Cursor cursor = db.rawQuery(
                 "SELECT " + COL_DATE + " FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?",
-                new String[]{formattedLike}
+                new String[]{formattedLike + "%"}
         );
 
         if (cursor.moveToFirst()) {
             do {
-                dates.add(Integer.parseInt(cursor.getString(0).split("-")[0]));
+                String fullDate = cursor.getString(0);  // "2025-07-21"
+                int day = Integer.parseInt(fullDate.split("-")[2]);  // Get "21"
+                dates.add(day);
             } while (cursor.moveToNext());
         }
 
         cursor.close();
         return dates;
     }
+
 
 
     public double getSumSpentCurrentMonth() {
@@ -392,6 +395,31 @@ public class SQl_Helper extends SQLiteOpenHelper {
         cursor.close();
         return loan;
     }
+    public void migrateDatesToISOFormat() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COL_ID + ", " + COL_DATE + " FROM " + TABLE_NAME, null);
+
+        SimpleDateFormat oldFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+        SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(0);
+                String oldDate = cursor.getString(1);
+                try {
+                    String newDate = newFormat.format(oldFormat.parse(oldDate));
+                    ContentValues values = new ContentValues();
+                    values.put(COL_DATE, newDate);
+                    db.update(TABLE_NAME, values, COL_ID + " = ?", new String[]{String.valueOf(id)});
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+    }
+
 
 
 
