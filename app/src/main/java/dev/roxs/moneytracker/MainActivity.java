@@ -79,8 +79,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
 
         sql = new SQl_Helper(getApplicationContext());
 
-
-
+//        sql.migrateDatesToISOFormat();
 
         //referencing
         date = findViewById(R.id.date);
@@ -238,5 +237,6 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         });
 
     }
+
 
 }
