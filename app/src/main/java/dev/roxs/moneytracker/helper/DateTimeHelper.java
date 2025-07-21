@@ -90,8 +90,9 @@ public class DateTimeHelper {
     }
 
     public static String formatToDisplayDate(LocalDate date) {
-        return date.format(java.time.format.DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH));
+        return date.format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH));
     }
+
     public static String monthYearFromDate(LocalDate date){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
         return  date.format(formatter);
