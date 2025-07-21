@@ -1,6 +1,7 @@
 package dev.roxs.moneytracker.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,12 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
         this.daysOfMonth = daysOfMonth;
         this.onItemListener = onItemListener;
         this.recordedDates = new HashSet<>(recordedDates);
+
+
+            Log.d("CalendarAdapter", "daysOfMonth: " + daysOfMonth.toString());
+            Log.d("CalendarAdapter", "recordedDates: " + recordedDates.toString());
+
+
     }
 
     @NonNull
@@ -44,6 +51,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
         String dayText = daysOfMonth.get(position);
         holder.dayOfMonth.setText(dayText);
         Context context = holder.itemView.getContext();
+
+
         if (!dayText.isEmpty()) {
             holder.dayOfMonth.setBackground(ContextCompat.getDrawable(context, R.drawable.component_rounded_border));
 
