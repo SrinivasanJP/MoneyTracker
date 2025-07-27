@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         temp = vTotalSpentOfMonth.findViewById(R.id.label);
         temp.setText("Total Spent on "+ DateTimeHelper.monthYearFromDate(selectedDate));
         temp = vTotalSpentOfMonth.findViewById((R.id.amount));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM-yyyy", Locale.ENGLISH);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM", Locale.ENGLISH);
         temp.setText(String.format("Rs. %.2f",sql.getMonthlyTotalSpent(selectedDate.format(formatter))));
 
     }

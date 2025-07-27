@@ -313,10 +313,10 @@ public class SQl_Helper extends SQLiteOpenHelper {
 
     public double getMonthlySpentPercentageChange() {
         Calendar calendar = Calendar.getInstance();
-        String currentMonth = new SimpleDateFormat("MMM-yyyy", Locale.ENGLISH).format(calendar.getTime());
+        String currentMonth = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH).format(calendar.getTime());
 
         calendar.add(Calendar.MONTH, -1);
-        String lastMonth = new SimpleDateFormat("MMM-yyyy", Locale.ENGLISH).format(calendar.getTime());
+        String lastMonth = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH).format(calendar.getTime());
 
         double currentSpent = getMonthlyTotalSpent(currentMonth);
         double lastSpent = getMonthlyTotalSpent(lastMonth);
