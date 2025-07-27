@@ -23,7 +23,7 @@ public class DateTimeHelper {
     }
     public static String getDayOfWeek(String formattedDate) {
         try {
-            SimpleDateFormat format = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
             Date date = format.parse(formattedDate);
 
             SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.ENGLISH);
@@ -51,7 +51,7 @@ public class DateTimeHelper {
 
     // Format Date to "dd-MMM-yyyy"
     public static String formatDate(Date date) {
-        return new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH).format(date);
+        return new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(date);
     }
 
     // Format Date to "hh:mm a"
@@ -61,7 +61,7 @@ public class DateTimeHelper {
 
     // Format Date to "dd-MMM-yyyy hh:mm a"
     public static String formatDateTime(Date date) {
-        return new SimpleDateFormat("dd-MMM-yyyy hh:mm a", Locale.ENGLISH).format(date);
+        return new SimpleDateFormat("yyyy-MM-dd hh:mm a", Locale.ENGLISH).format(date);
     }
     // Get current month like "May"
     public static String getCurrentMonth() {

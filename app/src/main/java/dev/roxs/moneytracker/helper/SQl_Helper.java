@@ -90,7 +90,7 @@ public class SQl_Helper extends SQLiteOpenHelper {
 
 
     public DB_STRUCT getYesterdaysHoldings(String formattedDate) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
         LocalDate dateLocalDate = LocalDate.parse(formattedDate, formatter);
         dateLocalDate = dateLocalDate.minusDays(1); // Move to yesterday
         formattedDate = DateTimeHelper.formatToDisplayDate(dateLocalDate); // Adjust date to string format
@@ -244,11 +244,13 @@ public class SQl_Helper extends SQLiteOpenHelper {
 
 
     public double getSumSpentCurrentMonth() {
-        String currentMonth = new SimpleDateFormat("MMM-yyyy", Locale.ENGLISH).format(Calendar.getInstance().getTime());
+        String currentMonth = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH).format(Calendar.getInstance().getTime());
+        Log.d("UT CM", "getSumSpentCurrentMonth: " + currentMonth);
         SQLiteDatabase db = this.getReadableDatabase();
+
         Cursor cursor = db.rawQuery(
                 "SELECT SUM(" + COL_SPENT + ") FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?",
-                new String[]{"%-" + currentMonth}
+                new String[]{currentMonth + "%"} // e.g., '2025-07%'
         );
 
         double totalSpent = 0;
@@ -260,12 +262,13 @@ public class SQl_Helper extends SQLiteOpenHelper {
         return totalSpent;
     }
 
+
     public double getHoldingsFromEarliestDateThisMonth() {
-        String currentMonth = new SimpleDateFormat("MMM-yyyy", Locale.ENGLISH).format(Calendar.getInstance().getTime());
+        String currentMonth = new SimpleDateFormat("yyyy-MM", Locale.ENGLISH).format(Calendar.getInstance().getTime());
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
                 "SELECT " + COL_HOLDINGS + " FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ? ORDER BY " + COL_DATE + " ASC LIMIT 1",
-                new String[]{"%-" + currentMonth}
+                new String[]{currentMonth+"%"}
         );
 
         double holdings = 0;
@@ -278,7 +281,7 @@ public class SQl_Helper extends SQLiteOpenHelper {
     }
 
     public double getTodaysSpent() {
-        String today = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH).format(Calendar.getInstance().getTime());
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(Calendar.getInstance().getTime());
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
                 "SELECT " + COL_SPENT + " FROM " + TABLE_NAME + " WHERE " + COL_DATE + " = ?",
@@ -294,7 +297,7 @@ public class SQl_Helper extends SQLiteOpenHelper {
         return spent;
     }
     public boolean isTodaysRecordAvailable() {
-        String today = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH).format(Calendar.getInstance().getTime());
+        String today = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH).format(Calendar.getInstance().getTime());
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
                 "SELECT 1 FROM " + TABLE_NAME + " WHERE " + COL_DATE + " = ? LIMIT 1",
@@ -333,7 +336,7 @@ public class SQl_Helper extends SQLiteOpenHelper {
 
         Cursor cursor = db.rawQuery(
                 "SELECT SUM(" + COL_SPENT + ") FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?",
-                new String[]{"%-" + monthYear}
+                new String[]{monthYear+"%"}
         );
 
         if (cursor.moveToFirst()) {
@@ -348,11 +351,12 @@ public class SQl_Helper extends SQLiteOpenHelper {
 
 
     public double getAverageSpentForMonth(LocalDate date) {
-        String monthName = date.getMonth().name().substring(0, 1) + date.getMonth().name().substring(1, 3).toLowerCase(); // "Jan", "Feb", ...
-        String pattern = "%-" + monthName + "-" + date.getYear();
-
+        String pattern = String.format("%04d-%02d", date.getYear(), date.getMonthValue()) + "%"; // yyyy-MM%
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT AVG(" + COL_SPENT + ") FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?", new String[]{pattern});
+        Cursor cursor = db.rawQuery(
+                "SELECT AVG(" + COL_SPENT + ") FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?",
+                new String[]{pattern}
+        );
 
         double avgSpent = 0;
         if (cursor.moveToFirst()) {
@@ -363,12 +367,14 @@ public class SQl_Helper extends SQLiteOpenHelper {
     }
 
 
-    public double getTotalInvestmentsForMonth(LocalDate date) {
-        String monthName = date.getMonth().name().substring(0, 1) + date.getMonth().name().substring(1, 3).toLowerCase();
-        String pattern = "%-" + monthName + "-" + date.getYear();
 
+    public double getTotalInvestmentsForMonth(LocalDate date) {
+        String pattern = String.format("%04d-%02d", date.getYear(), date.getMonthValue()) + "%";
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT SUM(" + COL_INVESTMENTS + ") FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?", new String[]{pattern});
+        Cursor cursor = db.rawQuery(
+                "SELECT SUM(" + COL_INVESTMENTS + ") FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?",
+                new String[]{pattern}
+        );
 
         double totalInvestments = 0;
         if (cursor.moveToFirst()) {
@@ -379,12 +385,11 @@ public class SQl_Helper extends SQLiteOpenHelper {
     }
 
     public double getLastLoanForMonth(LocalDate date) {
-        String monthName = date.getMonth().name().substring(0, 1) + date.getMonth().name().substring(1, 3).toLowerCase();
-        String pattern = "%-" + monthName + "-" + date.getYear();
-
+        String pattern = String.format("%04d-%02d", date.getYear(), date.getMonthValue()) + "%";
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
-                "SELECT " + COL_LOAN + " FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ? ORDER BY " + COL_DATE + " DESC LIMIT 1",
+                "SELECT " + COL_LOAN + " FROM " + TABLE_NAME +
+                        " WHERE " + COL_DATE + " LIKE ? ORDER BY " + COL_DATE + " DESC LIMIT 1",
                 new String[]{pattern}
         );
 
@@ -395,30 +400,30 @@ public class SQl_Helper extends SQLiteOpenHelper {
         cursor.close();
         return loan;
     }
-    public void migrateDatesToISOFormat() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT " + COL_ID + ", " + COL_DATE + " FROM " + TABLE_NAME, null);
-
-        SimpleDateFormat oldFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-        SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-
-        if (cursor.moveToFirst()) {
-            do {
-                int id = cursor.getInt(0);
-                String oldDate = cursor.getString(1);
-                try {
-                    String newDate = newFormat.format(oldFormat.parse(oldDate));
-                    ContentValues values = new ContentValues();
-                    values.put(COL_DATE, newDate);
-                    db.update(TABLE_NAME, values, COL_ID + " = ?", new String[]{String.valueOf(id)});
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-    }
+//    public void migrateDatesToISOFormat() {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        Cursor cursor = db.rawQuery("SELECT " + COL_ID + ", " + COL_DATE + " FROM " + TABLE_NAME, null);
+//
+//        SimpleDateFormat oldFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+//        SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+//
+//        if (cursor.moveToFirst()) {
+//            do {
+//                int id = cursor.getInt(0);
+//                String oldDate = cursor.getString(1);
+//                try {
+//                    String newDate = newFormat.format(oldFormat.parse(oldDate));
+//                    ContentValues values = new ContentValues();
+//                    values.put(COL_DATE, newDate);
+//                    db.update(TABLE_NAME, values, COL_ID + " = ?", new String[]{String.valueOf(id)});
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            } while (cursor.moveToNext());
+//        }
+//
+//        cursor.close();
+//    }
 
 
 

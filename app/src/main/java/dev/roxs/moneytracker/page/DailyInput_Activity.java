@@ -166,7 +166,7 @@ public class DailyInput_Activity extends AppCompatActivity {
                 Double yesterdaysHoldings = Double.parseDouble(spentStr);
 
                 // Use the formatted string from the activity (the selected date)
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MMM-yyyy", Locale.ENGLISH);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
                 LocalDate selectedDate = LocalDate.parse(formatted, formatter);
                 LocalDate yesterday = selectedDate.minusDays(1);
                 String yesterdayDateStr = yesterday.format(formatter);
