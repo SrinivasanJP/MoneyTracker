@@ -217,9 +217,63 @@
             android:textSize="25sp"/>
 
     </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="20dp"
+        android:id="@+id/month_show"
+        android:layout_below="@+id/todaySpentLayout"
+        android:layout_marginHorizontal="20dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/monthLayout"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="September"
+                android:textSize="28sp"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/primary_bold"
+                android:textColor="@color/colorPrimary"
+                android:id="@+id/month"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="40sp"
+                    android:layout_height="40sp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="10dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="left arrow"
+                    android:src="@drawable/baseline_chevron_left_24"
+                    android:background="@drawable/component_rounded_gray_tag"
+                    android:id="@+id/leftArrow"/>
+                <ImageView
+                    android:layout_width="40sp"
+                    android:layout_height="40sp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:id="@+id/rightArrow"
+                    android:src="@drawable/baseline_chevron_right_24"
+                    android:background="@drawable/component_rounded_gray_tag"/>
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_below="@+id/todaySpentLayout"
+        android:layout_below="@+id/month_show"
         android:layout_height="wrap_content">
         <RelativeLayout
             android:layout_width="match_parent"
@@ -227,54 +281,9 @@
             android:paddingBottom="20dp"
             android:layout_marginHorizontal="20dp"
            >
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:id="@+id/monthLayout"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="September"
-                    android:textSize="28sp"
-                    android:layout_marginStart="10dp"
-                    android:fontFamily="@font/primary_bold"
-                    android:textColor="@color/colorPrimary"
-                    android:id="@+id/month"/>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:layout_width="40sp"
-                        android:layout_height="40sp"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="10dp"
-                        android:layout_gravity="center"
-                        android:contentDescription="left arrow"
-                        android:src="@drawable/baseline_chevron_left_24"
-                        android:background="@drawable/component_rounded_gray_tag"
-                        android:id="@+id/leftArrow"/>
-                    <ImageView
-                        android:layout_width="40sp"
-                        android:layout_height="40sp"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:id="@+id/rightArrow"
-                        android:src="@drawable/baseline_chevron_right_24"
-                        android:background="@drawable/component_rounded_gray_tag"/>
-
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/monthLayout"
                 android:id="@+id/days"
                 android:layout_marginTop="20dp">
                 <TextView
@@ -387,7 +396,7 @@
                 android:fontFamily="@font/primary_bold"
                 android:id="@+id/monthSummery"
                 android:textColor="@color/colorPrimary"/>
-            <include layout="@layout/row_template_month_summary"
+            <include layout="@layout/component_card_summary"
                 android:id="@+id/avgSpent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -395,7 +404,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_below="@+id/monthSummery"
                 />
-            <include layout="@layout/row_template_month_summary"
+            <include layout="@layout/component_card_summary"
                 android:id="@+id/investments"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -403,7 +412,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_below="@+id/avgSpent"
                 />
-            <include layout="@layout/row_template_month_summary"
+            <include layout="@layout/component_card_summary"
                 android:id="@+id/loanBalance"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -411,7 +420,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_below="@+id/investments"
                 />
-            <include layout="@layout/row_template_month_summary"
+            <include layout="@layout/component_card_summary"
                 android:id="@+id/totalSpentOfTheMonth"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
