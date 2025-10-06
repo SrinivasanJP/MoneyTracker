@@ -116,9 +116,9 @@ public class DailyInput_Activity extends AppCompatActivity {
 
                     holdings = soft + hard + loan;
 
-                    spent = yesterdaysData.holdings - (holdings - investments - credits);
+                    spent = yesterdaysData.holdings - (holdings + investments - credits);
 
-                    Log.d("UT", "onClick: y:"+yesterdaysData.holdings+"h:"+holdings+"s:"+spent);
+                    Log.d("UT", "onClick: y:"+yesterdaysData.holdings+"h:"+holdings+"s:"+spent+"invest:"+investments);
 
                     // Use DateTimeHelper
                     String date = formatted;
