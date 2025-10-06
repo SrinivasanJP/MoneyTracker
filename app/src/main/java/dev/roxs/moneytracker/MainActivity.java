@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
@@ -41,7 +42,9 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
     private TextView date, balanceAmountWhole, balanceAmountFraction, vTotalSpent, vMonthStartHoldings,vPercentageOfLastMonth,vTodaySpent;
     private SQl_Helper sql;
 
-    private RelativeLayout vAvgSpentLayout, vInvestmentsLayout, vLoanBalanceLayout, vTotalSpentOfMonth;
+    private CardView  vInvestmentsLayout, vLoanBalanceLayout, vTotalSpentOfMonth;
+
+    private CardView vAvgSpentLayout;
 
     private TextView vMonthText;
     private RecyclerView calendarRecyclerView;
@@ -206,11 +209,11 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         calendarRecyclerView.setAdapter(calendarAdapter);
 
         TextView temp = vAvgSpentLayout.findViewById(R.id.label);
-        temp.setText("Average spent on "+ DateTimeHelper.monthYearFromDate(selectedDate));
+        temp.setText("Average spent");
         temp = vAvgSpentLayout.findViewById(R.id.amount);
         temp.setText(String.format("Rs. %.2f",sql.getAverageSpentForMonth(selectedDate)));
         temp = vInvestmentsLayout.findViewById(R.id.label);
-        temp.setText("Total Investments on "+DateTimeHelper.monthYearFromDate(selectedDate));
+        temp.setText("Total Investments");
         temp = vInvestmentsLayout.findViewById(R.id.amount);
         temp.setText(String.format("Rs. %.2f",sql.getTotalInvestmentsForMonth(selectedDate)));
         temp = vLoanBalanceLayout.findViewById(R.id.label);
@@ -218,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         temp = vLoanBalanceLayout.findViewById(R.id.amount);
         temp.setText(String.format("Rs. %.2f",sql.getLastLoanForMonth(selectedDate)));
         temp = vTotalSpentOfMonth.findViewById(R.id.label);
-        temp.setText("Total Spent on "+ DateTimeHelper.monthYearFromDate(selectedDate));
+        temp.setText("Total Spent");
         temp = vTotalSpentOfMonth.findViewById((R.id.amount));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM", Locale.ENGLISH);
         temp.setText(String.format("Rs. %.2f",sql.getMonthlyTotalSpent(selectedDate.format(formatter))));
