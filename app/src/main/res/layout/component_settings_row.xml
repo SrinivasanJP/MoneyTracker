@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/component_rounded_gray_rectangle"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/settingLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:fontFamily="@font/primary_medium"
+        android:text="Setting Label"
+        android:textColor="@color/colorOnBackground"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/settingValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:fontFamily="@font/primary_bold"
+        android:text=""
+        android:textColor="@color/colorPrimaryVariant"
+        android:textSize="14sp" />
+</RelativeLayout>

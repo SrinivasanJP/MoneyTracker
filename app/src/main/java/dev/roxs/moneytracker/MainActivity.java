@@ -34,23 +34,25 @@ import dev.roxs.moneytracker.helper.SQl_Helper;
 import dev.roxs.moneytracker.page.DailyInput_Activity;
 import dev.roxs.moneytracker.page.DayDataShow_Activity;
 import dev.roxs.moneytracker.page.Settings_Activity;
+import dev.roxs.moneytracker.page.Statistics_Activity;
 
 import android.Manifest;
+
 public class MainActivity extends AppCompatActivity implements CalendarAdapter.OnItemListener {
 
-    private RelativeLayout dailyInputButton, todaySpentLayout,progressFill,progressContainer;
-    private TextView date, balanceAmountWhole, balanceAmountFraction, vTotalSpent, vMonthStartHoldings,vPercentageOfLastMonth,vTodaySpent;
+    private RelativeLayout dailyInputButton, todaySpentLayout, progressFill, progressContainer;
+    private TextView date, balanceAmountWhole, balanceAmountFraction, vTotalSpent, vMonthStartHoldings, vPercentageOfLastMonth, vTodaySpent;
     private SQl_Helper sql;
 
-    private CardView  vInvestmentsLayout, vLoanBalanceLayout, vTotalSpentOfMonth;
-
+    private CardView vInvestmentsLayout, vLoanBalanceLayout, vTotalSpentOfMonth;
     private CardView vAvgSpentLayout;
+    private CardView vTotalCreditsOfMonth;
 
     private TextView vMonthText;
     private RecyclerView calendarRecyclerView;
     private LocalDate selectedDate;
 
-    private ImageView leftArrow,rightArrow, vSettings;
+    private ImageView leftArrow, rightArrow, vSettings;
     ArrayList<Integer> datesWithData;
 
 
@@ -79,17 +81,14 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
             }
         }
 
-
         sql = new SQl_Helper(getApplicationContext());
 
-//        sql.migrateDatesToISOFormat();
-
-        //referencing
+        // Referencing existing views
         date = findViewById(R.id.date);
         balanceAmountWhole = findViewById(R.id.balanceAmountWhole);
         balanceAmountFraction = findViewById(R.id.balanceAmountFraction);
         dailyInputButton = findViewById(R.id.dailyInputButton);
-        leftArrow =findViewById(R.id.leftArrow);
+        leftArrow = findViewById(R.id.leftArrow);
         rightArrow = findViewById(R.id.rightArrow);
         vTodaySpent = findViewById(R.id.todaySpent);
         vMonthStartHoldings = findViewById(R.id.monthStartHoldings);
@@ -102,86 +101,81 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         vLoanBalanceLayout = findViewById(R.id.loanBalance);
         vTotalSpentOfMonth = findViewById(R.id.totalSpentOfTheMonth);
         vInvestmentsLayout = findViewById(R.id.investments);
-        vSettings =findViewById(R.id.settings);
+        vSettings = findViewById(R.id.settings);
 
-        vSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent settings = new Intent(getApplicationContext(), Settings_Activity.class);
-                startActivity(settings);
-            }
+        // New stat views
+        vTotalCreditsOfMonth = findViewById(R.id.totalCreditsOfMonth);
+        
+        RelativeLayout btnDetailedStats = findViewById(R.id.btnDetailedStats);
+        btnDetailedStats.setOnClickListener(v -> {
+            Intent statsIntent = new Intent(getApplicationContext(), Statistics_Activity.class);
+            statsIntent.putExtra("selectedYear", selectedDate.getYear());
+            statsIntent.putExtra("selectedMonth", selectedDate.getMonthValue());
+            startActivity(statsIntent);
+        });
+
+        vSettings.setOnClickListener(v -> {
+            Intent settings = new Intent(getApplicationContext(), Settings_Activity.class);
+            startActivity(settings);
         });
 
         calendarRecyclerView = findViewById(R.id.calendarRecycyleView);
         vMonthText = findViewById(R.id.month);
         selectedDate = LocalDate.now();
 
-
-
         setMonthView();
 
-
-        //Date setting
+        // Date setting
         date.setText(DateTimeHelper.getCurrentDate());
-        //TODO: Left amount display
-        String[] balance = String.valueOf(sql.getBalanceLeft()).split("\\.");
+
+        // Balance display
+        double balanceLeft = sql.getBalanceLeft();
+        String[] balance = String.valueOf(balanceLeft).split("\\.");
         balanceAmountWhole.setText(balance[0]);
-        balanceAmountFraction.setText("."+balance[1]);
-
-
-
+        balanceAmountFraction.setText("." + balance[1]);
 
         double sumOfSpent = sql.getSumSpentCurrentMonth();
         double earliestDayHolding = sql.getHoldingsFromEarliestDateThisMonth();
-        double todaySpent = (sql.getTodaysSpent());
+        double todaySpent = sql.getTodaysSpent();
         double percentageOfChange = sql.getMonthlySpentPercentageChange();
 
         if (earliestDayHolding > 0) {
             spentProgress((sumOfSpent / earliestDayHolding) * 100.0);
         }
 
-        if(!sql.isTodaysRecordAvailable()){
+        if (!sql.isTodaysRecordAvailable()) {
             todaySpentLayout.setVisibility(View.INVISIBLE);
         }
-        vTotalSpent.setText(""+sumOfSpent);
-        vMonthStartHoldings.setText(""+earliestDayHolding+" ");
-        vTodaySpent.setText(""+todaySpent);
+        vTotalSpent.setText(String.format("Rs. %.2f", sumOfSpent));
+        vMonthStartHoldings.setText(String.format("Rs. %.2f ", earliestDayHolding));
+        vTodaySpent.setText(String.format("Rs. %.2f", todaySpent));
 
-        if(percentageOfChange>=0){
-            vPercentageOfLastMonth.setText(String.format("+%.2f %%",percentageOfChange));
-        }else{
-            vPercentageOfLastMonth.setText(String.format("%.2f %%",percentageOfChange));
+        if (percentageOfChange >= 0) {
+            vPercentageOfLastMonth.setText(String.format("+%.2f %%", percentageOfChange));
+        } else {
+            vPercentageOfLastMonth.setText(String.format("%.2f %%", percentageOfChange));
         }
 
+        // Lifetime stats (don't change with month navigation)
+        updateLifetimeStats();
 
-
-        //Button actions
-        dailyInputButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent dailyPage = new Intent(MainActivity.this, DailyInput_Activity.class);
-                dailyPage.putExtra("date",DateTimeHelper.getCurrentDate());
-                startActivity(dailyPage);
-            }
+        // Button actions
+        dailyInputButton.setOnClickListener(v -> {
+            Intent dailyPage = new Intent(MainActivity.this, DailyInput_Activity.class);
+            dailyPage.putExtra("date", DateTimeHelper.getCurrentDate());
+            startActivity(dailyPage);
         });
 
-        leftArrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedDate = selectedDate.minusMonths(1);
-                setMonthView();
-            }
+        leftArrow.setOnClickListener(v -> {
+            selectedDate = selectedDate.minusMonths(1);
+            setMonthView();
         });
 
-        rightArrow.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedDate = selectedDate.plusMonths(1);
-                setMonthView();
-            }
-        }));
+        rightArrow.setOnClickListener(v -> {
+            selectedDate = selectedDate.plusMonths(1);
+            setMonthView();
+        });
     }
-
 
 
     @Override
@@ -189,57 +183,68 @@ public class MainActivity extends AppCompatActivity implements CalendarAdapter.O
         if (!dayText.equals("")) {
             int day = Integer.parseInt(dayText);
             LocalDate clickedDate = selectedDate.withDayOfMonth(day);
-
-            // Format to "dd-MMM-yyyy"
-            String formattedDate = DateTimeHelper.formatToDisplayDate(clickedDate);  // Helper method you can add
+            String formattedDate = DateTimeHelper.formatToDisplayDate(clickedDate);
 
             Intent intent = new Intent(getApplicationContext(), DayDataShow_Activity.class);
-            intent.putExtra("date",formattedDate);
+            intent.putExtra("date", formattedDate);
             startActivity(intent);
-
         }
     }
-    private void setMonthView(){
-        datesWithData = sql.getAllRecordedDates(DateTimeHelper.getCurrentMonthLocalDate(selectedDate),DateTimeHelper.getCurrentYearLocalDate(selectedDate));
+
+    private void setMonthView() {
+        datesWithData = sql.getAllRecordedDates(
+                DateTimeHelper.getCurrentMonthLocalDate(selectedDate),
+                DateTimeHelper.getCurrentYearLocalDate(selectedDate));
         vMonthText.setText(DateTimeHelper.monthYearFromDate(selectedDate));
         ArrayList<String> daysInMonth = DateTimeHelper.daysInMonthArray(selectedDate);
-        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this,datesWithData);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(),7);
+        CalendarAdapter calendarAdapter = new CalendarAdapter(daysInMonth, this, datesWithData);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 7);
         calendarRecyclerView.setLayoutManager(layoutManager);
         calendarRecyclerView.setAdapter(calendarAdapter);
 
-        TextView temp = vAvgSpentLayout.findViewById(R.id.label);
-        temp.setText("Average spent");
+        // Monthly summary cards
+        TextView temp;
+
+        temp = vAvgSpentLayout.findViewById(R.id.label);
+        temp.setText("Average Spent");
         temp = vAvgSpentLayout.findViewById(R.id.amount);
-        temp.setText(String.format("Rs. %.2f",sql.getAverageSpentForMonth(selectedDate)));
+        temp.setText(String.format("Rs. %.2f", sql.getAverageSpentForMonth(selectedDate)));
+
         temp = vInvestmentsLayout.findViewById(R.id.label);
         temp.setText("Total Investments");
         temp = vInvestmentsLayout.findViewById(R.id.amount);
-        temp.setText(String.format("Rs. %.2f",sql.getTotalInvestmentsForMonth(selectedDate)));
+        temp.setText(String.format("Rs. %.2f", sql.getTotalInvestmentsForMonth(selectedDate)));
+
         temp = vLoanBalanceLayout.findViewById(R.id.label);
         temp.setText("Total Balance Loan");
         temp = vLoanBalanceLayout.findViewById(R.id.amount);
-        temp.setText(String.format("Rs. %.2f",sql.getLastLoanForMonth(selectedDate)));
+        temp.setText(String.format("Rs. %.2f", sql.getLastLoanForMonth(selectedDate)));
+
         temp = vTotalSpentOfMonth.findViewById(R.id.label);
         temp.setText("Total Spent");
-        temp = vTotalSpentOfMonth.findViewById((R.id.amount));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM", Locale.ENGLISH);
-        temp.setText(String.format("Rs. %.2f",sql.getMonthlyTotalSpent(selectedDate.format(formatter))));
+        temp = vTotalSpentOfMonth.findViewById(R.id.amount);
+        temp.setText(String.format("Rs. %.2f", sql.getMonthlyTotalSpent(selectedDate.format(formatter))));
 
+        // Total Credits
+        temp = vTotalCreditsOfMonth.findViewById(R.id.label);
+        temp.setText("Total Credits");
+        temp = vTotalCreditsOfMonth.findViewById(R.id.amount);
+        temp.setText(String.format("Rs. %.2f", sql.getTotalCreditsForMonth(selectedDate)));
     }
 
-    private void spentProgress(double percentage){
-        // Get the full width after layout pass
+    private void updateLifetimeStats() {
+        // Implementation moved to Statistics_Activity
+    }
+
+    private void spentProgress(double percentage) {
         progressContainer.post(() -> {
             int fullWidth = progressContainer.getWidth();
-            int progressWidth = (int) (fullWidth * (percentage / 100.0));
+            int progressWidth = (int) (fullWidth * (Math.min(percentage, 100.0) / 100.0));
 
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) progressFill.getLayoutParams();
             params.width = progressWidth;
             progressFill.setLayoutParams(params);
         });
-
     }
-
-
 }

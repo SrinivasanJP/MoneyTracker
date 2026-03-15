@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/darkBg"
+    tools:context=".page.Statistics_Activity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp">
+
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/baseline_chevron_left_24"
+                android:padding="4dp"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/backButton"
+                android:layout_marginStart="8dp"
+                android:text="Detailed Statistics"
+                android:textColor="@color/colorPrimary"
+                android:textSize="28sp"
+                android:fontFamily="@font/primary_bold" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/statsMonthSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="March 2026"
+            android:textColor="@color/gray600"
+            android:textSize="16sp"
+            android:fontFamily="@font/primary_medium" />
+
+        <!-- ===== Day Insights ===== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/day_insights"
+            style="@style/StatsSectionTitle"
+            android:textColor="@color/accentAmber"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            android:backgroundTint="@color/darkCard">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/highest_spent_day"
+                    android:fontFamily="@font/primary_medium"
+                    android:textColor="@color/gray600"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/highestSpentDay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/primary_bold"
+                    android:text="N/A"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray200"
+                    android:layout_marginVertical="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lowest_spent_day"
+                    android:fontFamily="@font/primary_medium"
+                    android:textColor="@color/gray600"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/lowestSpentDay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/primary_bold"
+                    android:text="N/A"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ===== Monthly Spending Line Chart ===== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Monthly Spending Trend"
+            style="@style/StatsSectionTitle"
+            android:layout_marginTop="32dp"
+            android:textColor="@color/accentBlue"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            android:backgroundTint="@color/darkCard">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/monthlyLineChart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="12dp" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- ===== Investment Trend ===== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Investment Trend"
+            style="@style/StatsSectionTitle"
+            android:layout_marginTop="32dp"
+            android:textColor="@color/accentGreen"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            android:backgroundTint="@color/darkCard">
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/investmentLineChart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="12dp" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- ===== Yearly Overview ===== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/yearly_overview"
+            style="@style/StatsSectionTitle"
+            android:layout_marginTop="32dp"
+            android:textColor="@color/accentGreen"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="12dp">
+
+            <include layout="@layout/component_stat_card"
+                android:id="@+id/yearTotalSpent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="5dp"
+                android:layout_height="wrap_content" />
+
+            <include layout="@layout/component_stat_card"
+                android:id="@+id/yearTotalInvestments"
+                android:layout_width="0dp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <include layout="@layout/component_stat_card"
+            android:id="@+id/yearAvgDaily"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp" />
+
+        <!-- ===== Yearly Spending Bar Chart ===== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Year Spending Breakdown"
+            style="@style/StatsSectionTitle"
+            android:layout_marginTop="32dp"
+            android:textColor="@color/accentAmber"/>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_marginTop="12dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            android:backgroundTint="@color/darkCard">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:id="@+id/yearlyBarChart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="12dp" />
+        </androidx.cardview.widget.CardView>
+
+
+        <!-- ===== Lifetime Stats ===== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lifetime_stats"
+            style="@style/StatsSectionTitle"
+            android:layout_marginTop="32dp"
+            android:textColor="@color/colorPrimaryVariant"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp">
+
+            <include layout="@layout/component_stat_card"
+                android:id="@+id/totalDaysTracked"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="5dp"
+                android:layout_height="wrap_content" />
+
+            <include layout="@layout/component_stat_card"
+                android:id="@+id/overallTotalSpent"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_marginStart="5dp"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <!-- Bottom spacing -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+    </LinearLayout>
+</ScrollView>

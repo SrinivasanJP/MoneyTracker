@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 
@@ -400,37 +401,237 @@ public class SQl_Helper extends SQLiteOpenHelper {
         cursor.close();
         return loan;
     }
-//    public void migrateDatesToISOFormat() {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        Cursor cursor = db.rawQuery("SELECT " + COL_ID + ", " + COL_DATE + " FROM " + TABLE_NAME, null);
-//
-//        SimpleDateFormat oldFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-//        SimpleDateFormat newFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-//
-//        if (cursor.moveToFirst()) {
-//            do {
-//                int id = cursor.getInt(0);
-//                String oldDate = cursor.getString(1);
-//                try {
-//                    String newDate = newFormat.format(oldFormat.parse(oldDate));
-//                    ContentValues values = new ContentValues();
-//                    values.put(COL_DATE, newDate);
-//                    db.update(TABLE_NAME, values, COL_ID + " = ?", new String[]{String.valueOf(id)});
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            } while (cursor.moveToNext());
-//        }
-//
-//        cursor.close();
-//    }
 
+    // ========== NEW STATISTICS METHODS ==========
 
+    /**
+     * Returns yearly total spent for a given year.
+     */
+    public double getYearlyTotalSpent(int year) {
+        String pattern = String.format("%04d", year) + "%";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT SUM(" + COL_SPENT + ") FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?",
+                new String[]{pattern}
+        );
+        double total = 0;
+        if (cursor.moveToFirst()) total = cursor.getDouble(0);
+        cursor.close();
+        return total;
+    }
 
+    /**
+     * Returns yearly total investments for a given year.
+     */
+    public double getYearlyTotalInvestments(int year) {
+        String pattern = String.format("%04d", year) + "%";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT SUM(" + COL_INVESTMENTS + ") FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?",
+                new String[]{pattern}
+        );
+        double total = 0;
+        if (cursor.moveToFirst()) total = cursor.getDouble(0);
+        cursor.close();
+        return total;
+    }
 
+    /**
+     * Returns yearly average daily spending for a given year.
+     */
+    public double getYearlyAverageDaily(int year) {
+        String pattern = String.format("%04d", year) + "%";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT AVG(" + COL_SPENT + ") FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?",
+                new String[]{pattern}
+        );
+        double avg = 0;
+        if (cursor.moveToFirst()) avg = cursor.getDouble(0);
+        cursor.close();
+        return avg;
+    }
 
+    /**
+     * Returns the date string of the highest spent day in a given month.
+     * Returns "N/A" if no data.
+     */
+    public String getHighestSpentDayThisMonth(LocalDate date) {
+        String pattern = String.format("%04d-%02d", date.getYear(), date.getMonthValue()) + "%";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT " + COL_DATE + ", " + COL_SPENT + " FROM " + TABLE_NAME +
+                        " WHERE " + COL_DATE + " LIKE ? ORDER BY " + COL_SPENT + " DESC LIMIT 1",
+                new String[]{pattern}
+        );
+        String result = "N/A";
+        if (cursor.moveToFirst()) {
+            String d = cursor.getString(0);
+            double s = cursor.getDouble(1);
+            int day = Integer.parseInt(d.split("-")[2]);
+            result = "Day " + day + " — Rs. " + String.format("%.2f", s);
+        }
+        cursor.close();
+        return result;
+    }
 
+    /**
+     * Returns the date string of the lowest spent day (non-zero) in a given month.
+     * Returns "N/A" if no data.
+     */
+    public String getLowestSpentDayThisMonth(LocalDate date) {
+        String pattern = String.format("%04d-%02d", date.getYear(), date.getMonthValue()) + "%";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT " + COL_DATE + ", " + COL_SPENT + " FROM " + TABLE_NAME +
+                        " WHERE " + COL_DATE + " LIKE ? AND " + COL_SPENT + " > 0 ORDER BY " + COL_SPENT + " ASC LIMIT 1",
+                new String[]{pattern}
+        );
+        String result = "N/A";
+        if (cursor.moveToFirst()) {
+            String d = cursor.getString(0);
+            double s = cursor.getDouble(1);
+            int day = Integer.parseInt(d.split("-")[2]);
+            result = "Day " + day + " — Rs. " + String.format("%.2f", s);
+        }
+        cursor.close();
+        return result;
+    }
 
+    /**
+     * Returns total number of unique days with recorded data.
+     */
+    public int getTotalDaysRecorded() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT COUNT(DISTINCT " + COL_DATE + ") FROM " + TABLE_NAME, null
+        );
+        int count = 0;
+        if (cursor.moveToFirst()) count = cursor.getInt(0);
+        cursor.close();
+        return count;
+    }
 
+    /**
+     * Returns all-time total spent across all records.
+     */
+    public double getOverallTotalSpent() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT SUM(" + COL_SPENT + ") FROM " + TABLE_NAME, null
+        );
+        double total = 0;
+        if (cursor.moveToFirst()) total = cursor.getDouble(0);
+        cursor.close();
+        return total;
+    }
+
+    /**
+     * Returns total credits for a given month.
+     */
+    public double getTotalCreditsForMonth(LocalDate date) {
+        String pattern = String.format("%04d-%02d", date.getYear(), date.getMonthValue()) + "%";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT SUM(" + COL_CREDIT + ") FROM " + TABLE_NAME + " WHERE " + COL_DATE + " LIKE ?",
+                new String[]{pattern}
+        );
+        double total = 0;
+        if (cursor.moveToFirst()) total = cursor.getDouble(0);
+        cursor.close();
+        return total;
+    }
+
+    /**
+     * Returns an array of spending sums mapped to days 1-31 of a month.
+     * Index 0 = Day 1, Index 30 = Day 31.
+     */
+    public float[] getMonthlyDailySpends(LocalDate date) {
+        float[] dailySpends = new float[31];
+        String pattern = String.format("%04d-%02d", date.getYear(), date.getMonthValue()) + "%";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT " + COL_DATE + ", " + COL_SPENT + " FROM " + TABLE_NAME +
+                        " WHERE " + COL_DATE + " LIKE ?",
+                new String[]{pattern}
+        );
+        while (cursor.moveToNext()) {
+            String dateStr = cursor.getString(0); // e.g. "2026-03-15"
+            double spent = cursor.getDouble(1);
+            int day = Integer.parseInt(dateStr.split("-")[2]); // extract day
+            if (day >= 1 && day <= 31) {
+                dailySpends[day - 1] = (float) spent;
+            }
+        }
+        cursor.close();
+        return dailySpends;
+    }
+
+    /**
+     * Returns an array of spending sums mapped to months 1-12 of a year.
+     * Index 0 = Jan, Index 11 = Dec.
+     */
+    public float[] getYearlyMonthlySpends(int year) {
+        float[] monthlySpends = new float[12];
+        String pattern = String.format("%04d", year) + "%";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT CAST(SUBSTR(" + COL_DATE + ", 6, 2) AS INTEGER) as month, SUM(" + COL_SPENT + ") FROM " + TABLE_NAME +
+                        " WHERE " + COL_DATE + " LIKE ? GROUP BY month",
+                new String[]{pattern}
+        );
+        while (cursor.moveToNext()) {
+            int month = cursor.getInt(0); // 1 to 12
+            double sum = cursor.getDouble(1);
+            if (month >= 1 && month <= 12) {
+                monthlySpends[month - 1] = (float) sum;
+            }
+        }
+        cursor.close();
+        return monthlySpends;
+    }
+    /**
+     * Returns investment entries for a given month, only for days where investments > 0.
+     * Key = day number, Value = investment amount.
+     */
+    public HashMap<String, Double> getInvestmentEntries() {
+        HashMap<String, Double> investmentMap = new HashMap<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT "+ COL_DATE +" ,"+ COL_INVESTMENTS +
+                        " FROM " + TABLE_NAME +
+                        " WHERE " + COL_INVESTMENTS + " > 0 ORDER BY " + COL_DATE, null
+        );
+        while (cursor.moveToNext()) {
+            String dateStr = cursor.getString(0); // e.g. "2026-03-15"
+            double investment = cursor.getDouble(1);
+            investmentMap.put(dateStr, investment);
+        }
+        cursor.close();
+        return investmentMap;
+    }
+
+    /**
+     * Returns investment entries for a given month, only for days where investments > 0.
+     * Key = day number, Value = investment amount.
+     */
+    public HashMap<Integer, Float> getMonthlyInvestmentEntries(LocalDate date) {
+        HashMap<Integer, Float> investmentMap = new HashMap<>();
+        String pattern = String.format("%04d-%02d", date.getYear(), date.getMonthValue()) + "%";
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT CAST(SUBSTR(" + COL_DATE + ", 9, 2) AS INTEGER) as day, " + COL_INVESTMENTS +
+                        " FROM " + TABLE_NAME +
+                        " WHERE " + COL_DATE + " LIKE ? AND " + COL_INVESTMENTS + " > 0 ORDER BY " + COL_DATE,
+                new String[]{pattern}
+        );
+        while (cursor.moveToNext()) {
+            int day = cursor.getInt(0);
+            float amount = cursor.getFloat(1);
+            investmentMap.put(day, amount);
+        }
+        cursor.close();
+        return investmentMap;
+    }
 
 }

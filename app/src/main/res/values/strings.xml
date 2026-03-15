@@ -1,3 +1,33 @@
 <resources>
     <string name="app_name">Money Manager</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="notification_settings">Notification Settings</string>
+    <string name="reminder_time">Daily Reminder Time</string>
+    <string name="data_settings">Data Settings</string>
+    <string name="export_data">Export Spent Data</string>
+    <string name="import_data">Import Data from XLS</string>
+    <string name="clear_all_data">Clear All Data</string>
+    <string name="clear_data_warning">This will permanently delete all your expense records. This action cannot be undone.</string>
+    <string name="general">General</string>
+    <string name="share_app">Share App</string>
+    <string name="share_message">Check out Money Manager - track your daily expenses easily!\nhttps://srinivasan-jp-portfolio.vercel.app</string>
+    <string name="app_version">App Version</string>
+    <string name="about">About</string>
+    <string name="about_description">Money Manager helps you track daily expenses, investments, and loans. Built with ❤ by ROXs Dev.</string>
+
+    <!-- Stats -->
+    <string name="monthly_summary">Monthly Summary</string>
+    <string name="day_insights">Day Insights</string>
+    <string name="highest_spent_day">Highest Spent Day</string>
+    <string name="lowest_spent_day">Lowest Spent Day</string>
+    <string name="yearly_overview">Yearly Overview</string>
+    <string name="year_total_spent">Year Total Spent</string>
+    <string name="year_total_investments">Year Investments</string>
+    <string name="year_avg_daily">Year Avg. Daily</string>
+    <string name="lifetime_stats">Lifetime Stats</string>
+    <string name="total_days_tracked">Days Tracked</string>
+    <string name="overall_total_spent">Lifetime Spent</string>
+    <string name="total_credits_month">Total Credits</string>
 </resources>

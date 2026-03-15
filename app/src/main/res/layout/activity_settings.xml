@@ -1,47 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".page.Settings_Activity">
-    <RelativeLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_margin="30dp"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Settings"
+            android:text="@string/settings_title"
             android:textColor="@color/colorPrimary"
-            android:textSize="38sp"
-            android:id="@+id/settingsLabel"
-            android:fontFamily="@font/primary_bold"/>
+            android:textSize="34sp"
+            android:fontFamily="@font/primary_bold"
+            android:layout_marginBottom="24dp" />
+
+        <!-- ===== Notification Settings ===== -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Data Settings"
-            android:id="@+id/dataLabel"
-            android:fontFamily="@font/primary_medium"
-            android:textColor="@color/colorPrimaryVariant"
-            android:layout_below="@id/settingsLabel"
-            android:layout_marginTop="20dp"
-            android:textSize="20sp"/>
-        <LinearLayout
+            style="@style/SettingsSectionTitle"
+            android:text="@string/notification_settings"
+            android:layout_marginBottom="8dp" />
+
+        <RelativeLayout
+            android:id="@+id/notificationTimeRow"
             android:layout_width="match_parent"
-            android:layout_below="@+id/dataLabel"
-            android:padding="20dp"
-            android:layout_height="wrap_content">
-            <include layout="@layout/components_button_black_xxl"
-                android:id="@+id/exportData"/>
+            android:layout_height="wrap_content"
+            android:background="@color/darkCard"
+            android:padding="16dp"
+            android:layout_marginBottom="4dp">
 
-        </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                style="@style/SettingsRowLabel"
+                android:text="@string/reminder_time" />
 
-    </RelativeLayout>
+            <TextView
+                android:id="@+id/notificationTimeValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/primary_bold"
+                android:text="6:00 PM"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                android:drawableEnd="@drawable/baseline_chevron_right_24"
+                android:drawablePadding="4dp" />
+        </RelativeLayout>
 
+        <!-- ===== Data Settings ===== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SettingsSectionTitle"
+            android:text="@string/data_settings"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp" />
 
+        <include layout="@layout/components_button_black_xxl"
+            android:id="@+id/exportData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp" />
 
+        <include layout="@layout/components_button_black_xxl"
+            android:id="@+id/importData"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp" />
 
+        <!-- ===== General ===== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SettingsSectionTitle"
+            android:text="@string/general"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp" />
 
-</RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/shareAppRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/darkCard"
+            android:padding="16dp"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                style="@style/SettingsRowLabel"
+                android:text="@string/share_app" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/baseline_chevron_right_24" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/darkCard"
+            android:padding="16dp"
+            android:layout_marginBottom="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                style="@style/SettingsRowLabel"
+                android:text="@string/app_version" />
+
+            <TextView
+                android:id="@+id/versionValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/primary_bold"
+                android:text="v1.0"
+                android:textColor="@color/gray500"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <!-- ===== About ===== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SettingsSectionTitle"
+            android:text="@string/about"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            card_view:cardCornerRadius="12dp"
+            card_view:cardElevation="2dp"
+            android:backgroundTint="@color/accentBlueSoft">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/primary_bold"
+                    android:text="Money Manager"
+                    android:textColor="@color/accentBlue"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="@font/primary_regular"
+                    android:text="@string/about_description"
+                    android:textColor="@color/gray700"
+                    android:textSize="14sp"
+                    android:lineSpacingMultiplier="1.3" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- ===== Danger Zone ===== -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SettingsSectionTitle"
+            android:text="Danger Zone"
+            android:textColor="@color/accentRed"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp" />
+
+        <RelativeLayout
+            android:id="@+id/clearDataRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/darkCard"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/primary_medium"
+                android:text="@string/clear_all_data"
+                android:textColor="@color/accentRed"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/baseline_chevron_right_24" />
+        </RelativeLayout>
+
+        <!-- Bottom spacing -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="32dp" />
+
+    </LinearLayout>
+</ScrollView>

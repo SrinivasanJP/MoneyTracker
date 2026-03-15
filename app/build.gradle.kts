@@ -5,6 +5,7 @@ plugins {
 android {
     namespace = "dev.roxs.moneytracker"
     compileSdk = 34
+    buildToolsVersion = "34.0.0"
     buildFeatures {
         buildConfig = true
     }
@@ -39,6 +40,7 @@ dependencies {
     implementation("org.apache.poi:poi:5.2.3")
     implementation("org.apache.poi:poi-ooxml:5.2.3")
     implementation("androidx.work:work-runtime:2.9.0")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
