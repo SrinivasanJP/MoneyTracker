@@ -48,15 +48,13 @@ public class AssetDetailAdapter extends RecyclerView.Adapter<AssetDetailAdapter.
         holder.tvQty.setText(formatNumber(item.getQty()));
         holder.tvAvgCost.setText("₹ " + formatNumber(item.getAvgCost()));
         holder.tvLtp.setText("₹ " + formatNumber(item.getLtp()));
-        holder.tvInvested.setText("₹ " + formatNumber(item.getInvested()));
+        holder.tvInvested.setText(String.format("₹ %s (%.1f%%)", formatNumber(item.getInvested()), item.getPercentage()));
         holder.tvCurrent.setText("₹ " + formatNumber(item.getValue()));
 
-        // P&L coloring
         double pnl = item.getPnl();
         holder.tvPnl.setText((pnl >= 0 ? "+" : "") + "₹ " + formatNumber(pnl));
         holder.tvPnl.setTextColor(Color.parseColor(pnl >= 0 ? "#00E676" : "#FF5252"));
 
-        // Day change
         double dayChg = item.getDayChg();
         holder.tvDayChg.setText(String.format("Day: %s%.2f%%", dayChg >= 0 ? "+" : "", dayChg));
         holder.tvDayChg.setTextColor(Color.parseColor(dayChg >= 0 ? "#00E676" : "#FF5252"));

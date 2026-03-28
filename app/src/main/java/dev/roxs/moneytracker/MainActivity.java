@@ -55,19 +55,19 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up ViewPager2
         ViewPager2 viewPager = findViewById(R.id.viewPager);
-        tabLayout = findViewById(R.id.tabLayout);
+//        tabLayout = findViewById(R.id.tabLayout);
 
         MainPagerAdapter pagerAdapter = new MainPagerAdapter(this);
         viewPager.setAdapter(pagerAdapter);
 
         // Connect TabLayout with ViewPager2
-        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
-            if (position == 0) {
-                tab.setText("Money Tracker");
-            } else {
-                tab.setText("Wealth");
-            }
-        }).attach();
+//        new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
+//            if (position == 0) {
+//                tab.setText("Money Tracker");
+//            } else {
+//                tab.setText("Wealth");
+//            }
+//        }).attach();
 
         // Dynamic status bar + tab bar color per page
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
@@ -86,22 +86,22 @@ public class MainActivity extends AppCompatActivity {
             int statusColor = ContextCompat.getColor(this, R.color.colorPrimary);
             int tabBg = ContextCompat.getColor(this, R.color.darkSurface);
             window.setStatusBarColor(statusColor);
-            tabLayout.setBackgroundColor(tabBg);
-            tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.colorPrimary));
-            tabLayout.setTabTextColors(
-                    ContextCompat.getColor(this, R.color.gray500),
-                    ContextCompat.getColor(this, R.color.colorPrimary));
+//            tabLayout.setBackgroundColor(tabBg);
+//            tabLayout.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.colorPrimary));
+//            tabLayout.setTabTextColors(
+//                    ContextCompat.getColor(this, R.color.gray500),
+//                    ContextCompat.getColor(this, R.color.colorPrimary));
         } else {
             // Wealth: dark navy + cyan theme
             int statusColor = Color.parseColor("#0D1117");
             int tabBg = Color.parseColor("#0D1117");
             int accent = Color.parseColor("#00E5FF");
             window.setStatusBarColor(statusColor);
-            tabLayout.setBackgroundColor(tabBg);
-            tabLayout.setSelectedTabIndicatorColor(accent);
-            tabLayout.setTabTextColors(
-                    Color.parseColor("#8B95A5"),
-                    accent);
+//            tabLayout.setBackgroundColor(tabBg);
+//            tabLayout.setSelectedTabIndicatorColor(accent);
+//            tabLayout.setTabTextColors(
+//                    Color.parseColor("#8B95A5"),
+//                    accent);
         }
     }
 }

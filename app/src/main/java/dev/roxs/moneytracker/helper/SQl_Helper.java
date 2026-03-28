@@ -176,6 +176,16 @@ public class SQl_Helper extends SQLiteOpenHelper {
             } catch (Exception e) { /* already exists */ }
         }
     }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Automatically drop all tables and recreate them if we are doing a rollback/downgrade between branches
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ASSET_ITEMS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ASSET_CATEGORIES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
+    }
+
     public void clearDatabase() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_NAME, null, null); // Deletes all rows

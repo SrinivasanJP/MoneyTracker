@@ -86,9 +86,13 @@ public class AssetCategory {
     }
 
     public void computeItemPercentages() {
-        if (totalValue <= 0) return;
+        double totalInvested = 0;
         for (AssetItem item : items) {
-            item.setPercentage((item.getValue() / totalValue) * 100.0);
+            totalInvested += item.getInvested();
+        }
+        if (totalInvested <= 0) return;
+        for (AssetItem item : items) {
+            item.setPercentage((item.getInvested() / totalInvested) * 100.0);
         }
     }
 }
