@@ -14,12 +14,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+
+import dev.roxs.moneytracker.model.AssetCategory;
+import dev.roxs.moneytracker.model.AssetItem;
 
 public class SQl_Helper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "money_tracker.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 5;
 
     public static final String TABLE_NAME = "money_tracking";
     public static final String COL_ID = "id";
@@ -33,6 +37,27 @@ public class SQl_Helper extends SQLiteOpenHelper {
     public static final String COL_CREDIT = "credit";
     public static final String COL_LOAN = "friendly_loan";
     public static final String COL_REMARKS = "remarks";
+
+    // ========== ASSET ALLOCATION TABLES ==========
+    public static final String TABLE_ASSET_CATEGORIES = "asset_categories";
+    public static final String COL_CAT_ID = "id";
+    public static final String COL_CAT_NAME = "name";
+    public static final String COL_CAT_COLOR = "color";
+    public static final String COL_CAT_SORT_ORDER = "sort_order";
+    public static final String COL_CAT_TARGET_ALLOC = "target_allocation";
+
+    public static final String TABLE_ASSET_ITEMS = "asset_items";
+    public static final String COL_ITEM_ID = "id";
+    public static final String COL_ITEM_CATEGORY_ID = "category_id";
+    public static final String COL_ITEM_NAME = "name";
+    public static final String COL_ITEM_VALUE = "value";
+    public static final String COL_ITEM_QTY = "qty";
+    public static final String COL_ITEM_AVG_COST = "avg_cost";
+    public static final String COL_ITEM_LTP = "ltp";
+    public static final String COL_ITEM_INVESTED = "invested";
+    public static final String COL_ITEM_PNL = "pnl";
+    public static final String COL_ITEM_NET_CHG = "net_chg";
+    public static final String COL_ITEM_DAY_CHG = "day_chg";
 
     public SQl_Helper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -63,7 +88,7 @@ public class SQl_Helper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                COL_DATE + " TEXT UNIQUE, " +  // <-- Make date UNIQUE
+                COL_DATE + " TEXT UNIQUE, " +
                 COL_DAY + " TEXT, " +
                 COL_SPENT + " REAL, " +
                 COL_SOFTCASH + " REAL, " +
@@ -75,13 +100,81 @@ public class SQl_Helper extends SQLiteOpenHelper {
                 COL_REMARKS + " TEXT" +
                 ")";
         db.execSQL(CREATE_TABLE);
+        createAssetTables(db);
+    }
+
+    private void createAssetTables(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_ASSET_CATEGORIES + " (" +
+                COL_CAT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_CAT_NAME + " TEXT, " +
+                COL_CAT_COLOR + " TEXT, " +
+                COL_CAT_SORT_ORDER + " INTEGER, " +
+                COL_CAT_TARGET_ALLOC + " REAL DEFAULT 0" +
+                ")");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_ASSET_ITEMS + " (" +
+                COL_ITEM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_ITEM_CATEGORY_ID + " INTEGER, " +
+                COL_ITEM_NAME + " TEXT, " +
+                COL_ITEM_VALUE + " REAL, " +
+                COL_ITEM_QTY + " REAL DEFAULT 0, " +
+                COL_ITEM_AVG_COST + " REAL DEFAULT 0, " +
+                COL_ITEM_LTP + " REAL DEFAULT 0, " +
+                COL_ITEM_INVESTED + " REAL DEFAULT 0, " +
+                COL_ITEM_PNL + " REAL DEFAULT 0, " +
+                COL_ITEM_NET_CHG + " REAL DEFAULT 0, " +
+                COL_ITEM_DAY_CHG + " REAL DEFAULT 0, " +
+                "FOREIGN KEY(" + COL_ITEM_CATEGORY_ID + ") REFERENCES " + TABLE_ASSET_CATEGORIES + "(" + COL_CAT_ID + ") ON DELETE CASCADE" +
+                ")");
+
+        seedDefaultCategories(db);
+    }
+
+    private void seedDefaultCategories(SQLiteDatabase db) {
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_ASSET_CATEGORIES, null);
+        int count = 0;
+        if (cursor.moveToFirst()) count = cursor.getInt(0);
+        cursor.close();
+        if (count > 0) return;
+
+        String[][] defaults = {
+                {"Equity", "#4CAF50"},
+                {"Bonds", "#2196F3"},
+                {"Metals", "#FFA000"},
+                {"Cash", "#9C27B0"},
+                {"Real Estate", "#FF5722"}
+        };
+        for (int i = 0; i < defaults.length; i++) {
+            ContentValues cv = new ContentValues();
+            cv.put(COL_CAT_NAME, defaults[i][0]);
+            cv.put(COL_CAT_COLOR, defaults[i][1]);
+            cv.put(COL_CAT_SORT_ORDER, i);
+            db.insert(TABLE_ASSET_CATEGORIES, null, cv);
+        }
     }
 
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(db);
+        if (oldVersion < 3) {
+            createAssetTables(db);
+        }
+        if (oldVersion < 4) {
+            // Add new columns to asset_items
+            String[] newCols = {COL_ITEM_QTY, COL_ITEM_AVG_COST, COL_ITEM_LTP, COL_ITEM_INVESTED, COL_ITEM_PNL, COL_ITEM_NET_CHG, COL_ITEM_DAY_CHG};
+            for (String col : newCols) {
+                try {
+                    db.execSQL("ALTER TABLE " + TABLE_ASSET_ITEMS + " ADD COLUMN " + col + " REAL DEFAULT 0");
+                } catch (Exception e) {
+                    // Column may already exist
+                }
+            }
+        }
+        if (oldVersion < 5) {
+            try {
+                db.execSQL("ALTER TABLE " + TABLE_ASSET_CATEGORIES + " ADD COLUMN " + COL_CAT_TARGET_ALLOC + " REAL DEFAULT 0");
+            } catch (Exception e) { /* already exists */ }
+        }
     }
     public void clearDatabase() {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -634,4 +727,199 @@ public class SQl_Helper extends SQLiteOpenHelper {
         return investmentMap;
     }
 
+
+    // ========== ASSET CATEGORY CRUD ==========
+
+    public long insertCategory(String name, String color) {
+        return insertCategory(name, color, 0);
+    }
+
+    public long insertCategory(String name, String color, double targetAllocation) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT MAX(" + COL_CAT_SORT_ORDER + ") FROM " + TABLE_ASSET_CATEGORIES, null);
+        int maxOrder = 0;
+        if (cursor.moveToFirst()) maxOrder = cursor.getInt(0) + 1;
+        cursor.close();
+
+        ContentValues cv = new ContentValues();
+        cv.put(COL_CAT_NAME, name);
+        cv.put(COL_CAT_COLOR, color);
+        cv.put(COL_CAT_SORT_ORDER, maxOrder);
+        cv.put(COL_CAT_TARGET_ALLOC, targetAllocation);
+        return db.insert(TABLE_ASSET_CATEGORIES, null, cv);
+    }
+
+    public void updateCategory(int id, String name, String color) {
+        updateCategory(id, name, color, -1);
+    }
+
+    public void updateCategory(int id, String name, String color, double targetAllocation) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_CAT_NAME, name);
+        cv.put(COL_CAT_COLOR, color);
+        if (targetAllocation >= 0) cv.put(COL_CAT_TARGET_ALLOC, targetAllocation);
+        db.update(TABLE_ASSET_CATEGORIES, cv, COL_CAT_ID + " = ?", new String[]{String.valueOf(id)});
+    }
+
+    public void deleteCategory(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_ASSET_ITEMS, COL_ITEM_CATEGORY_ID + " = ?", new String[]{String.valueOf(id)});
+        db.delete(TABLE_ASSET_CATEGORIES, COL_CAT_ID + " = ?", new String[]{String.valueOf(id)});
+    }
+
+    public List<AssetCategory> getAllCategories() {
+        List<AssetCategory> categories = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_ASSET_CATEGORIES + " ORDER BY " + COL_CAT_SORT_ORDER,
+                null);
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_CAT_ID));
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(COL_CAT_NAME));
+            String color = cursor.getString(cursor.getColumnIndexOrThrow(COL_CAT_COLOR));
+            int sortOrder = cursor.getInt(cursor.getColumnIndexOrThrow(COL_CAT_SORT_ORDER));
+            double targetAlloc = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_CAT_TARGET_ALLOC));
+            AssetCategory cat = new AssetCategory(id, name, color, sortOrder, targetAlloc);
+            cat.setItems(getItemsForCategory(id));
+            cat.computeTotalValue();
+            categories.add(cat);
+        }
+        cursor.close();
+
+        // Compute percentages
+        double totalNetWorth = 0;
+        for (AssetCategory c : categories) totalNetWorth += c.getTotalValue();
+        if (totalNetWorth > 0) {
+            for (AssetCategory c : categories) {
+                c.setPercentage((c.getTotalValue() / totalNetWorth) * 100.0);
+                c.computeItemPercentages();
+            }
+        }
+        return categories;
+    }
+
+    // ========== ASSET ITEM CRUD ==========
+
+    public long insertAssetItem(int categoryId, String name, double value) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_ITEM_CATEGORY_ID, categoryId);
+        cv.put(COL_ITEM_NAME, name);
+        cv.put(COL_ITEM_VALUE, value);
+        return db.insert(TABLE_ASSET_ITEMS, null, cv);
+    }
+
+    public void updateAssetItem(int id, String name, double value) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_ITEM_NAME, name);
+        cv.put(COL_ITEM_VALUE, value);
+        db.update(TABLE_ASSET_ITEMS, cv, COL_ITEM_ID + " = ?", new String[]{String.valueOf(id)});
+    }
+
+    public void deleteAssetItem(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_ASSET_ITEMS, COL_ITEM_ID + " = ?", new String[]{String.valueOf(id)});
+    }
+
+    public List<AssetItem> getItemsForCategory(int categoryId) {
+        List<AssetItem> items = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_ASSET_ITEMS + " WHERE " + COL_ITEM_CATEGORY_ID + " = ?",
+                new String[]{String.valueOf(categoryId)});
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ITEM_ID));
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(COL_ITEM_NAME));
+            double value = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_VALUE));
+            double qty = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_QTY));
+            double avgCost = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_AVG_COST));
+            double ltp = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_LTP));
+            double invested = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_INVESTED));
+            double pnl = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_PNL));
+            double netChg = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_NET_CHG));
+            double dayChg = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_DAY_CHG));
+            items.add(new AssetItem(id, categoryId, name, value, qty, avgCost, ltp, invested, pnl, netChg, dayChg));
+        }
+        cursor.close();
+        return items;
+    }
+
+    public double getTotalAssetValue() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT SUM(" + COL_ITEM_VALUE + ") FROM " + TABLE_ASSET_ITEMS, null);
+        double total = 0;
+        if (cursor.moveToFirst()) total = cursor.getDouble(0);
+        cursor.close();
+        return total;
+    }
+
+    /**
+     * Find an asset item by name (case-insensitive). Returns null if not found.
+     */
+    public AssetItem findAssetItemByName(String name) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_ASSET_ITEMS + " WHERE " + COL_ITEM_NAME + " = ? COLLATE NOCASE",
+                new String[]{name});
+        AssetItem item = null;
+        if (cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ITEM_ID));
+            int catId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ITEM_CATEGORY_ID));
+            String n = cursor.getString(cursor.getColumnIndexOrThrow(COL_ITEM_NAME));
+            double value = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_VALUE));
+            double qty = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_QTY));
+            double avgCost = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_AVG_COST));
+            double ltp = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_LTP));
+            double invested = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_INVESTED));
+            double pnl = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_PNL));
+            double netChg = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_NET_CHG));
+            double dayChg = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_DAY_CHG));
+            item = new AssetItem(id, catId, n, value, qty, avgCost, ltp, invested, pnl, netChg, dayChg);
+        }
+        cursor.close();
+        return item;
+    }
+
+    /**
+     * Insert a full asset item with all holding details.
+     */
+    public long insertFullAssetItem(int categoryId, String name, double qty, double avgCost,
+                                     double ltp, double invested, double curVal,
+                                     double pnl, double netChg, double dayChg) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_ITEM_CATEGORY_ID, categoryId);
+        cv.put(COL_ITEM_NAME, name);
+        cv.put(COL_ITEM_VALUE, curVal);
+        cv.put(COL_ITEM_QTY, qty);
+        cv.put(COL_ITEM_AVG_COST, avgCost);
+        cv.put(COL_ITEM_LTP, ltp);
+        cv.put(COL_ITEM_INVESTED, invested);
+        cv.put(COL_ITEM_PNL, pnl);
+        cv.put(COL_ITEM_NET_CHG, netChg);
+        cv.put(COL_ITEM_DAY_CHG, dayChg);
+        return db.insert(TABLE_ASSET_ITEMS, null, cv);
+    }
+
+    /**
+     * Update a full asset item with all holding details.
+     */
+    public void updateFullAssetItem(int id, String name, double qty, double avgCost,
+                                     double ltp, double invested, double curVal,
+                                     double pnl, double netChg, double dayChg) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_ITEM_NAME, name);
+        cv.put(COL_ITEM_VALUE, curVal);
+        cv.put(COL_ITEM_QTY, qty);
+        cv.put(COL_ITEM_AVG_COST, avgCost);
+        cv.put(COL_ITEM_LTP, ltp);
+        cv.put(COL_ITEM_INVESTED, invested);
+        cv.put(COL_ITEM_PNL, pnl);
+        cv.put(COL_ITEM_NET_CHG, netChg);
+        cv.put(COL_ITEM_DAY_CHG, dayChg);
+        db.update(TABLE_ASSET_ITEMS, cv, COL_ITEM_ID + " = ?", new String[]{String.valueOf(id)});
+    }
 }

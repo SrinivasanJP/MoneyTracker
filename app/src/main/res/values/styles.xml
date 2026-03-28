@@ -25,4 +25,9 @@
         <item name="android:fontFamily">@font/primary_bold</item>
         <item name="android:textColor">@color/colorPrimary</item>
     </style>
+
+    <style name="TabTextStyle" parent="TextAppearance.Material3.BodyMedium">
+        <item name="android:fontFamily">@font/primary_bold</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 </resources>

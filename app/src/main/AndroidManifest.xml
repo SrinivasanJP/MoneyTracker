@@ -24,6 +24,9 @@
         <receiver android:name=".helper.NotificationReceiver" android:exported="false" />
         
         <activity
+            android:name=".page.CategoryDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".page.Statistics_Activity"
             android:exported="false" />
             

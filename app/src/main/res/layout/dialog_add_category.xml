@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/primary_bold"
+        android:text="Add Category"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Category Name">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etCategoryName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/primary_medium"
+            android:inputType="text"
+            android:textColor="@color/white" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:hint="Target Allocation (%)">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etTargetAllocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/primary_medium"
+            android:inputType="numberDecimal"
+            android:textColor="@color/white" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Simple color picker grid -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/primary_medium"
+        android:text="Pick Color"
+        android:textColor="@color/gray600"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:id="@+id/colorGrid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <View android:id="@+id/color1" android:layout_width="36dp" android:layout_height="36dp" android:layout_margin="4dp" android:background="@drawable/component_circle_indicator" />
+        <View android:id="@+id/color2" android:layout_width="36dp" android:layout_height="36dp" android:layout_margin="4dp" android:background="@drawable/component_circle_indicator" />
+        <View android:id="@+id/color3" android:layout_width="36dp" android:layout_height="36dp" android:layout_margin="4dp" android:background="@drawable/component_circle_indicator" />
+        <View android:id="@+id/color4" android:layout_width="36dp" android:layout_height="36dp" android:layout_margin="4dp" android:background="@drawable/component_circle_indicator" />
+        <View android:id="@+id/color5" android:layout_width="36dp" android:layout_height="36dp" android:layout_margin="4dp" android:background="@drawable/component_circle_indicator" />
+        <View android:id="@+id/color6" android:layout_width="36dp" android:layout_height="36dp" android:layout_margin="4dp" android:background="@drawable/component_circle_indicator" />
+        <View android:id="@+id/color7" android:layout_width="36dp" android:layout_height="36dp" android:layout_margin="4dp" android:background="@drawable/component_circle_indicator" />
+    </LinearLayout>
+</LinearLayout>

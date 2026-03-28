@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/component_wealth_card"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Instrument Name -->
+    <TextView
+        android:id="@+id/tvAssetName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/primary_bold"
+        android:text="Instrument"
+        android:textColor="@color/wealthTextPrimary"
+        android:textSize="15sp" />
+
+    <!-- Row: Qty | Avg Cost | LTP -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="QTY"
+                android:textColor="@color/wealthTextSecondary"
+                android:textSize="10sp"
+                android:fontFamily="@font/primary_medium"
+                android:letterSpacing="0.1" />
+            <TextView
+                android:id="@+id/tvQty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/wealthTextPrimary"
+                android:textSize="13sp"
+                android:fontFamily="@font/primary_bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AVG COST"
+                android:textColor="@color/wealthTextSecondary"
+                android:textSize="10sp"
+                android:fontFamily="@font/primary_medium"
+                android:letterSpacing="0.1" />
+            <TextView
+                android:id="@+id/tvAvgCost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹ 0"
+                android:textColor="@color/wealthTextPrimary"
+                android:textSize="13sp"
+                android:fontFamily="@font/primary_bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LTP"
+                android:textColor="@color/wealthTextSecondary"
+                android:textSize="10sp"
+                android:fontFamily="@font/primary_medium"
+                android:letterSpacing="0.1" />
+            <TextView
+                android:id="@+id/tvLtp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹ 0"
+                android:textColor="@color/wealthTextPrimary"
+                android:textSize="13sp"
+                android:fontFamily="@font/primary_bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginVertical="10dp"
+        android:background="@color/wealthDivider" />
+
+    <!-- Row: Invested | Current | P&L -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="INVESTED"
+                android:textColor="@color/wealthTextSecondary"
+                android:textSize="10sp"
+                android:fontFamily="@font/primary_medium"
+                android:letterSpacing="0.1" />
+            <TextView
+                android:id="@+id/tvInvested"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹ 0"
+                android:textColor="@color/wealthTextPrimary"
+                android:textSize="13sp"
+                android:fontFamily="@font/primary_bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CURRENT"
+                android:textColor="@color/wealthTextSecondary"
+                android:textSize="10sp"
+                android:fontFamily="@font/primary_medium"
+                android:letterSpacing="0.1" />
+            <TextView
+                android:id="@+id/tvCurrent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹ 0"
+                android:textColor="@color/wealthAccent"
+                android:textSize="13sp"
+                android:fontFamily="@font/primary_bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="P&amp;L"
+                android:textColor="@color/wealthTextSecondary"
+                android:textSize="10sp"
+                android:fontFamily="@font/primary_medium"
+                android:letterSpacing="0.1" />
+            <TextView
+                android:id="@+id/tvPnl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹ 0"
+                android:textSize="13sp"
+                android:fontFamily="@font/primary_bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Day Change row -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tvDayChg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/component_wealth_tag"
+            android:fontFamily="@font/primary_medium"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:text="Day: 0%"
+            android:textSize="11sp" />
+
+        <ImageView
+            android:id="@+id/btnEditAsset"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="10dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="Edit"
+            android:src="@android:drawable/ic_menu_edit"
+            app:tint="@color/wealthTextSecondary" />
+
+        <ImageView
+            android:id="@+id/btnDeleteAsset"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="6dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="Delete"
+            android:src="@android:drawable/ic_menu_delete"
+            app:tint="@color/wealthLoss" />
+    </LinearLayout>
+</LinearLayout>

@@ -48,4 +48,19 @@
     <color name="colorError">#B00020</color>
     <color name="colorOnError">#FFFFFF</color>
 
+    <!-- Wealth page theme colors -->
+    <color name="wealthAccent">#00E5FF</color>
+    <color name="wealthAccentDark">#00B8D4</color>
+    <color name="wealthAccentSoft">#1A00E5FF</color>
+    <color name="wealthCardBg">#1A1A2E</color>
+    <color name="wealthSurface">#16213E</color>
+    <color name="wealthGradientStart">#0F3460</color>
+    <color name="wealthGradientEnd">#1A1A2E</color>
+    <color name="wealthBg">#0D1117</color>
+    <color name="wealthProfit">#00E676</color>
+    <color name="wealthLoss">#FF5252</color>
+    <color name="wealthTextPrimary">#E8EAED</color>
+    <color name="wealthTextSecondary">#8B95A5</color>
+    <color name="wealthDivider">#1E2A3A</color>
+
 </resources>

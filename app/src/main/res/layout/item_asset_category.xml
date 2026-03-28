@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="3dp"
+    app:cardBackgroundColor="@color/darkCard"
+    android:layout_marginBottom="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Category Header Row -->
+        <RelativeLayout
+            android:id="@+id/categoryHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Color dot + Name -->
+            <LinearLayout
+                android:id="@+id/categoryNameLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:id="@+id/colorIndicator"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:background="@drawable/component_circle_indicator" />
+
+                <TextView
+                    android:id="@+id/tvCategoryName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/primary_bold"
+                    android:text="Category"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
+            </LinearLayout>
+
+            <!-- Value + Percentage + Actions -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvCategoryValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/primary_bold"
+                    android:text="₹ 0"
+                    android:textColor="@color/gray700"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tvCategoryPercentage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/component_tags_secondary"
+                    android:fontFamily="@font/primary_bold"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="2dp"
+                    android:text="0%"
+                    android:textColor="@color/colorOnPrimary"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/btnEditCategory"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="8dp"
+                    android:contentDescription="Edit"
+                    android:src="@android:drawable/ic_menu_edit"
+                    app:tint="@color/gray500" />
+
+                <ImageView
+                    android:id="@+id/btnDeleteCategory"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="6dp"
+                    android:contentDescription="Delete"
+                    android:src="@android:drawable/ic_menu_delete"
+                    app:tint="@color/accentRed" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <!-- Allocation Progress Bar (dual-fill with target marker) -->
+        <RelativeLayout
+            android:id="@+id/progressWrapper"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/component_progress_bar_bg">
+
+            <!-- Base fill: up to min(actual, target) in category color -->
+            <View
+                android:id="@+id/progressBarFill"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/component_progress_bar_fill" />
+
+            <!-- Diff fill: the over/under portion in red or green -->
+            <View
+                android:id="@+id/progressBarDiff"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+
+            <!-- Target marker line -->
+            <View
+                android:id="@+id/targetMarker"
+                android:layout_width="2dp"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <!-- Target vs Actual Allocation -->
+        <LinearLayout
+            android:id="@+id/allocationRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tvTargetLabel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/primary_medium"
+                android:text="Target: 0%"
+                android:textColor="@color/gray500"
+                android:textSize="11sp" />
+
+            <TextView
+                android:id="@+id/tvAllocationStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/primary_bold"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:text="On Track"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Expand/Collapse indicator -->
+        <ImageView
+            android:id="@+id/btnExpand"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_marginTop="4dp"
+            android:contentDescription="Expand"
+            android:src="@drawable/baseline_chevron_right_24"
+            android:rotation="90"
+            app:tint="@color/gray500" />
+
+        <!-- Expandable Section: Sub-assets + Add button -->
+        <LinearLayout
+            android:id="@+id/expandableSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:paddingTop="8dp">
+
+            <LinearLayout
+                android:id="@+id/subAssetContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <!-- Add Sub-Asset Button -->
+            <TextView
+                android:id="@+id/btnAddAsset"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/component_rounded_gray_tag"
+                android:fontFamily="@font/primary_medium"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="+ Add Asset"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

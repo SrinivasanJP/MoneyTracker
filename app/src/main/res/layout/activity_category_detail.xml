@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/wealthBg">
+
+    <!-- Header -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/component_wealth_gradient"
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/baseline_chevron_left_24"
+            android:contentDescription="Back"
+            app:tint="@color/wealthAccent" />
+
+        <TextView
+            android:id="@+id/tvCategoryTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:fontFamily="@font/primary_bold"
+            android:text="Category"
+            android:textColor="@color/wealthTextPrimary"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:id="@+id/btnAddAsset"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="Add Asset"
+            android:src="@android:drawable/ic_input_add"
+            app:tint="@color/wealthAccent" />
+    </RelativeLayout>
+
+    <!-- Summary Card -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/component_wealth_card"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CATEGORY VALUE"
+            android:fontFamily="@font/primary_medium"
+            android:textColor="@color/wealthTextSecondary"
+            android:textSize="11sp"
+            android:letterSpacing="0.15" />
+
+        <TextView
+            android:id="@+id/tvCategoryValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/primary_bold"
+            android:text="₹ 0"
+            android:textColor="@color/wealthAccent"
+            android:textSize="28sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvCategoryPnl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/primary_medium"
+                android:text=""
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tvCategoryAllocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/component_wealth_tag"
+                android:fontFamily="@font/primary_bold"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="3dp"
+                android:text="0%"
+                android:textColor="@color/wealthAccent"
+                android:textSize="12sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Rebalance Suggestion -->
+    <TextView
+        android:id="@+id/tvRebalanceSuggestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/component_wealth_card"
+        android:fontFamily="@font/primary_medium"
+        android:gravity="center"
+        android:padding="14dp"
+        android:textSize="13sp"
+        android:visibility="gone" />
+
+    <!-- Assets List -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/primary_bold"
+        android:text="Holdings"
+        android:textColor="@color/wealthTextPrimary"
+        android:textSize="16sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvAssets"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginHorizontal="16dp"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp" />
+</LinearLayout>

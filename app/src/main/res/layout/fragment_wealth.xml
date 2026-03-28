@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/wealthBg">
+
+    <!-- Header with gradient -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/component_wealth_gradient"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:fontFamily="@font/primary_bold"
+            android:text="Wealth Tracker"
+            android:textColor="@color/wealthAccent"
+            android:textSize="20sp"
+            android:letterSpacing="0.05" />
+
+        <ImageView
+            android:id="@+id/btnAddCategory"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="Add Category"
+            android:src="@android:drawable/ic_input_add"
+            app:tint="@color/wealthAccent" />
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <!-- Net Worth Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/component_wealth_card"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="28dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/primary_medium"
+                    android:text="TOTAL NET WORTH"
+                    android:textColor="@color/wealthTextSecondary"
+                    android:textSize="12sp"
+                    android:letterSpacing="0.15" />
+
+                <TextView
+                    android:id="@+id/tvTotalNetWorth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="@font/primary_bold"
+                    android:text="₹ 0.00"
+                    android:textColor="@color/wealthAccent"
+                    android:textSize="34sp" />
+
+                <TextView
+                    android:id="@+id/tvTotalPnl"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/primary_medium"
+                    android:text=""
+                    android:textColor="@color/wealthTextSecondary"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Donut Chart Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/component_wealth_card"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/primary_bold"
+                    android:text="Asset Allocation"
+                    android:textColor="@color/wealthTextPrimary"
+                    android:textSize="16sp"
+                    android:layout_marginBottom="8dp" />
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/pieChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="240dp" />
+            </LinearLayout>
+
+            <!-- Categories Header -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="12dp"
+                android:fontFamily="@font/primary_bold"
+                android:text="Categories"
+                android:textColor="@color/wealthAccent"
+                android:textSize="18sp"
+                android:letterSpacing="0.03" />
+
+            <!-- Category list - LinearLayout populated programmatically -->
+            <LinearLayout
+                android:id="@+id/categoryContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:orientation="vertical" />
+
+            <!-- Import Button at the bottom -->
+            <TextView
+                android:id="@+id/btnImport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/component_wealth_button"
+                android:fontFamily="@font/primary_bold"
+                android:gravity="center"
+                android:padding="14dp"
+                android:text="📂  Import Holdings (CSV)"
+                android:textColor="@color/wealthBg"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

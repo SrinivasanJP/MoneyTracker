@@ -23,17 +23,15 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     private final ArrayList<String> daysOfMonth;
     private final OnItemListener onItemListener;
     private final Set<Integer> recordedDates;
+    private final float[] dailySpends;
+    private final double averageSpent;
 
-    public CalendarAdapter(ArrayList<String> daysOfMonth, OnItemListener onItemListener, List<Integer> recordedDates) {
+    public CalendarAdapter(ArrayList<String> daysOfMonth, OnItemListener onItemListener, List<Integer> datesWithData, float[] dailySpends, double averageSpent) {
         this.daysOfMonth = daysOfMonth;
         this.onItemListener = onItemListener;
-        this.recordedDates = new HashSet<>(recordedDates);
-
-
-            Log.d("CalendarAdapter", "daysOfMonth: " + daysOfMonth.toString());
-            Log.d("CalendarAdapter", "recordedDates: " + recordedDates.toString());
-
-
+        this.recordedDates = new HashSet<>(datesWithData);
+        this.dailySpends = dailySpends;
+        this.averageSpent = averageSpent;
     }
 
     @NonNull
@@ -42,8 +40,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.calendar_cell, parent, false);
         ViewGroup.LayoutParams layoutParams = view.getLayoutParams();
-        layoutParams.height = (int)(parent.getHeight()*0.12);
-        return new CalendarViewHolder(view,onItemListener);
+        layoutParams.height = (int)(parent.getHeight() * 0.12);
+        return new CalendarViewHolder(view, onItemListener);
     }
 
     @Override
@@ -52,28 +50,42 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
         holder.dayOfMonth.setText(dayText);
         Context context = holder.itemView.getContext();
 
-
         if (!dayText.isEmpty()) {
+            int day = Integer.parseInt(dayText);
+            
+            // Set default styling (no border, gray text)
             holder.dayOfMonth.setBackground(ContextCompat.getDrawable(context, R.drawable.component_rounded_border));
+            holder.dayOfMonth.setTextColor(ContextCompat.getColor(context, R.color.white));
+            holder.dayOfMonth.setTypeface(ResourcesCompat.getFont(context, R.font.primary_medium));
 
-            // Highlight recorded date
-            if (recordedDates.contains(Integer.parseInt(dayText))) {
-                // You can change background or text color
-                holder.dayOfMonth.setBackground(ContextCompat.getDrawable(context, R.drawable.component_tag_box)); // use a different drawable for highlighted
-                holder.dayOfMonth.setTextColor(ContextCompat.getColor(context, R.color.colorOnPrimary));
+            // Highlight recorded dates with spend logic
+            if (recordedDates.contains(day)) {
+                float spent = dailySpends[day - 1]; // dailySpends is 0-indexed where index 0 is day 1
+
+                // Determine border color based on spending compared to average
+                int backgroundRes;
+                if (spent <= averageSpent) {
+                    backgroundRes = R.drawable.calendar_border_green;
+                } else if (spent < 2 * averageSpent) {
+                    backgroundRes = R.drawable.calendar_border_yellow;
+                } else {
+                    backgroundRes = R.drawable.calendar_border_red;
+                }
+
+                holder.dayOfMonth.setBackground(ContextCompat.getDrawable(context, backgroundRes));
                 holder.dayOfMonth.setTypeface(ResourcesCompat.getFont(context, R.font.primary_bold));
-
+                holder.dayOfMonth.setTextColor(ContextCompat.getColor(context, R.color.colorOnPrimary)); // Optional: to make numbers stand out when highlighted if desired, currently sticking to user spec
             }
         } else {
             holder.dayOfMonth.setText(""); // in case of empty cell
         }
     }
 
-
     @Override
     public int getItemCount() {
         return daysOfMonth.size();
     }
+
     public interface OnItemListener{
         void onItemClick(int position, String dayText);
     }
