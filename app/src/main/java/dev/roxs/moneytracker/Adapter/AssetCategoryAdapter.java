@@ -143,14 +143,13 @@ public class AssetCategoryAdapter extends RecyclerView.Adapter<AssetCategoryAdap
             holder.allocationRow.setVisibility(View.GONE);
         }
 
-        // Expand/collapse
-        boolean isExpanded = category.isExpanded();
-        holder.expandableSection.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-        holder.btnExpand.setRotation(isExpanded ? 270 : 90);
+        // Always show expandable section (no collapse toggle)
+        holder.expandableSection.setVisibility(View.VISIBLE);
 
         holder.categoryHeader.setOnClickListener(v -> {
-            category.setExpanded(!category.isExpanded());
-            notifyItemChanged(position);
+            Intent intent = new Intent(context, CategoryDetailActivity.class);
+            intent.putExtra("categoryId", category.getId());
+            context.startActivity(intent);
         });
 
         // Name click -> open detail page
@@ -160,37 +159,66 @@ public class AssetCategoryAdapter extends RecyclerView.Adapter<AssetCategoryAdap
             context.startActivity(intent);
         });
 
-        holder.btnExpand.setOnClickListener(v -> {
-            category.setExpanded(!category.isExpanded());
-            notifyItemChanged(position);
-        });
-
         // Populate sub-assets
         holder.subAssetContainer.removeAllViews();
         List<AssetItem> items = category.getItems();
         if (items != null && !items.isEmpty()) {
             for (AssetItem item : items) {
-                View subView = LayoutInflater.from(context).inflate(R.layout.item_asset_sub, holder.subAssetContainer, false);
+                if (item.isFd()) {
+                    // Inflate FD-specific sub-item layout
+                    View fdView = LayoutInflater.from(context).inflate(R.layout.item_asset_fd_sub, holder.subAssetContainer, false);
 
-                TextView tvName = subView.findViewById(R.id.tvItemName);
-                TextView tvValue = subView.findViewById(R.id.tvItemValue);
-                TextView tvPercentage = subView.findViewById(R.id.tvItemPercentage);
-                ImageView btnEdit = subView.findViewById(R.id.btnEditItem);
-                ImageView btnDelete = subView.findViewById(R.id.btnDeleteItem);
+                    TextView tvFdName = fdView.findViewById(R.id.tvFdName);
+                    TextView tvFdInterestType = fdView.findViewById(R.id.tvFdInterestType);
+                    TextView tvFdInvested = fdView.findViewById(R.id.tvFdInvested);
+                    TextView tvFdRate = fdView.findViewById(R.id.tvFdRate);
+                    TextView tvFdCycle = fdView.findViewById(R.id.tvFdCycle);
+                    TextView tvFdCurrentValue = fdView.findViewById(R.id.tvFdCurrentValue);
+                    TextView tvFdEarned = fdView.findViewById(R.id.tvFdEarned);
+                    TextView tvFdNextCredit = fdView.findViewById(R.id.tvFdNextCredit);
+                    ImageView btnEditFd = fdView.findViewById(R.id.btnEditFd);
+                    ImageView btnDeleteFd = fdView.findViewById(R.id.btnDeleteFd);
 
-                tvName.setText(item.getName());
-                tvValue.setText(formatCurrency(item.getValue()));
-                tvPercentage.setText(String.format("(%.1f%%)", item.getPercentage()));
+                    tvFdName.setText(item.getName());
+                    tvFdInterestType.setText(item.getInterestType() != null ? item.getInterestType() : "Simple");
+                    tvFdInvested.setText(formatCurrency(item.getInvested()));
+                    tvFdRate.setText(String.format("%.2f%%", item.getInterestRate()));
+                    tvFdCycle.setText(item.getCycleLabel());
+                    tvFdCurrentValue.setText(formatCurrency(item.getValue()));
+                    tvFdEarned.setText("+" + formatCurrency(item.getPnl()));
+                    tvFdNextCredit.setText(item.getInterestCreditDate() != null ? item.getInterestCreditDate() : "--");
 
-                btnEdit.setOnClickListener(v -> {
-                    if (listener != null) listener.onEditAsset(item);
-                });
+                    btnEditFd.setOnClickListener(v -> {
+                        if (listener != null) listener.onEditAsset(item);
+                    });
+                    btnDeleteFd.setOnClickListener(v -> {
+                        if (listener != null) listener.onDeleteAsset(item);
+                    });
 
-                btnDelete.setOnClickListener(v -> {
-                    if (listener != null) listener.onDeleteAsset(item);
-                });
+                    holder.subAssetContainer.addView(fdView);
+                } else {
+                    // Regular asset sub-item
+                    View subView = LayoutInflater.from(context).inflate(R.layout.item_asset_sub, holder.subAssetContainer, false);
 
-                holder.subAssetContainer.addView(subView);
+                    TextView tvName = subView.findViewById(R.id.tvItemName);
+                    TextView tvValue = subView.findViewById(R.id.tvItemValue);
+                    TextView tvPercentage = subView.findViewById(R.id.tvItemPercentage);
+                    ImageView btnEdit = subView.findViewById(R.id.btnEditItem);
+                    ImageView btnDelete = subView.findViewById(R.id.btnDeleteItem);
+
+                    tvName.setText(item.getName());
+                    tvValue.setText(formatCurrency(item.getValue()));
+                    tvPercentage.setText(String.format("(%.1f%%)", item.getPercentage()));
+
+                    btnEdit.setOnClickListener(v -> {
+                        if (listener != null) listener.onEditAsset(item);
+                    });
+                    btnDelete.setOnClickListener(v -> {
+                        if (listener != null) listener.onDeleteAsset(item);
+                    });
+
+                    holder.subAssetContainer.addView(subView);
+                }
             }
         }
 
@@ -228,7 +256,7 @@ public class AssetCategoryAdapter extends RecyclerView.Adapter<AssetCategoryAdap
     public static class ViewHolder extends RecyclerView.ViewHolder {
         View colorIndicator;
         TextView tvCategoryName, tvCategoryValue, tvCategoryPercentage;
-        ImageView btnEditCategory, btnDeleteCategory, btnExpand;
+        ImageView btnEditCategory, btnDeleteCategory;
         View progressBarFill, progressBarDiff, targetMarker;
         RelativeLayout categoryHeader;
         LinearLayout expandableSection, subAssetContainer, allocationRow;
@@ -242,7 +270,6 @@ public class AssetCategoryAdapter extends RecyclerView.Adapter<AssetCategoryAdap
             tvCategoryPercentage = itemView.findViewById(R.id.tvCategoryPercentage);
             btnEditCategory = itemView.findViewById(R.id.btnEditCategory);
             btnDeleteCategory = itemView.findViewById(R.id.btnDeleteCategory);
-            btnExpand = itemView.findViewById(R.id.btnExpand);
             progressBarFill = itemView.findViewById(R.id.progressBarFill);
             progressBarDiff = itemView.findViewById(R.id.progressBarDiff);
             targetMarker = itemView.findViewById(R.id.targetMarker);

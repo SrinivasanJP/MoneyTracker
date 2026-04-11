@@ -55,7 +55,7 @@
     <color name="wealthCardBg">#1A1A2E</color>
     <color name="wealthSurface">#16213E</color>
     <color name="wealthGradientStart">#0F3460</color>
-    <color name="wealthGradientEnd">#1A1A2E</color>
+    <color name="wealthGradientEnd">#00000000</color>
     <color name="wealthBg">#0D1117</color>
     <color name="wealthProfit">#00E676</color>
     <color name="wealthLoss">#FF5252</color>

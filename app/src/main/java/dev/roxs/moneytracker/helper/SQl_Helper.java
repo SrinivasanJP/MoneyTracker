@@ -23,7 +23,7 @@ import dev.roxs.moneytracker.model.AssetItem;
 public class SQl_Helper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "money_tracker.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 7;
 
     public static final String TABLE_NAME = "money_tracking";
     public static final String COL_ID = "id";
@@ -45,6 +45,7 @@ public class SQl_Helper extends SQLiteOpenHelper {
     public static final String COL_CAT_COLOR = "color";
     public static final String COL_CAT_SORT_ORDER = "sort_order";
     public static final String COL_CAT_TARGET_ALLOC = "target_allocation";
+    public static final String COL_CAT_IS_FD = "is_fd_category";
 
     public static final String TABLE_ASSET_ITEMS = "asset_items";
     public static final String COL_ITEM_ID = "id";
@@ -58,6 +59,18 @@ public class SQl_Helper extends SQLiteOpenHelper {
     public static final String COL_ITEM_PNL = "pnl";
     public static final String COL_ITEM_NET_CHG = "net_chg";
     public static final String COL_ITEM_DAY_CHG = "day_chg";
+    public static final String COL_ITEM_INTEREST_RATE = "interest_rate";
+    public static final String COL_ITEM_INTEREST_CYCLE = "interest_cycle";
+    public static final String COL_ITEM_INTEREST_CREDIT_DATE = "interest_credit_date";
+    public static final String COL_ITEM_IS_FD = "is_fd";
+    public static final String COL_ITEM_INTEREST_TYPE = "interest_type";
+
+    // ========== NET WORTH HISTORY TABLE ==========
+    public static final String TABLE_NET_WORTH_HISTORY = "net_worth_history";
+    public static final String COL_NW_ID = "id";
+    public static final String COL_NW_DATE = "date";
+    public static final String COL_NW_TOTAL = "total_net_worth";
+    public static final String COL_NW_BREAKDOWN = "category_breakdown";
 
     public SQl_Helper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -109,7 +122,8 @@ public class SQl_Helper extends SQLiteOpenHelper {
                 COL_CAT_NAME + " TEXT, " +
                 COL_CAT_COLOR + " TEXT, " +
                 COL_CAT_SORT_ORDER + " INTEGER, " +
-                COL_CAT_TARGET_ALLOC + " REAL DEFAULT 0" +
+                COL_CAT_TARGET_ALLOC + " REAL DEFAULT 0, " +
+                COL_CAT_IS_FD + " INTEGER DEFAULT 0" +
                 ")");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_ASSET_ITEMS + " (" +
@@ -124,10 +138,23 @@ public class SQl_Helper extends SQLiteOpenHelper {
                 COL_ITEM_PNL + " REAL DEFAULT 0, " +
                 COL_ITEM_NET_CHG + " REAL DEFAULT 0, " +
                 COL_ITEM_DAY_CHG + " REAL DEFAULT 0, " +
+                COL_ITEM_INTEREST_RATE + " REAL DEFAULT 0, " +
+                COL_ITEM_INTEREST_CYCLE + " INTEGER DEFAULT 0, " +
+                COL_ITEM_INTEREST_CREDIT_DATE + " TEXT, " +
+                COL_ITEM_IS_FD + " INTEGER DEFAULT 0, " +
+                COL_ITEM_INTEREST_TYPE + " TEXT, " +
                 "FOREIGN KEY(" + COL_ITEM_CATEGORY_ID + ") REFERENCES " + TABLE_ASSET_CATEGORIES + "(" + COL_CAT_ID + ") ON DELETE CASCADE" +
                 ")");
 
         seedDefaultCategories(db);
+
+        // Net worth history table
+        db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NET_WORTH_HISTORY + " (" +
+                COL_NW_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_NW_DATE + " TEXT UNIQUE, " +
+                COL_NW_TOTAL + " REAL, " +
+                COL_NW_BREAKDOWN + " TEXT" +
+                ")");
     }
 
     private void seedDefaultCategories(SQLiteDatabase db) {
@@ -175,11 +202,36 @@ public class SQl_Helper extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE " + TABLE_ASSET_CATEGORIES + " ADD COLUMN " + COL_CAT_TARGET_ALLOC + " REAL DEFAULT 0");
             } catch (Exception e) { /* already exists */ }
         }
+        if (oldVersion < 6) {
+            // Add FD columns to asset_items
+            String[] fdCols = {COL_ITEM_INTEREST_RATE + " REAL DEFAULT 0", COL_ITEM_INTEREST_CYCLE + " INTEGER DEFAULT 0",
+                    COL_ITEM_INTEREST_CREDIT_DATE + " TEXT", COL_ITEM_IS_FD + " INTEGER DEFAULT 0",
+                    COL_ITEM_INTEREST_TYPE + " TEXT"};
+            for (String colDef : fdCols) {
+                try {
+                    db.execSQL("ALTER TABLE " + TABLE_ASSET_ITEMS + " ADD COLUMN " + colDef);
+                } catch (Exception e) { /* already exists */ }
+            }
+            // Add is_fd_category to categories
+            try {
+                db.execSQL("ALTER TABLE " + TABLE_ASSET_CATEGORIES + " ADD COLUMN " + COL_CAT_IS_FD + " INTEGER DEFAULT 0");
+            } catch (Exception e) { /* already exists */ }
+        }
+        if (oldVersion < 7) {
+            // Create net worth history table
+            db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NET_WORTH_HISTORY + " (" +
+                    COL_NW_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COL_NW_DATE + " TEXT UNIQUE, " +
+                    COL_NW_TOTAL + " REAL, " +
+                    COL_NW_BREAKDOWN + " TEXT" +
+                    ")");
+        }
     }
 
     @Override
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Automatically drop all tables and recreate them if we are doing a rollback/downgrade between branches
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NET_WORTH_HISTORY);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ASSET_ITEMS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ASSET_CATEGORIES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
@@ -745,6 +797,10 @@ public class SQl_Helper extends SQLiteOpenHelper {
     }
 
     public long insertCategory(String name, String color, double targetAllocation) {
+        return insertCategory(name, color, targetAllocation, false);
+    }
+
+    public long insertCategory(String name, String color, double targetAllocation, boolean isFdCategory) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT MAX(" + COL_CAT_SORT_ORDER + ") FROM " + TABLE_ASSET_CATEGORIES, null);
         int maxOrder = 0;
@@ -756,6 +812,7 @@ public class SQl_Helper extends SQLiteOpenHelper {
         cv.put(COL_CAT_COLOR, color);
         cv.put(COL_CAT_SORT_ORDER, maxOrder);
         cv.put(COL_CAT_TARGET_ALLOC, targetAllocation);
+        cv.put(COL_CAT_IS_FD, isFdCategory ? 1 : 0);
         return db.insert(TABLE_ASSET_CATEGORIES, null, cv);
     }
 
@@ -764,11 +821,16 @@ public class SQl_Helper extends SQLiteOpenHelper {
     }
 
     public void updateCategory(int id, String name, String color, double targetAllocation) {
+        updateCategory(id, name, color, targetAllocation, false);
+    }
+
+    public void updateCategory(int id, String name, String color, double targetAllocation, boolean isFdCategory) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_CAT_NAME, name);
         cv.put(COL_CAT_COLOR, color);
         if (targetAllocation >= 0) cv.put(COL_CAT_TARGET_ALLOC, targetAllocation);
+        cv.put(COL_CAT_IS_FD, isFdCategory ? 1 : 0);
         db.update(TABLE_ASSET_CATEGORIES, cv, COL_CAT_ID + " = ?", new String[]{String.valueOf(id)});
     }
 
@@ -790,7 +852,9 @@ public class SQl_Helper extends SQLiteOpenHelper {
             String color = cursor.getString(cursor.getColumnIndexOrThrow(COL_CAT_COLOR));
             int sortOrder = cursor.getInt(cursor.getColumnIndexOrThrow(COL_CAT_SORT_ORDER));
             double targetAlloc = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_CAT_TARGET_ALLOC));
-            AssetCategory cat = new AssetCategory(id, name, color, sortOrder, targetAlloc);
+            boolean isFdCat = false;
+            try { isFdCat = cursor.getInt(cursor.getColumnIndexOrThrow(COL_CAT_IS_FD)) == 1; } catch (Exception e) {}
+            AssetCategory cat = new AssetCategory(id, name, color, sortOrder, targetAlloc, isFdCat);
             cat.setItems(getItemsForCategory(id));
             cat.computeTotalValue();
             categories.add(cat);
@@ -850,7 +914,26 @@ public class SQl_Helper extends SQLiteOpenHelper {
             double pnl = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_PNL));
             double netChg = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_NET_CHG));
             double dayChg = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_DAY_CHG));
-            items.add(new AssetItem(id, categoryId, name, value, qty, avgCost, ltp, invested, pnl, netChg, dayChg));
+
+            boolean isFd = false;
+            double interestRate = 0;
+            int interestCycle = 0;
+            String interestCreditDate = null;
+            String interestType = null;
+            try {
+                isFd = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ITEM_IS_FD)) == 1;
+                interestRate = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_INTEREST_RATE));
+                interestCycle = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ITEM_INTEREST_CYCLE));
+                interestCreditDate = cursor.getString(cursor.getColumnIndexOrThrow(COL_ITEM_INTEREST_CREDIT_DATE));
+                interestType = cursor.getString(cursor.getColumnIndexOrThrow(COL_ITEM_INTEREST_TYPE));
+            } catch (Exception e) { /* columns may not exist on older schema */ }
+
+            if (isFd) {
+                items.add(new AssetItem(id, categoryId, name, invested, interestRate, interestCycle,
+                        interestCreditDate, interestType, value, pnl));
+            } else {
+                items.add(new AssetItem(id, categoryId, name, value, qty, avgCost, ltp, invested, pnl, netChg, dayChg));
+            }
         }
         cursor.close();
         return items;
@@ -932,4 +1015,153 @@ public class SQl_Helper extends SQLiteOpenHelper {
         cv.put(COL_ITEM_DAY_CHG, dayChg);
         db.update(TABLE_ASSET_ITEMS, cv, COL_ITEM_ID + " = ?", new String[]{String.valueOf(id)});
     }
+
+    // ========== FD-SPECIFIC CRUD ==========
+
+    /**
+     * Insert a Fixed Deposit asset item.
+     */
+    public long insertFdAssetItem(int categoryId, String name, double invested,
+                                   double interestRate, int interestCycle,
+                                   String interestCreditDate, String interestType) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_ITEM_CATEGORY_ID, categoryId);
+        cv.put(COL_ITEM_NAME, name);
+        cv.put(COL_ITEM_VALUE, invested); // Initially value = invested
+        cv.put(COL_ITEM_INVESTED, invested);
+        cv.put(COL_ITEM_PNL, 0);
+        cv.put(COL_ITEM_INTEREST_RATE, interestRate);
+        cv.put(COL_ITEM_INTEREST_CYCLE, interestCycle);
+        cv.put(COL_ITEM_INTEREST_CREDIT_DATE, interestCreditDate);
+        cv.put(COL_ITEM_IS_FD, 1);
+        cv.put(COL_ITEM_INTEREST_TYPE, interestType);
+        return db.insert(TABLE_ASSET_ITEMS, null, cv);
+    }
+
+    /**
+     * Update a Fixed Deposit asset item.
+     */
+    public void updateFdAssetItem(int id, String name, double invested,
+                                   double interestRate, int interestCycle,
+                                   String interestCreditDate, String interestType) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_ITEM_NAME, name);
+        cv.put(COL_ITEM_INVESTED, invested);
+        cv.put(COL_ITEM_INTEREST_RATE, interestRate);
+        cv.put(COL_ITEM_INTEREST_CYCLE, interestCycle);
+        cv.put(COL_ITEM_INTEREST_CREDIT_DATE, interestCreditDate);
+        cv.put(COL_ITEM_INTEREST_TYPE, interestType);
+        db.update(TABLE_ASSET_ITEMS, cv, COL_ITEM_ID + " = ?", new String[]{String.valueOf(id)});
+    }
+
+    /**
+     * Credit interest to an FD item: increase value and pnl.
+     */
+    public void creditFdInterest(int itemId, double interestAmount, String nextCreditDate) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE " + TABLE_ASSET_ITEMS + " SET " +
+                COL_ITEM_VALUE + " = " + COL_ITEM_VALUE + " + ?, " +
+                COL_ITEM_PNL + " = " + COL_ITEM_PNL + " + ?, " +
+                COL_ITEM_INTEREST_CREDIT_DATE + " = ? " +
+                "WHERE " + COL_ITEM_ID + " = ?",
+                new Object[]{interestAmount, interestAmount, nextCreditDate, itemId});
+    }
+
+    /**
+     * Get all FD items (where is_fd = 1).
+     */
+    public List<AssetItem> getAllFdItems() {
+        List<AssetItem> items = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_ASSET_ITEMS + " WHERE " + COL_ITEM_IS_FD + " = 1", null);
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ITEM_ID));
+            int catId = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ITEM_CATEGORY_ID));
+            String name = cursor.getString(cursor.getColumnIndexOrThrow(COL_ITEM_NAME));
+            double value = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_VALUE));
+            double invested = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_INVESTED));
+            double pnl = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_PNL));
+            double interestRate = cursor.getDouble(cursor.getColumnIndexOrThrow(COL_ITEM_INTEREST_RATE));
+            int interestCycle = cursor.getInt(cursor.getColumnIndexOrThrow(COL_ITEM_INTEREST_CYCLE));
+            String creditDate = cursor.getString(cursor.getColumnIndexOrThrow(COL_ITEM_INTEREST_CREDIT_DATE));
+            String interestType = cursor.getString(cursor.getColumnIndexOrThrow(COL_ITEM_INTEREST_TYPE));
+            items.add(new AssetItem(id, catId, name, invested, interestRate, interestCycle,
+                    creditDate, interestType, value, pnl));
+        }
+        cursor.close();
+        return items;
+    }
+
+    // ========== NET WORTH HISTORY ==========
+
+    /**
+     * Record a daily net worth snapshot. Uses INSERT OR REPLACE so only one record per day.
+     * @param date       yyyy-MM-dd
+     * @param total      total net worth
+     * @param breakdown  JSON string like {"Equity":150000, "Bonds":50000}
+     */
+    public void insertNetWorthSnapshot(String date, double total, String breakdown) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_NW_DATE, date);
+        cv.put(COL_NW_TOTAL, total);
+        cv.put(COL_NW_BREAKDOWN, breakdown);
+        db.insertWithOnConflict(TABLE_NET_WORTH_HISTORY, null, cv, SQLiteDatabase.CONFLICT_REPLACE);
+    }
+
+    /**
+     * Get net worth history ordered by date ascending.
+     * Each entry is [date, total, breakdownJson].
+     */
+    public List<String[]> getNetWorthHistory(int limit) {
+        List<String[]> history = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + COL_NW_DATE + ", " + COL_NW_TOTAL + ", " + COL_NW_BREAKDOWN +
+                " FROM " + TABLE_NET_WORTH_HISTORY + " ORDER BY " + COL_NW_DATE + " ASC";
+        if (limit > 0) query += " LIMIT " + limit;
+        Cursor cursor = db.rawQuery(query, null);
+        while (cursor.moveToNext()) {
+            String date = cursor.getString(0);
+            String total = String.valueOf(cursor.getDouble(1));
+            String breakdown = cursor.getString(2);
+            history.add(new String[]{date, total, breakdown});
+        }
+        cursor.close();
+        return history;
+    }
+
+    /**
+     * Get all net worth history (no limit).
+     */
+    public List<String[]> getAllNetWorthHistory() {
+        return getNetWorthHistory(0);
+    }
+
+    /**
+     * Get raw cursor for all asset categories (for export).
+     */
+    public Cursor getAssetCategoriesCursor() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_ASSET_CATEGORIES + " ORDER BY " + COL_CAT_SORT_ORDER, null);
+    }
+
+    /**
+     * Get raw cursor for all asset items (for export).
+     */
+    public Cursor getAssetItemsCursor() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_ASSET_ITEMS, null);
+    }
+
+    /**
+     * Get raw cursor for net worth history (for export).
+     */
+    public Cursor getNetWorthHistoryCursor() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_NET_WORTH_HISTORY + " ORDER BY " + COL_NW_DATE, null);
+    }
 }
+

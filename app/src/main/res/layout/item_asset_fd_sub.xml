@@ -3,109 +3,71 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/component_wealth_card"
-    android:layout_marginBottom="10dp"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:paddingVertical="10dp"
+    android:paddingHorizontal="4dp">
 
-    <!-- Instrument Name -->
-    <TextView
-        android:id="@+id/tvAssetName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/primary_bold"
-        android:text="Instrument"
-        android:textColor="@color/wealthTextPrimary"
-        android:textSize="15sp" />
+    <!-- Row 1: Name + Actions -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <!-- Row: Qty | Avg Cost | LTP -->
+        <TextView
+            android:id="@+id/tvFdName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:fontFamily="@font/primary_bold"
+            android:text="FD Name"
+            android:textColor="@color/wealthTextPrimary"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvFdInterestType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/component_wealth_tag"
+                android:fontFamily="@font/primary_medium"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="2dp"
+                android:text="Simple"
+                android:textColor="@color/wealthAccent"
+                android:textSize="10sp" />
+
+            <ImageView
+                android:id="@+id/btnEditFd"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="8dp"
+                android:contentDescription="Edit"
+                android:src="@drawable/ic_edit_slim"
+                app:tint="@color/gray500" />
+
+            <ImageView
+                android:id="@+id/btnDeleteFd"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="4dp"
+                android:contentDescription="Delete"
+                android:src="@drawable/ic_delete_slim"
+                app:tint="@color/accentRed" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Row 2: Invested | Rate | Cycle -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="QTY"
-                android:textColor="@color/wealthTextSecondary"
-                android:textSize="10sp"
-                android:fontFamily="@font/primary_medium"
-                android:letterSpacing="0.1" />
-            <TextView
-                android:id="@+id/tvQty"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0"
-                android:textColor="@color/wealthTextPrimary"
-                android:textSize="13sp"
-                android:fontFamily="@font/primary_bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="AVG COST"
-                android:textColor="@color/wealthTextSecondary"
-                android:textSize="10sp"
-                android:fontFamily="@font/primary_medium"
-                android:letterSpacing="0.1" />
-            <TextView
-                android:id="@+id/tvAvgCost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="₹ 0"
-                android:textColor="@color/wealthTextPrimary"
-                android:textSize="13sp"
-                android:fontFamily="@font/primary_bold" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="LTP"
-                android:textColor="@color/wealthTextSecondary"
-                android:textSize="10sp"
-                android:fontFamily="@font/primary_medium"
-                android:letterSpacing="0.1" />
-            <TextView
-                android:id="@+id/tvLtp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="₹ 0"
-                android:textColor="@color/wealthTextPrimary"
-                android:textSize="13sp"
-                android:fontFamily="@font/primary_bold" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- Divider -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginVertical="10dp"
-        android:background="@color/wealthDivider" />
-
-    <!-- Row: Invested | Current | P&L -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -117,19 +79,73 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="INVESTED"
-                android:textColor="@color/wealthTextSecondary"
-                android:textSize="10sp"
+                android:textColor="@color/gray500"
+                android:textSize="9sp"
                 android:fontFamily="@font/primary_medium"
                 android:letterSpacing="0.1" />
             <TextView
-                android:id="@+id/tvInvested"
+                android:id="@+id/tvFdInvested"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="₹ 0"
-                android:textColor="@color/wealthTextPrimary"
-                android:textSize="13sp"
+                android:textColor="@color/gray700"
+                android:textSize="12sp"
                 android:fontFamily="@font/primary_bold" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RATE"
+                android:textColor="@color/gray500"
+                android:textSize="9sp"
+                android:fontFamily="@font/primary_medium"
+                android:letterSpacing="0.1" />
+            <TextView
+                android:id="@+id/tvFdRate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0%"
+                android:textColor="@color/gray700"
+                android:textSize="12sp"
+                android:fontFamily="@font/primary_bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CYCLE"
+                android:textColor="@color/gray500"
+                android:textSize="9sp"
+                android:fontFamily="@font/primary_medium"
+                android:letterSpacing="0.1" />
+            <TextView
+                android:id="@+id/tvFdCycle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Monthly"
+                android:textColor="@color/gray700"
+                android:textSize="12sp"
+                android:fontFamily="@font/primary_bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Row 3: Current Value | Interest Earned | Next Credit -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -140,17 +156,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="CURRENT"
-                android:textColor="@color/wealthTextSecondary"
-                android:textSize="10sp"
+                android:textColor="@color/gray500"
+                android:textSize="9sp"
                 android:fontFamily="@font/primary_medium"
                 android:letterSpacing="0.1" />
             <TextView
-                android:id="@+id/tvCurrent"
+                android:id="@+id/tvFdCurrentValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="₹ 0"
                 android:textColor="@color/wealthAccent"
-                android:textSize="13sp"
+                android:textSize="12sp"
                 android:fontFamily="@font/primary_bold" />
         </LinearLayout>
 
@@ -162,58 +178,49 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="P&amp;L"
-                android:textColor="@color/wealthTextSecondary"
-                android:textSize="10sp"
+                android:text="EARNED"
+                android:textColor="@color/gray500"
+                android:textSize="9sp"
                 android:fontFamily="@font/primary_medium"
                 android:letterSpacing="0.1" />
             <TextView
-                android:id="@+id/tvPnl"
+                android:id="@+id/tvFdEarned"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="₹ 0"
-                android:textSize="13sp"
+                android:textColor="@color/wealthProfit"
+                android:textSize="12sp"
+                android:fontFamily="@font/primary_bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NEXT CREDIT"
+                android:textColor="@color/gray500"
+                android:textSize="9sp"
+                android:fontFamily="@font/primary_medium"
+                android:letterSpacing="0.1" />
+            <TextView
+                android:id="@+id/tvFdNextCredit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="--"
+                android:textColor="@color/gray700"
+                android:textSize="12sp"
                 android:fontFamily="@font/primary_bold" />
         </LinearLayout>
     </LinearLayout>
 
-    <!-- Day Change row -->
-    <LinearLayout
+    <!-- Divider -->
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="1dp"
         android:layout_marginTop="8dp"
-        android:gravity="end"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tvDayChg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/component_wealth_tag"
-            android:fontFamily="@font/primary_medium"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="2dp"
-            android:text="Day: 0%"
-            android:textSize="11sp" />
-
-        <ImageView
-            android:id="@+id/btnEditAsset"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="10dp"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="Edit"
-            android:src="@drawable/ic_edit_slim"
-            app:tint="@color/wealthTextSecondary" />
-
-        <ImageView
-            android:id="@+id/btnDeleteAsset"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="6dp"
-            android:layout_gravity="center_vertical"
-            android:contentDescription="Delete"
-            android:src="@drawable/ic_delete_slim"
-            app:tint="@color/wealthLoss" />
-    </LinearLayout>
+        android:background="@color/gray200" />
 </LinearLayout>

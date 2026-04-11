@@ -44,6 +44,18 @@
             android:textColor="@color/white" />
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Fixed Deposit checkbox -->
+    <CheckBox
+        android:id="@+id/cbIsFdCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:fontFamily="@font/primary_medium"
+        android:text="Fixed Deposit / Bond Category"
+        android:textColor="@color/gray700"
+        android:textSize="14sp"
+        android:buttonTint="@color/wealthAccent" />
+
     <!-- Simple color picker grid -->
     <TextView
         android:layout_width="wrap_content"
@@ -71,3 +83,4 @@
         <View android:id="@+id/color7" android:layout_width="36dp" android:layout_height="36dp" android:layout_margin="4dp" android:background="@drawable/component_circle_indicator" />
     </LinearLayout>
 </LinearLayout>
+

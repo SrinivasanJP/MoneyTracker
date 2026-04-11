@@ -52,7 +52,7 @@
             android:layout_height="20dp"
             android:layout_marginStart="8dp"
             android:contentDescription="Edit"
-            android:src="@android:drawable/ic_menu_edit"
+            android:src="@drawable/ic_edit_slim"
             app:tint="@color/gray500" />
 
         <ImageView
@@ -61,7 +61,7 @@
             android:layout_height="20dp"
             android:layout_marginStart="4dp"
             android:contentDescription="Delete"
-            android:src="@android:drawable/ic_menu_delete"
+            android:src="@drawable/ic_delete_slim"
             app:tint="@color/accentRed" />
     </LinearLayout>
 

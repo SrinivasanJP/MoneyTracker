@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 //                    ContextCompat.getColor(this, R.color.colorPrimary));
         } else {
             // Wealth: dark navy + cyan theme
-            int statusColor = Color.parseColor("#0D1117");
+            int statusColor = Color.parseColor("#0F3460");
             int tabBg = Color.parseColor("#0D1117");
             int accent = Color.parseColor("#00E5FF");
             window.setStatusBarColor(statusColor);

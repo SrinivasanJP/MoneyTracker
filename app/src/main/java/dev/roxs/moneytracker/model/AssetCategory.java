@@ -11,15 +11,17 @@ public class AssetCategory {
     private double totalValue;
     private double percentage;
     private double targetAllocation; // target % of total portfolio
+    private boolean isFdCategory;    // true if this is a Fixed Deposit / Bond category
     private List<AssetItem> items;
     private boolean expanded;
 
-    public AssetCategory(int id, String name, String color, int sortOrder, double targetAllocation) {
+    public AssetCategory(int id, String name, String color, int sortOrder, double targetAllocation, boolean isFdCategory) {
         this.id = id;
         this.name = name;
         this.color = color;
         this.sortOrder = sortOrder;
         this.targetAllocation = targetAllocation;
+        this.isFdCategory = isFdCategory;
         this.totalValue = 0;
         this.percentage = 0;
         this.items = new ArrayList<>();
@@ -52,6 +54,9 @@ public class AssetCategory {
 
     public boolean isExpanded() { return expanded; }
     public void setExpanded(boolean expanded) { this.expanded = expanded; }
+
+    public boolean isFdCategory() { return isFdCategory; }
+    public void setFdCategory(boolean fdCategory) { isFdCategory = fdCategory; }
 
     /**
      * Check if current allocation is within ±2% of target.
