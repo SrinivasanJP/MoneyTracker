@@ -7,12 +7,21 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -126,13 +135,47 @@ public class Settings_Activity extends AppCompatActivity {
             timePickerDialog.show();
         });
 
-        // Share app
+        // Share app — fetch the latest link from the API
         vShareAppRow.setOnClickListener(v -> {
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
-            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_message));
-            startActivity(Intent.createChooser(shareIntent, "Share via"));
+            Toast.makeText(this, "Fetching app link...", Toast.LENGTH_SHORT).show();
+            new AsyncTask<Void, Void, String>() {
+                @Override
+                protected String doInBackground(Void... voids) {
+                    try {
+                        URL url = new URL("https://srinivasan-jp-portfolio.vercel.app/appVersionAPI.json");
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        StringBuilder json = new StringBuilder();
+                        String line;
+                        while ((line = reader.readLine()) != null) {
+                            json.append(line);
+                        }
+                        reader.close();
+                        conn.disconnect();
+
+                        JSONObject jsonObject = new JSONObject(json.toString());
+                        return jsonObject.getString("appLink");
+                    } catch (Exception e) {
+                        Log.e("Settings", "Failed to fetch app link", e);
+                        return null;
+                    }
+                }
+
+                @Override
+                protected void onPostExecute(String appLink) {
+                    if (appLink != null && !appLink.isEmpty()) {
+                        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                        shareIntent.setType("text/plain");
+                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name));
+                        shareIntent.putExtra(Intent.EXTRA_TEXT,
+                                "Check out " + getString(R.string.app_name) + "!\nDownload here: " + appLink);
+                        startActivity(Intent.createChooser(shareIntent, "Share via"));
+                    } else {
+                        Toast.makeText(Settings_Activity.this,
+                                "Failed to fetch app link. Please try again.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }.execute();
         });
 
         // Clear all data
