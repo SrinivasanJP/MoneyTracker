@@ -5,11 +5,14 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.util.Log;
 
 import java.util.Calendar;
 
 public class Notification_Helper {
 
+    private static final String TAG = "Notification_Helper";
     private static final String PREF_NAME = "money_tracker_prefs";
     private static final String KEY_NOTIFICATION_HOUR = "notification_hour";
     private static final String KEY_NOTIFICATION_MINUTE = "notification_minute";
@@ -43,6 +46,56 @@ public class Notification_Helper {
         return String.format("%d:%02d %s", displayHour, minute, amPm);
     }
 
+    /**
+     * Checks whether the app can schedule exact alarms on API 31+.
+     * On older APIs, exact alarms are always allowed.
+     */
+    private static boolean canScheduleExactAlarms(AlarmManager alarmManager) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            return alarmManager.canScheduleExactAlarms();
+        }
+        return true;
+    }
+
+    /**
+     * Schedules an alarm using exact timing if permitted, otherwise falls back
+     * to an inexact alarm to avoid a SecurityException on API 31+.
+     */
+    private static void scheduleAlarmSafely(AlarmManager alarmManager, long triggerAtMillis, PendingIntent pendingIntent) {
+        if (canScheduleExactAlarms(alarmManager)) {
+            // Exact alarm permitted
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        triggerAtMillis,
+                        pendingIntent
+                );
+            } else {
+                alarmManager.setExact(
+                        AlarmManager.RTC_WAKEUP,
+                        triggerAtMillis,
+                        pendingIntent
+                );
+            }
+        } else {
+            // Exact alarm NOT permitted — fall back to inexact alarm
+            Log.w(TAG, "Exact alarm permission not granted, falling back to inexact alarm");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        triggerAtMillis,
+                        pendingIntent
+                );
+            } else {
+                alarmManager.set(
+                        AlarmManager.RTC_WAKEUP,
+                        triggerAtMillis,
+                        pendingIntent
+                );
+            }
+        }
+    }
+
     public static void scheduleDailyWork(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         if (alarmManager == null) return;
@@ -68,20 +121,7 @@ public class Notification_Helper {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
-        // Use setExactAndAllowWhileIdle for reliable delivery even in Doze Mode
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            alarmManager.setExactAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(),
-                    pendingIntent
-            );
-        } else {
-            alarmManager.setExact(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(),
-                    pendingIntent
-            );
-        }
+        scheduleAlarmSafely(alarmManager, calendar.getTimeInMillis(), pendingIntent);
     }
 
     public static void cancelNotification(Context context) {
@@ -123,18 +163,6 @@ public class Notification_Helper {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            alarmManager.setExactAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(),
-                    pendingIntent
-            );
-        } else {
-            alarmManager.setExact(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(),
-                    pendingIntent
-            );
-        }
+        scheduleAlarmSafely(alarmManager, calendar.getTimeInMillis(), pendingIntent);
     }
 }
